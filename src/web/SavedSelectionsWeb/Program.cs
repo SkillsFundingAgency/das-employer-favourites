@@ -7,6 +7,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace SavedSelectionsWeb
 {
@@ -14,7 +15,24 @@ namespace SavedSelectionsWeb
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+            try
+            {
+                logger.Info("Starting up host");
+                var host = CreateWebHostBuilder(args).Build();
+
+                host.Run();
+            }
+            catch (Exception ex)
+            {
+                //NLog: catch setup errors
+                logger.Fatal(ex, "Stopped program because of exception");
+                throw;
+            }
+            finally
+            {
+                NLog.LogManager.Shutdown();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
