@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DfE.EmployerFavourites.Web.Security;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +10,15 @@ namespace DfE.EmployerFavourites.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _hostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+
+        private IHostingEnvironment _hostingEnvironment;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -28,6 +32,10 @@ namespace DfE.EmployerFavourites.Web
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.Configure<OidcConfiguration>(Configuration.GetSection("Oidc"));
+
+            services.AddAuthenticationService(Configuration.GetSection("Oidc").Get<OidcConfiguration>(), _hostingEnvironment);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,7 +52,8 @@ namespace DfE.EmployerFavourites.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            app.UseAuthentication();
+            // app.UseHttpsRedirection(); // Don't need if using AppService
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
