@@ -7,8 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/SavedSelectionsWeb.csproj",
-                "/p:GenerateFullPaths=true"
+                "${workspaceFolder}/EmployerFavouritesApi.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

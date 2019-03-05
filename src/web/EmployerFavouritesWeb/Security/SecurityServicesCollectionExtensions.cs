@@ -1,4 +1,4 @@
-namespace Esfa.SavedSelections.Web.Security
+namespace DfE.EmployerFavourites.Web.Security
 {
     public class SecurityServicesCollectionExtensions
     {

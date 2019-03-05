@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using NLog.Web;
 
-namespace Esfa.SavedSelections.Api
+namespace DfE.EmployerFavourites.Api
 {
     public class Program
     {
@@ -35,7 +29,7 @@ namespace Esfa.SavedSelections.Api
             }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureKestrel(c => c.AddServerHeader = false)
                 .UseStartup<Startup>()
