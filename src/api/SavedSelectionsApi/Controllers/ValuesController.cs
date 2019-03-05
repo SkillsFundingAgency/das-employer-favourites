@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace SavedSelectionsApi.Controllers
+namespace Esfa.SavedSelections.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

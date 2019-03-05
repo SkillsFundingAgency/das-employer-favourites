@@ -1,6 +1,6 @@
 using System;
 
-namespace SavedSelectionsWeb.Models
+namespace Esfa.SavedSelections.Web.Models
 {
     public class ErrorViewModel
     {

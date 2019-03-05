@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>Esfa.SavedSelections.Api</RootNamespace>
+    <AssemblyName>Esfa.SavedSelections.Api</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

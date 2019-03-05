@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
 
-namespace SavedSelectionsWeb
+namespace Esfa.SavedSelections.Web
 {
     public class Program
     {
@@ -37,7 +37,7 @@ namespace SavedSelectionsWeb
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(c => c.AddServerHeader = false)
+                .ConfigureKestrel(c => c.AddServerHeader = false)
                 .UseStartup<Startup>()
                 .UseUrls("https://localhost:5040")
                 .UseNLog();

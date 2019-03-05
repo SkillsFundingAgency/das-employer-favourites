@@ -2,6 +2,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>Esfa.SavedSelections.Web</RootNamespace>
+    <AssemblyName>Esfa.SavedSelections.Web</AssemblyName>
+    <UserSecretsId>saved-selections-web</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
