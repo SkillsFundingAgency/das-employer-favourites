@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Web.Cookies;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -10,8 +11,10 @@ namespace DfE.EmployerFavourites.Web.Security
 {
     public static class SecurityServicesCollectionExtensions
     {
-        public static void AddAuthenticationService(this IServiceCollection services, OidcConfiguration authConfig, IHostingEnvironment hostingEnvironment)
+        public static void AddAuthenticationService(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
+            var authConfig = configuration.GetSection("Oidc").Get<OidcConfiguration>();
+
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddAuthentication(options =>
