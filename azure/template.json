@@ -158,7 +158,7 @@
                 }
             },
             "dependsOn": [
-                "internal-api-app-service"
+                "internal-api-app-insights"
             ]
         },
         {
