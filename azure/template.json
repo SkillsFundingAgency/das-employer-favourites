@@ -35,6 +35,18 @@
         },
         "appServiceCertificateNAme": {
             "type": "string"
+        },
+        "azureStorageConnectionString": {
+            "type": "string"
+        },
+        "OdicAuthority": {
+            "type": "string"
+        },
+        "OdicMetaDataAddress": {
+            "type": "string"
+        },
+        "OdicClientSecret": {
+            "type": "string"
         }
     },
     "variables": {
@@ -146,7 +158,13 @@
                                 "name": "Redis",
                                 "connectionString": "[parameters('loggingRedisConnectionString')]",
                                 "type": "Custom"
+                            },
+                            {
+                                "name": "AzureStorage",
+                                "connectionString": "[parameters('azureStorageConnectionString')]",
+                                "type": "Custom"
                             }
+
                         ]
                     },
                     "customHostName": {
@@ -194,6 +212,18 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('app-service-app-insights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "Odic.Authority",
+                                "value": "[parameters('OdicAuthority')]"
+                            },
+                            {
+                                "name": "Odic.MetaDataAddress",
+                                "value": "[parameters('OdicMetaDataAddress')]"
+                            },
+                            {
+                                "name": "Odic.ClientSecret",
+                                "value": "[parameters('OdicClientSecret')]"
                             }
                         ]
                     },
