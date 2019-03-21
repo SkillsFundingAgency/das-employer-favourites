@@ -164,7 +164,7 @@
                             },
                             {
                                 "name": "AzureStorage",
-                                "connectionString":  "[reference('storage-account').outputs.storageConnectionString.value]",
+                                "connectionString":  "[parameters('azureStorageConnectionString')]",
                                 "type": "Custom"
                             }
 
