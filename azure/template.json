@@ -164,7 +164,7 @@
                             },
                             {
                                 "name": "AzureStorage",
-                                "connectionString": "[parameters('azureStorageConnectionString')]",
+                                "connectionString":  "[reference('storage-account').outputs.storageConnectionString.value]",
                                 "type": "Custom"
                             }
 
@@ -179,7 +179,8 @@
                 }
             },
             "dependsOn": [
-                "internal-api-app-insights"
+                "internal-api-app-insights",
+                "storage-account"
             ]
         },
         {
