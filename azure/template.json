@@ -218,19 +218,19 @@
                                 "value": "[reference('app-service-app-insights').outputs.InstrumentationKey.value]"
                             },
                             {
-                                "name": "Odic:Authority",
+                                "name": "Oidc:Authority",
                                 "value": "[parameters('OdicAuthority')]"
                             },
                             {
-                                "name": "Odic:MetaDataAddress",
+                                "name": "Oidc:MetaDataAddress",
                                 "value": "[parameters('OdicMetaDataAddress')]"
                             },
                             {
-                                "name": "Odic:ClientSecret",
+                                "name": "Oidc:ClientSecret",
                                 "value": "[parameters('OdicClientSecret')]"
                             },
                             {
-                                "name":"Odic:ClientId",
+                                "name":"Oidc:ClientId",
                                 "value": "[parameters('OdicID')]"
                             }
                         ]
