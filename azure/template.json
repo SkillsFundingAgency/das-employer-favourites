@@ -47,6 +47,9 @@
         },
         "OdicClientSecret": {
             "type": "string"
+        },
+        "OdicID":{
+            "type":"string"
         }
     },
     "variables": {
@@ -214,16 +217,20 @@
                                 "value": "[reference('app-service-app-insights').outputs.InstrumentationKey.value]"
                             },
                             {
-                                "name": "Odic.Authority",
+                                "name": "Odic:Authority",
                                 "value": "[parameters('OdicAuthority')]"
                             },
                             {
-                                "name": "Odic.MetaDataAddress",
+                                "name": "Odic:MetaDataAddress",
                                 "value": "[parameters('OdicMetaDataAddress')]"
                             },
                             {
-                                "name": "Odic.ClientSecret",
+                                "name": "Odic:ClientSecret",
                                 "value": "[parameters('OdicClientSecret')]"
+                            },
+                            {
+                                "name":"Odic:ClientId",
+                                "value": "[parameters('OdicID')]"
                             }
                         ]
                     },
