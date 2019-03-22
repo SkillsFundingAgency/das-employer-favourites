@@ -183,7 +183,7 @@
                                 "value": "[parameters('ActiveDirectorytenant')]"
                             },
                             {
-                                "name": "ActiveDirectory:Tenant",
+                                "name": "ActiveDirectory:IdentifierUri",
                                 "value": "[parameters('ActiveDirectoryidentifier')]"
                             }
                         ]
