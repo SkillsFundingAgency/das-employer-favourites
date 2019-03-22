@@ -59,6 +59,18 @@
         },
         "ActiveDirectoryidentifier": {
             "type": "string"
+        },
+        "ApiBaseUrl": {
+            "type": "string"
+        },
+        "ClientId": {
+            "type": "string"  
+        },
+        "ClientSecret": {
+            "type": "string" 
+        },
+        "IdentifierUri": {
+            "type": "string"
         }
     },
     "variables": {
@@ -163,15 +175,15 @@
                                 "value": "[reference('internal-api-app-insights').outputs.InstrumentationKey.value]"
                             },
                             {
-                                "name": "ActiveDirectory:id",
+                                "name": "ActiveDirectory:AppId",
                                 "value": "[parameters('ActiveDirectoryid')]"
                             },
                             {
-                                "name": "ActiveDirectory:tenant",
+                                "name": "ActiveDirectory:Tenant",
                                 "value": "[parameters('ActiveDirectorytenant')]"
                             },
                             {
-                                "name": "ActiveDirectory:identifier",
+                                "name": "ActiveDirectory:Tenant",
                                 "value": "[parameters('ActiveDirectoryidentifier')]"
                             }
                         ]
@@ -253,6 +265,26 @@
                             {
                                 "name":"Oidc:ClientId",
                                 "value": "[parameters('OdicID')]"
+                            },
+                            {
+                                "name": "EmployerFavouritesApi:ApiBaseUrl",
+                                "value": "[parameters('ApiBaseUrl')]"
+                            },
+                            {
+                                "name": "EmployerFavouritesApi:ClientId",
+                                "value": "[parameters('ClientId')]"
+                            },
+                            {
+                                "name": "EmployerFavouritesApi:ClientSecret",
+                                "value": "[parameters('ClientSecret')]"
+                            },
+                            {
+                                "name": "EmployerFavouritesApi:IdentifierUri",
+                                "value": "[parameters('IdentifierUri')]"
+                            },
+                            {
+                                "name": "EmployerFavouritesApi:Tenant",
+                                "value": "[parameters('ActiveDirectorytenant')]"
                             }
                         ]
                     },
