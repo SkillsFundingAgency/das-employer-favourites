@@ -52,6 +52,8 @@ namespace DfE.EmployerFavourites.Api
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+
             app.UseMvc();
         }
     }
