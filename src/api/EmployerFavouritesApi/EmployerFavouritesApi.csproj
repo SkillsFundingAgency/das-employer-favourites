@@ -5,6 +5,7 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>DfE.EmployerFavourites.Api</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.Api</AssemblyName>
+    <UserSecretsId>employer-favourites-api</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -32,8 +32,8 @@ namespace DfE.EmployerFavourites.Api.Security
                     {
                         ValidAudiences = new List<string>
                         {
-                            activeDirectoryConfig.Identifier,
-                            activeDirectoryConfig.Id
+                            activeDirectoryConfig.IdentifierUri,
+                            activeDirectoryConfig.AppId
                         }
                     };
                 });
