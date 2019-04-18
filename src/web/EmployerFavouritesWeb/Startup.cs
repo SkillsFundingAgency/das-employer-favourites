@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using DfE.EmployerFavourites.Web.Security;
+using EmployerFavouritesWeb.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,8 @@ namespace DfE.EmployerFavourites.Web
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthenticationService(Configuration, _hostingEnvironment);
+
+            services.Configure<ExternalLinks>(Configuration.GetSection("ExternalLinks"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
