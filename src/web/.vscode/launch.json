@@ -8,26 +8,14 @@
             "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-web",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/SavedSelectionsWeb/bin/Debug/netcoreapp2.2/SavedSelectionsWeb.dll",
+            "program": "${workspaceFolder}/EmployerFavouritesWeb/bin/Debug/netcoreapp2.2/DfE.EmployerFavourites.Web.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/SavedSelectionsWeb",
+            "cwd": "${workspaceFolder}/EmployerFavouritesWeb",
             "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart",
             "launchBrowser": {
-                "enabled": true,
-                "args": "${auto-detect-url}",
-                "windows": {
-                    "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
-                },
-                "osx": {
-                    "command": "open"
-                },
-                "linux": {
-                    "command": "xdg-open"
-                }
+                "enabled": true
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
@@ -42,5 +30,5 @@
             "request": "attach",
             "processId": "${command:pickProcess}"
         }
-    ,]
+    ]
 }
