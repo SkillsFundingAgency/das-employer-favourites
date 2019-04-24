@@ -1,6 +1,6 @@
 using System;
 
-namespace EmployerFavouritesWeb.Configuration
+namespace DfE.EmployerFavourites.Web.Configuration
 {
     public class ExternalLinks
     {

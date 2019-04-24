@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using DfE.EmployerFavourites.Web.Security;
-using EmployerFavouritesWeb.Configuration;
+using DfE.EmployerFavourites.Web.Configuration;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +28,8 @@ namespace DfE.EmployerFavourites.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMediatR(typeof(Startup).Assembly);
+            
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.

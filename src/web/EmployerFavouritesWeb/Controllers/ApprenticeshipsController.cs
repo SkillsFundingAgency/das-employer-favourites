@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
-using DfE.EmployerFavourites.Web.Models;
-using EmployerFavouritesWeb.Configuration;
-using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using DfE.EmployerFavourites.Web.Security;
+using DfE.EmployerFavourites.Web.Commands;
+using DfE.EmployerFavourites.Web.Configuration;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,15 +14,17 @@ namespace DfE.EmployerFavourites.Web.Controllers
     {
         private readonly ILogger<ApprenticeshipsController> _logger;
         private readonly ExternalLinks _externalLinks;
+        private readonly IMediator _mediator;
 
-        public ApprenticeshipsController(ILogger<ApprenticeshipsController> logger, IOptions<ExternalLinks> externalLinks)
+        public ApprenticeshipsController(ILogger<ApprenticeshipsController> logger, IOptions<ExternalLinks> externalLinks, IMediator mediator)
         {
             _logger = logger;
             _externalLinks = externalLinks.Value;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IActionResult Add(string apprenticeshipId, int? ukprn = null)
+        public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
         {
             var validator = new ApprenticeshipsParameterValidator();
             
@@ -29,6 +33,9 @@ namespace DfE.EmployerFavourites.Web.Controllers
             
             if (!validator.IsValidProviderUkprn(ukprn))
                 return BadRequest();
+
+            var userId = User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+            await _mediator.Send(new SaveApprenticeshipFavouriteCommand { EmployerAccountId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
 
             return Redirect(_externalLinks.AccountsHomePage.AbsoluteUri);
         }
