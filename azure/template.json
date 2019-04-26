@@ -71,6 +71,21 @@
         },
         "IdentifierUri": {
             "type": "string"
+        },
+        "AccountsHomePage": {
+            "type": "string"
+        },
+        "AccountsApiBaseUrl": {
+            "type": "string"
+        },
+        "AccountsApiClientSecret": { 
+            "type": "string"  
+        },
+        "AccountsApiIdentifierUri": {
+            "type": "string"
+        },
+        "AccountsApiClientId": {
+            "type": "string"
         }
     },
     "variables": {
@@ -285,6 +300,31 @@
                             {
                                 "name": "EmployerFavouritesApi:Tenant",
                                 "value": "[parameters('ActiveDirectorytenant')]"
+                            },
+                            {
+                                "name": "ExternalLinks:AccountsHomePage",
+                                "value": "[parameters('AccountsHomePage')]"
+                            },
+                            {
+                                "name": "AccountApiConfiguration:ApiBaseUrl",
+                                "value": "[parameters('AccountsApiBaseUrl')]"
+                            },
+                            {
+                                "name": "AccountApiConfiguration:ClientSecret",
+                                "value": "[parameters('AccountsApiClientSecret')]"
+                            },
+                            {
+                                "name": "AccountApiConfiguration:IdentifierUri",
+                                "value": "[parameters('AccountsApiIdentifierUri')]"
+                            },
+                            
+                            {
+                                "name": "AccountApiConfiguration:ClientId",
+                                "value": "[parameters('AccountsApiClientId')]"
+                            },
+                            {
+                                "name": "AccountApiConfiguration:Tenant",
+                                "value": "[parameters('ActiveDirectorytenant')]"
                             }
                         ]
                     },
@@ -294,7 +334,13 @@
                                 "name": "Redis",
                                 "connectionString": "[parameters('loggingRedisConnectionString')]",
                                 "type": "Custom"
+                            },
+                            {
+                                "name": "AzureStorage",
+                                "connectionString":  "[reference('storage-account').outputs.storageConnectionString.value]",
+                                "type": "Custom"
                             }
+
                         ]
                     },
                     "customHostName": {
