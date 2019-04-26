@@ -14,43 +14,40 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
+using SFA.DAS.EAS.Account.Api.Client;
+using System.Collections.Generic;
+using SFA.DAS.EAS.Account.Api.Types;
+using DfE.EmployerFavourites.Web.Commands;
 
 namespace DfE.EmployerFavourites.UnitTests
 {
     public class ApprenticeshipsControllerTests
     {
         public const string TEST_MA_ACCOUNTS_HOME_URL = "https://ma-accounts-home.com/";
-        public const string EMPLOYER_ACCOUNT_ID = "ABC123";
+        public const string EMPLOYER_ACCOUNT_ID = "XXX123";
+        public const string USER_ID = "User123";
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         private readonly Mock<IFavouritesRepository> _mockRepository;
+        private readonly Mock<IAccountApiClient> _mockAccountApiClient;
         private readonly ApprenticeshipsController _sut;
 
         public ApprenticeshipsControllerTests()
         {
             _mockRepository = new Mock<IFavouritesRepository>();
-            _mockRepository.Setup(x => x.GetApprenticeshipFavourites(It.IsAny<string>())).ReturnsAsync(GetTestRepositoryFavourites());
+            _mockRepository.Setup(x => x.GetApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetTestRepositoryFavourites());
 
-            var services = new ServiceCollection();
-            services.AddMediatR(typeof(Startup).Assembly);
-            services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
-            var provider = services.BuildServiceProvider();
-
-            var mediator = provider.GetService<IMediator>();
+            _mockAccountApiClient = new Mock<IAccountApiClient>();
+            _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsHomePage = new Uri(TEST_MA_ACCOUNTS_HOME_URL) });
-            
-            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
-            {
-                new Claim("http://das/employer/identity/claims/id", EMPLOYER_ACCOUNT_ID),
-            }));
+
+            ServiceProvider provider = BuildDependencies();
+            var mediator = provider.GetService<IMediator>();
 
             _sut = new ApprenticeshipsController(Mock.Of<ILogger<ApprenticeshipsController>>(), _mockConfig.Object, mediator);
-            
-            _sut.ControllerContext = new ControllerContext()
-            {
-                HttpContext = new DefaultHttpContext() { User = user }
-            };
+
+            SetupUserInContext();
         }
 
         [Fact]
@@ -216,6 +213,48 @@ namespace DfE.EmployerFavourites.UnitTests
             list.Add(new ApprenticeshipFavourite("70", 12345678));
 
             return list;
+        }
+
+        private static List<AccountDetailViewModel> GetListOfAccounts()
+        {
+
+            return new List<AccountDetailViewModel>
+            {
+                // Account API in TEST not currently values back correctly. Will rely on the order being deterministic from 
+                // the api with the first item being the oldest.
+                // new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
+                // new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
+                // new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
+                // new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
+                new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
+                new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
+                new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
+                new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
+            };
+        }
+
+        private void SetupUserInContext()
+        {
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                        {
+                new Claim("http://das/employer/identity/claims/id", USER_ID),
+                        }));
+
+            _sut.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext() { User = user }
+            };
+        }
+
+        private ServiceProvider BuildDependencies()
+        {
+            var services = new ServiceCollection();
+            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
+            services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
+            services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
+            var provider = services.BuildServiceProvider();
+            return provider;
         }
     }
 }

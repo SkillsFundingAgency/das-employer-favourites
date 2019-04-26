@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
@@ -23,6 +24,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
             _mediator = mediator;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
         {
@@ -35,7 +37,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 return BadRequest();
 
             var userId = User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
-            await _mediator.Send(new SaveApprenticeshipFavouriteCommand { EmployerAccountId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
+            await _mediator.Send(new SaveApprenticeshipFavouriteCommand { UserId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
 
             return Redirect(_externalLinks.AccountsHomePage.AbsoluteUri);
         }

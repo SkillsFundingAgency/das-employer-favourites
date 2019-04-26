@@ -10,6 +10,12 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using DfE.EmployerFavourites.Web.Infrastructure;
+using DfE.EmployerFavourites.Web.Domain;
+using SFA.DAS.EAS.Account.Api.Client;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -47,9 +53,22 @@ namespace DfE.EmployerFavourites.Web
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            JsonConvert.DefaultSettings = () =>
+            {
+                var settings = new JsonSerializerSettings();
+                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                return settings;
+            };
+
             services.AddAuthenticationService(Configuration, _hostingEnvironment);
 
             services.Configure<ExternalLinks>(Configuration.GetSection("ExternalLinks"));
+            services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+
+            services.AddSingleton<IAccountApiConfiguration>(x => Configuration.GetSection("AccountApiConfiguration").Get<AccountApiConfiguration>());
+            services.AddTransient<IAccountApiClient, AccountApiClient>();
+
+            services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>(); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
