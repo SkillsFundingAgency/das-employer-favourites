@@ -6,6 +6,8 @@ using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Polly;
+using Polly.Retry;
 
 namespace DfE.EmployerFavourites.Web.Infrastructure
 {
@@ -13,12 +15,14 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
     {
         private const string TABLE_NAME = "EmployerFavourites";
         private readonly ILogger<AzureTableStorageFavouritesRepository> _logger;
+        private readonly AsyncRetryPolicy _retryPolicy;
         private readonly CloudStorageAccount _storageAccount;
 
         public AzureTableStorageFavouritesRepository(ILogger<AzureTableStorageFavouritesRepository> logger, IOptions<ConnectionStrings> option)
         {
             
             _logger = logger;
+            _retryPolicy = GetRetryPolicy();
             
             try
             {
@@ -41,17 +45,13 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
             {
                 var table = await GetTable();
                 TableOperation retrieveOperation = TableOperation.Retrieve<ApprenticeshipFavouritesEntity>(employerAccountId, ApprenticeshipFavouritesEntity.ROW_KEY);
-                TableResult result = await table.ExecuteAsync(retrieveOperation);
+                
+                TableResult result = await _retryPolicy.ExecuteAsync(context => table.ExecuteAsync(retrieveOperation), new Context(nameof(GetApprenticeshipFavourites)));
                 ApprenticeshipFavouritesEntity entity = result.Result as ApprenticeshipFavouritesEntity;
+                
                 if (entity != null)
                 {
-                    _logger.LogDebug("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
-                }
-
-                // Get the request units consumed by the current operation. RequestCharge of a TableResult is only applied to Azure CosmoS DB 
-                if (result.RequestCharge.HasValue)
-                {
-                    _logger.LogDebug("Request Charge of Retrieve Operation: {requestCharge}", result.RequestCharge);
+                    _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
                 return entity?.ToApprenticeshipFavourites();
@@ -79,14 +79,8 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
                 TableOperation insertOrMergeOperation = TableOperation.InsertOrMerge(entity);
 
                 // Execute the operation.
-                TableResult result = await table.ExecuteAsync(insertOrMergeOperation);
+                TableResult result = await _retryPolicy.ExecuteAsync(context => table.ExecuteAsync(insertOrMergeOperation), new Context(nameof(SaveApprenticeshipFavourites)));
                 ApprenticeshipFavouritesEntity insertedCustomer = result.Result as ApprenticeshipFavouritesEntity;
-                    
-                // Get the request units consumed by the current operation. RequestCharge of a TableResult is only applied to Azure CosmoS DB 
-                if (result.RequestCharge.HasValue)
-                {
-                    Console.WriteLine("Request Charge of InsertOrMerge Operation: " + result.RequestCharge);
-                }
             }
             catch (StorageException ex)
             {
@@ -100,8 +94,10 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
             CloudTableClient tableClient = _storageAccount.CreateCloudTableClient(new TableClientConfiguration());
 
             CloudTable table = tableClient.GetTableReference(TABLE_NAME);
-
-            if (await table.CreateIfNotExistsAsync())
+                    
+            var createdTable = await _retryPolicy.ExecuteAsync(context => table.CreateIfNotExistsAsync(), new Context(nameof(GetTable)));
+            
+            if (createdTable)
             {
                 _logger.LogDebug($"Created Table named: {TABLE_NAME}");
             }
@@ -111,6 +107,21 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
             }
 
             return table;
+        }
+
+        private Polly.Retry.AsyncRetryPolicy GetRetryPolicy()
+        {
+            return Policy
+                    .Handle<StorageException>()
+                    .WaitAndRetryAsync(new[]
+                    {
+                        TimeSpan.FromSeconds(1),
+                        TimeSpan.FromSeconds(2),
+                        TimeSpan.FromSeconds(4)
+                    }, (exception, timeSpan, retryCount, context) =>
+                    {
+                        _logger.LogWarning($"Error executing Table Storage command  {context.OperationKey} Reason: {exception.Message}. Retrying in {timeSpan.Seconds} secs...attempt: {retryCount}");
+                    });
         }
     }
 }
