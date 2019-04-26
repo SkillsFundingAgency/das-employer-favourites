@@ -4,10 +4,14 @@ namespace DfE.EmployerFavourites.Web.Domain
 {
     public class ApprenticeshipFavourite
     {
-        public ApprenticeshipFavourite(string apprenticeshipId)
+        public ApprenticeshipFavourite()
+        {
+            Ukprns = new List<int>();
+        }
+
+        public ApprenticeshipFavourite(string apprenticeshipId) : this()
         {
             ApprenticeshipId = apprenticeshipId;
-            Ukprns = new List<int>();
         }
 
         public ApprenticeshipFavourite(string apprenticeshipId, int ukprn) : this(apprenticeshipId)
@@ -15,7 +19,7 @@ namespace DfE.EmployerFavourites.Web.Domain
             Ukprns.Add(ukprn);
         }
 
-        public string ApprenticeshipId { get; private set; }
-        public IList<int> Ukprns { get; private set; }
+        public string ApprenticeshipId { get; set; }
+        public IList<int> Ukprns { get; set; }
     }
 }
