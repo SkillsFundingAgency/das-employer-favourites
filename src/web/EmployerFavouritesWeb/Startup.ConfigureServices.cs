@@ -21,11 +21,13 @@ namespace DfE.EmployerFavourites.Web
     {
         public IConfiguration Configuration { get; }
         private IHostingEnvironment _hostingEnvironment;
+        private readonly OidcConfiguration _authConfig;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
             _hostingEnvironment = env;
+            _authConfig = Configuration.GetSection("Oidc").Get<OidcConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -58,7 +60,7 @@ namespace DfE.EmployerFavourites.Web
                 return settings;
             };
 
-            services.AddAuthenticationService(Configuration, _hostingEnvironment);
+            services.AddAuthenticationService(_authConfig, _hostingEnvironment);
 
             AddConfiguration(services);
             AddInfrastructureServices(services);
@@ -76,6 +78,7 @@ namespace DfE.EmployerFavourites.Web
         {
             services.Configure<ExternalLinks>(Configuration.GetSection("ExternalLinks"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<CdnConfig>(Configuration.GetSection("cdn"));
         }
     }
 }

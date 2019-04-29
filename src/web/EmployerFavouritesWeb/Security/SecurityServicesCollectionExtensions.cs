@@ -6,14 +6,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DfE.EmployerFavourites.Web.Security
 {
     public static class SecurityServicesCollectionExtensions
     {
-        public static void AddAuthenticationService(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public static void AddAuthenticationService(this IServiceCollection services, OidcConfiguration authConfiguration, IHostingEnvironment hostingEnvironment)
         {
-            var authConfig = configuration.GetSection("Oidc").Get<OidcConfiguration>();
+            var authConfig = authConfiguration;
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

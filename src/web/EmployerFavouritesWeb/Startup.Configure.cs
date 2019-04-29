@@ -1,13 +1,23 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using DfE.EmployerFavourites.Web.Configuration;
+using DfE.EmployerFavourites.Web.Security;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DfE.EmployerFavourites.Web
 {
     public partial class Startup
     {
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime, ILogger<Startup> logger)
+        public void Configure(
+            IApplicationBuilder app, 
+            IHostingEnvironment env, 
+            IApplicationLifetime applicationLifetime,
+            IOptions<ExternalLinks> externalLinks,
+            IOptions<CdnConfig> cdnConfig, 
+            ILogger<Startup> logger)
         {
             applicationLifetime.ApplicationStarted.Register(() => logger.LogInformation("Host fully started"));
             applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation("Host shutting down...waiting to complete requests."));
@@ -33,7 +43,8 @@ namespace DfE.EmployerFavourites.Web
                         .CustomSources("https://www.googletagmanager.com/",
                                         "https://www.tagmanager.google.com/",
                                         "https://tagmanager.google.com/",
-                                        "https://fonts.googleapis.com/");
+                                        "https://fonts.googleapis.com/",
+                                        cdnConfig.Value.Url.AbsoluteUri);
                     }
                 )
                 .ScriptSources(s =>
@@ -43,13 +54,15 @@ namespace DfE.EmployerFavourites.Web
                                 "https://www.google-analytics.com/analytics.js",
                                 "https://www.googletagmanager.com/",
                                 "https://www.tagmanager.google.com/",
-                                "https://tagmanager.google.com/");
+                                "https://tagmanager.google.com/",
+                                cdnConfig.Value.Url.AbsoluteUri);
                     }
                 )
                 .FontSources(s => 
                     s.Self()
                     .CustomSources("data:",
-                                    "https://fonts.googleapis.com/")
+                                    "https://fonts.googleapis.com/",
+                                    cdnConfig.Value.Url.AbsoluteUri)
                 )
                 .ConnectSources(s => 
                     s.Self()
@@ -61,7 +74,8 @@ namespace DfE.EmployerFavourites.Web
                                     "https://www.google-analytics.com", 
                                     "https://ssl.gstatic.com",
                                     "https://www.gstatic.com/",
-                                    "data:")
+                                    "data:",
+                                    cdnConfig.Value.Url.AbsoluteUri)
                 )
                 .ReportUris(r => r.Uris("/ContentPolicyReport/Report")));
 
@@ -79,6 +93,10 @@ namespace DfE.EmployerFavourites.Web
             app.UseXfo(xfo => xfo.Deny());
             app.UseXDownloadOptions();
             app.UseXRobotsTag(options => options.NoIndex().NoFollow());
+            app.UseRedirectValidation(opts => {
+                opts.AllowSameHostRedirectsToHttps();
+                opts.AllowedDestinations(GetAllowableDestinations(_authConfig, externalLinks.Value));
+            }); //Register this earlier if there's middleware that might redirect.
 
             app.UseNoCacheHttpHeaders(); // Effectively forces the browser to always request dynamic pages
 
@@ -88,6 +106,19 @@ namespace DfE.EmployerFavourites.Web
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+
+        private static string[] GetAllowableDestinations(OidcConfiguration authConfig, ExternalLinks linksConfig)
+        {
+            var destinations = new List<string>();
+            
+            if (!string.IsNullOrWhiteSpace(authConfig?.Authority))
+                destinations.Add(authConfig.Authority.Replace("identity", string.Empty));
+            
+            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsHomePage.AbsoluteUri))
+                destinations.Add(linksConfig.AccountsHomePage.AbsoluteUri);
+            
+            return destinations.ToArray();
         }
     }
 }
