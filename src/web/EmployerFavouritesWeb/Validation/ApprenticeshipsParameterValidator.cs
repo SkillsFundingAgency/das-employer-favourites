@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace DfE.EmployerFavourites.Web.Controllers
+namespace DfE.EmployerFavourites.Web.Validation
 {
     internal class ApprenticeshipsParameterValidator
     {
