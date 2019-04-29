@@ -25,7 +25,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpGet("save-apprenticeship-favourites")]
         public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
         {
             var validator = new ApprenticeshipsParameterValidator();
