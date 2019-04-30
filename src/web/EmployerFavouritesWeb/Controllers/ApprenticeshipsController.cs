@@ -26,6 +26,13 @@ namespace DfE.EmployerFavourites.Web.Controllers
         }
 
         [Authorize]
+        [HttpGet("accounts/{employerAccountId:minlength(6)}")]
+        public IActionResult Index(string employerAccountId)
+        {
+            return View();
+        }
+
+        [Authorize]
         [HttpGet("save-apprenticeship-favourites")]
         public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
         {
