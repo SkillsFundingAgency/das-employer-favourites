@@ -23,6 +23,8 @@ namespace DfE.EmployerFavourites.Web
             applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation("Host shutting down...waiting to complete requests."));
             applicationLifetime.ApplicationStopped.Register(() => logger.LogInformation("Host fully stopped. All requests processed."));
 
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

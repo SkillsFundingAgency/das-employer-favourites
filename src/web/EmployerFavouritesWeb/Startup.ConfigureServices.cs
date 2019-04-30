@@ -14,6 +14,7 @@ using DfE.EmployerFavourites.Web.Domain;
 using SFA.DAS.EAS.Account.Api.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -51,6 +52,9 @@ namespace DfE.EmployerFavourites.Web
                     formatter.SupportedMediaTypes
                         .Add(Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/csp-report"));
                 }
+
+                options.Filters.Add(new AuthorizeFilter("EmployerAccountPolicy"));
+
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             JsonConvert.DefaultSettings = () =>
@@ -61,6 +65,7 @@ namespace DfE.EmployerFavourites.Web
             };
 
             services.AddAuthenticationService(_authConfig, _hostingEnvironment);
+            services.AddAuthorizationService();
 
             AddConfiguration(services);
             AddInfrastructureServices(services);
