@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DfE.EmployerFavourites.Web;
 using DfE.EmployerFavourites.Web.Controllers;
 using DfE.EmployerFavourites.Web.Configuration;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +17,7 @@ using Xunit;
 using SFA.DAS.EAS.Account.Api.Client;
 using System.Collections.Generic;
 using SFA.DAS.EAS.Account.Api.Types;
-using DfE.EmployerFavourites.Web.Commands;
+using DfE.EmployerFavourites.ApplicationServices.Commands;
 
 namespace DfE.EmployerFavourites.UnitTests
 {
@@ -249,7 +249,7 @@ namespace DfE.EmployerFavourites.UnitTests
         private ServiceProvider BuildDependencies()
         {
             var services = new ServiceCollection();
-            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
             services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());

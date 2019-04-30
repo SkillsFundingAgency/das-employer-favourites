@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.Web.Security;
@@ -32,7 +33,7 @@ namespace DfE.EmployerFavourites.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
 
             services.Configure<CookiePolicyOptions>(options =>
             {
