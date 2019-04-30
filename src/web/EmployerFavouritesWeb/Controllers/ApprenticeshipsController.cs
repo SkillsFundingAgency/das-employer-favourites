@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Web.Security;
-using DfE.EmployerFavourites.Web.Commands;
+using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.Web.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

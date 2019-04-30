@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace DfE.EmployerFavourites.Web.Commands
+namespace DfE.EmployerFavourites.ApplicationServices.Commands
 {
     public class SaveApprenticeshipFavouriteCommand : IRequest
     {

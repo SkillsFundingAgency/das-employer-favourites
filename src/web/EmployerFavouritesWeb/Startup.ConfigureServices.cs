@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using DfE.EmployerFavourites.ApplicationServices.Configuration;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.Web.Security;
 using DfE.EmployerFavourites.Web.Configuration;
 using MediatR;
@@ -9,8 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DfE.EmployerFavourites.Web.Infrastructure;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
 using SFA.DAS.EAS.Account.Api.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;

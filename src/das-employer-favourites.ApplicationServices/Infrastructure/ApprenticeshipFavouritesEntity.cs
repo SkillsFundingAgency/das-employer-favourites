@@ -1,8 +1,8 @@
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
 
-namespace DfE.EmployerFavourites.Web.Infrastructure
+namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
     public class ApprenticeshipFavouritesEntity : TableEntity
     {
