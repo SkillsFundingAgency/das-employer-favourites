@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
+using DfE.EmployerFavourites.Web.Validation;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
