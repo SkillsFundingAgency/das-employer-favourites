@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using DfE.EmployerFavourites.Web.Validation;
+using EmployerFavouritesWeb.Security;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
@@ -44,7 +45,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
             if (!validator.IsValidProviderUkprn(ukprn))
                 return BadRequest();
 
-            var userId = User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
+            var userId = User.GetUserId();
             await _mediator.Send(new SaveApprenticeshipFavouriteCommand { UserId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
 
             return Redirect(_externalLinks.AccountsHomePage.AbsoluteUri);

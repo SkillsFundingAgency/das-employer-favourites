@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using SFA.DAS.EAS.Account.Api.Types;
 using DfE.EmployerFavourites.Web.Commands;
 
-namespace DfE.EmployerFavourites.UnitTests
+namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
     public class ApprenticeshipsControllerTests
     {
