@@ -7,12 +7,12 @@ using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Commands
 {
-    public class EmployerAccountRepository : IEmployerAccountRepository
+    public class EmployerAccountApiRepository : IEmployerAccountRepository
     {
-        private readonly ILogger<EmployerAccountRepository> _logger;
+        private readonly ILogger<EmployerAccountApiRepository> _logger;
         private readonly IAccountApiClient _accountApiClient;
 
-        public EmployerAccountRepository(IAccountApiClient accountApiClient, ILogger<EmployerAccountRepository> logger)
+        public EmployerAccountApiRepository(IAccountApiClient accountApiClient, ILogger<EmployerAccountApiRepository> logger)
         {
             _accountApiClient = accountApiClient;
             _logger = logger;

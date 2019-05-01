@@ -29,6 +29,7 @@ namespace DfE.EmployerFavourites.UnitTests
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         private readonly Mock<IFavouritesRepository> _mockRepository;
         private readonly Mock<IAccountApiClient> _mockAccountApiClient;
+        private readonly Mock<IEmployerAccountRepository> _mockEmployerAccountRepostiory;
         private readonly ApprenticeshipsController _sut;
 
         public ApprenticeshipsControllerTests()
@@ -38,6 +39,10 @@ namespace DfE.EmployerFavourites.UnitTests
 
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
+
+            _mockEmployerAccountRepostiory = new Mock<IEmployerAccountRepository>();
+            _mockEmployerAccountRepostiory.Setup(s => s.GetEmployerAccountId(It.IsAny<string>()))
+                .ReturnsAsync(EMPLOYER_ACCOUNT_ID);
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsHomePage = new Uri(TEST_MA_ACCOUNTS_HOME_URL) });
@@ -253,6 +258,7 @@ namespace DfE.EmployerFavourites.UnitTests
             services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
+            services.AddTransient<IEmployerAccountRepository>(c => _mockEmployerAccountRepostiory.Object);
             var provider = services.BuildServiceProvider();
             return provider;
         }
