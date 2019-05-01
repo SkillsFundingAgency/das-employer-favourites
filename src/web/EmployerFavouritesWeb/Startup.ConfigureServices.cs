@@ -15,6 +15,8 @@ using SFA.DAS.EAS.Account.Api.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using SFA.DAS.Employer.Shared.UI;
+using DfE.EmployerFavourites.Web.Controllers;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -63,6 +65,8 @@ namespace DfE.EmployerFavourites.Web
                 settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 return settings;
             };
+
+            services.AddMaMenuConfiguration(Configuration, RouteNames.Logout_Get, _authConfig.ClientId);
 
             services.AddAuthenticationService(_authConfig, _hostingEnvironment);
             services.AddAuthorizationService();

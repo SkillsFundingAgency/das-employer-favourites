@@ -1,7 +1,10 @@
 ﻿using System;
+using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using NLog.Web;
+using SFA.DAS.Configuration.AzureTableStorage;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -33,6 +36,21 @@ namespace DfE.EmployerFavourites.Web
             WebHost.CreateDefaultBuilder(args)
                 .ConfigureKestrel(c => c.AddServerHeader = false)
                 .UseStartup<Startup>()
+                .ConfigureAppConfiguration((hostingContext, config) =>
+                {
+                    var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
+                    config.SetBasePath(Directory.GetCurrentDirectory());
+                    config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
+                    config.AddJsonFile($"appSettings.{environmentName}.json", optional: false, reloadOnChange: false);
+                    config.AddUserSecrets<Startup>();
+                    config.AddAzureTableStorage(options => {
+                        options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Menu" };
+                        options.EnvironmentNameEnvironmentVariableName = "EnvironmentName";
+                        options.StorageConnectionStringEnvironmentVariableName = "ConfigStorageConnectionString";
+                    });
+                    config.AddEnvironmentVariables();
+                    config.AddCommandLine(args);
+                })
                 .UseUrls("https://localhost:5040")
                 .UseNLog();
     }

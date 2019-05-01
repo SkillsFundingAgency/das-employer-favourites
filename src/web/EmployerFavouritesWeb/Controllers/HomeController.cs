@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using DfE.EmployerFavourites.Web.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -15,16 +17,18 @@ namespace DfE.EmployerFavourites.Web.Controllers
             _logger = logger;
         }
 
+        [HttpGet, Route("logout", Name = RouteNames.Logout_Get)]
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync("Cookies");
+
+            await HttpContext.SignOutAsync("oidc");
+        }
+
         public IActionResult Index()
         {
             _logger.LogInformation("This is a test log entry");
             
-            return View();
-        }
-
-        [Authorize]
-        public IActionResult Privacy()
-        {
             return View();
         }
 
