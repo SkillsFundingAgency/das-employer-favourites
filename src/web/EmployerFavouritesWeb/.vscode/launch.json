@@ -30,7 +30,8 @@
                 }
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "ConfigStorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=leefuncstore;AccountKey=CXL46+A5snqPDsWkxqL46EPJXx0438yTbb+ygBzLCTRTFWQWlM5VNuubygyKcJsyhoPUKbw5Z200X2t7AqDlvA==;EndpointSuffix=core.windows.net"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"
