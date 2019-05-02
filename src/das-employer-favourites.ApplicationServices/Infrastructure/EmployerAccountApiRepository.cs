@@ -20,6 +20,10 @@ namespace DfE.EmployerFavourites.ApplicationServices.Commands
 
         public async Task<string> GetEmployerAccountId(string userId)
         {
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new ArgumentException("User Id is required but is not provided");
+            }
             try
             {
                 var accounts = await _accountApiClient.GetUserAccounts(userId);
