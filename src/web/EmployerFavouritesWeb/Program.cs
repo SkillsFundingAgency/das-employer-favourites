@@ -41,7 +41,7 @@ namespace DfE.EmployerFavourites.Web
                     var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
-                    config.AddJsonFile($"appSettings.{environmentName}.json", optional: false, reloadOnChange: false);
+                    config.AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddUserSecrets<Startup>();
                     config.AddAzureTableStorage(options => {
                         options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Shared.UI" };
