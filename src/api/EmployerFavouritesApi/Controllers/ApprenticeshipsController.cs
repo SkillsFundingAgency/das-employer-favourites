@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.Web.Security;
 using MediatR;
@@ -24,13 +25,12 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<string>>> Get(string employerAccountId)
         {
             try
             {
-                var userId = User.FindFirstValue(EmployerClaims.IdamsUserIdClaimTypeIdentifier);
 
-                var apprenticeships = _mediator.Send(new GetApprenticeshipFavouritesRequest() {UserId = userId});
+                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest() {EmployerAccountID = employerAccountId});
 
                 return Ok(apprenticeships);
             }

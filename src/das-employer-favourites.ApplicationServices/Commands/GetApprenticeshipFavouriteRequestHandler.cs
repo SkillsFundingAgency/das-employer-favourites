@@ -25,13 +25,12 @@ namespace DfE.EmployerFavourites.ApplicationServices.Commands
 
         public async Task<ApprenticeshipFavourites> Handle(GetApprenticeshipFavouritesRequest request, CancellationToken cancellationToken)
         {
-            if (string.IsNullOrWhiteSpace(request.UserId))
+            if (string.IsNullOrWhiteSpace(request.EmployerAccountID))
             {
-                throw new ArgumentException("User Id is required but is not provided");
+                throw new ArgumentException("Employer account Id is required but is not provided");
             }
 
-            var employerAccountId = await _employerAccountRepository.GetEmployerAccountId(request.UserId);
-            var favourites = (await _repository.GetApprenticeshipFavourites(employerAccountId)) ?? new ApprenticeshipFavourites();
+            var favourites = (await _repository.GetApprenticeshipFavourites(request.EmployerAccountID)) ?? new ApprenticeshipFavourites();
 
             return favourites;
         }
