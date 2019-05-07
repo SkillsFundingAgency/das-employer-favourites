@@ -28,7 +28,6 @@ namespace DfE.EmployerFavourites.UnitTests
         public const string USER_ID = "User123";
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         private readonly Mock<IFavouritesRepository> _mockRepository;
-        private readonly Mock<IAccountApiClient> _mockAccountApiClient;
         private readonly Mock<IEmployerAccountRepository> _mockEmployerAccountRepostiory;
         private readonly ApprenticeshipsController _sut;
 
@@ -37,8 +36,6 @@ namespace DfE.EmployerFavourites.UnitTests
             _mockRepository = new Mock<IFavouritesRepository>();
             _mockRepository.Setup(x => x.GetApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetTestRepositoryFavourites());
 
-            _mockAccountApiClient = new Mock<IAccountApiClient>();
-            _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
 
             _mockEmployerAccountRepostiory = new Mock<IEmployerAccountRepository>();
             _mockEmployerAccountRepostiory.Setup(s => s.GetEmployerAccountId(It.IsAny<string>()))
@@ -220,23 +217,7 @@ namespace DfE.EmployerFavourites.UnitTests
             return list;
         }
 
-        private static List<AccountDetailViewModel> GetListOfAccounts()
-        {
 
-            return new List<AccountDetailViewModel>
-            {
-                // Account API in TEST not currently values back correctly. Will rely on the order being deterministic from 
-                // the api with the first item being the oldest.
-                // new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
-                new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
-                new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
-                new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
-                new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
-            };
-        }
 
         private void SetupUserInContext()
         {
@@ -256,7 +237,6 @@ namespace DfE.EmployerFavourites.UnitTests
             var services = new ServiceCollection();
             services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
             services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
-            services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
             services.AddTransient<IEmployerAccountRepository>(c => _mockEmployerAccountRepostiory.Object);
             var provider = services.BuildServiceProvider();
