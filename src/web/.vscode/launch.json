@@ -18,7 +18,9 @@
                 "enabled": true
             },
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "APPSETTING_EnvironmentName": "LOCAL",
+                "APPSETTING_ConfigurationStorageConnectionString": "UseDevelopmentStorage=true"
             },
             "sourceFileMap": {
                 "/Views": "${workspaceFolder}/Views"

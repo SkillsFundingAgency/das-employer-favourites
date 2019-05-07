@@ -45,8 +45,8 @@ namespace DfE.EmployerFavourites.Web
                     config.AddUserSecrets<Startup>();
                     config.AddAzureTableStorage(options => {
                         options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Shared.UI" };
-                        options.EnvironmentNameEnvironmentVariableName = "EnvironmentName";
-                        options.StorageConnectionStringEnvironmentVariableName = "ConfigurationStorageConnectionString";
+                        options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
+                        options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                     });
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
