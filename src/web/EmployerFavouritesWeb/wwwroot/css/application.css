@@ -1,0 +1,436 @@
+.hero-container {
+    background: #005ea5;
+    padding: 1.5em;
+    margin: 0 0 1em 0;
+  }
+  
+.hero-container h1, .hero-container h2, .hero-container h3, .hero-container h4 {
+    margin: 0;
+    color: white;
+}
+  
+.hero-container .app-bookmarked-numbers {
+    color: white;
+}
+  
+.hero-container .app-bookmarked-numbers .app-number {
+    color: #005ea5;
+    background: white;
+}
+  
+.hero-container .icon-basket {
+    background: url("../images/favourite-unchecked-white.svg") no-repeat;
+    background-size: contain;
+}
+  
+.app-task-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+  
+@media (min-width: 40.0625em) {
+    .app-task-list {
+        min-width: 550px;
+    }
+}
+  
+.app-task-list__section {
+    display: table;
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 18px;
+    font-size: 1.125rem;
+    line-height: 1.11111;
+}
+  
+@media (min-width: 40.0625em) {
+    .app-task-list__section {
+        font-size: 24px;
+        font-size: 1.5rem;
+        line-height: 1.25;
+    }
+}
+  
+.app-task-list__section-number {
+    display: table-cell;
+}
+  
+@media (min-width: 40.0625em) {
+    .app-task-list__section-number {
+        min-width: 30px;
+        padding-right: 0;
+    }
+}
+  
+.app-task-list__items {
+    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 16px;
+    font-size: 1rem;
+    line-height: 1.25;
+    margin-bottom: 40px;
+    list-style: none;
+    padding-left: 0;
+}
+  
+@media (min-width: 40.0625em) {
+    .app-task-list__items {
+        font-size: 19px;
+        font-size: 1.1875rem;
+        line-height: 1.31579;
+    }
+}
+  
+@media (min-width: 40.0625em) {
+    .app-task-list__items {
+        margin-bottom: 60px;
+    }
+}
+  
+@media (min-width: 40.0625em) {
+    .app-task-list__items {
+        padding-left: 30px;
+    }
+}
+  
+.app-task-list__item {
+    border-bottom: 1px solid #bfc1c3;
+    margin-bottom: 0 !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+  
+.app-task-list__item:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+  
+.app-task-list__item:first-child {
+    border-top: 1px solid #bfc1c3;
+}
+  
+.app-task-list__task-name {
+    display: block;
+}
+  
+@media (min-width: 28.125em) {
+    .app-task-list__task-name {
+        float: left;
+        width: 75%;
+    }
+}
+  
+.app-task-list__task-completed {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+  
+@media (min-width: 28.125em) {
+    .app-task-list__task-completed {
+        float: right;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+.app-related-items {
+    border-top: 10px solid #005ea5;
+    padding-top: 10px;
+}
+
+    .app-related-items .govuk-list > li {
+    margin-bottom: 10px;
+}
+  
+  .app-bookmarked-numbers {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 0.5em;
+  }
+  
+  .app-bookmarked-numbers .separator {
+    display: inline-block;
+    height: 2em;
+    width: 2px;
+    background: #dee0e2;
+    margin: 0 1em;
+  }
+  
+  .app-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #005ea5;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    font-size: 1.2rem;
+    margin: -0.25em 0.75em 0 0;
+    float: left;
+  }
+  
+  .app-number.zero {
+    background: #6f777b;
+  }
+  
+  .app-number.provider-number {
+    margin: -0.45em 0.75em 0 0;
+  }
+  
+  .app-new {
+    background: #6f777b;
+    color: white;
+    border-radius: 5px;
+    display:inline-block;
+    padding: 0.25em 0.5em;
+    width: auto;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.875rem;
+  }
+
+.app-apprenticeship-details {
+	list-style: none;
+	padding: 0;
+	margin: 0 0 30px;
+}
+
+.app-apprenticeship-details dt {
+	float: left;
+	clear: both;
+	padding-right: 10px
+}
+  
+  ol.app-task-list li .app-task-list__section {
+    width: 100%;
+    border-bottom: 1px solid #bfc1c3;
+    padding-bottom: 0.5em;
+    font-size: 1.7rem;
+  }
+  
+  ol.app-task-list li .app-task-list__section .govuk-button {
+    float: right;
+    margin: 0;
+  }
+  
+  ol.app-task-list li .app-task-list__section .app-task-list__section-number {
+    display: inline-block;
+  }
+  
+  ol.app-task-list li .app-task-list__section .govuk-form-group {
+    float: right;
+    margin: 0 0 0 0;
+  }
+  
+  ol.app-task-list li .app-task-list__section .govuk-form-group .govuk-fieldset {
+    display: inline-block;
+    width: 100%;
+  }
+  
+  ol.app-task-list li .app-task-list__section .govuk-form-group .govuk-checkboxes {
+    display: inline-block;
+    width: 100%;
+  }
+  
+  ol.app-task-list li p {
+    display: inline-block;
+    float: left;
+    clear: both;
+    margin-bottom: 7px;
+  }
+  
+  ol.app-task-list li .app-task-list__items {
+    padding-left: 0;
+  }
+  
+  ol.app-task-list li .app-task-list__items .app-task-list__task-name {
+    width: auto;
+    margin: 0.35em 0 0 0;
+  }
+  
+  ol.app-task-list li .app-task-list__items .govuk-form-group {
+    float: right;
+    margin: 0;
+  }
+  
+  ol.app-task-list li .govuk-checkboxes__item, ol.app-task-list li .govuk-delete-link {
+    display: inline-block;
+    float: left;
+    clear: none;
+    font-weight: normal;
+    font-size: 19px;
+  }
+  
+  ol.app-task-list li .govuk-checkboxes__item {
+    min-height: 30px;
+    padding: 0 0 0 30px;
+  }
+  
+  ol.app-task-list li .govuk-delete-link {
+    margin: 0.5em 0 0 1em;
+    padding: 0 0 0 1.5em;
+    background: url("../images/delete-black.svg") no-repeat;
+  }
+  
+  ol.app-task-list li .govuk-checkboxes__input, ol.app-task-list li .govuk-checkboxes__input + .govuk-checkboxes__label::before {
+    width: 30px;
+    height: 30px;
+  }
+  
+  ol.app-task-list li .govuk-checkboxes__input + .govuk-checkboxes__label::before {
+    top: 5px;
+  }
+  
+  ol.app-task-list li .govuk-checkboxes__input + .govuk-checkboxes__label::after {
+    top: 11px;
+    left: 6px;
+    width: 14px;
+    height: 7px;
+  }
+  
+  ol.app-task-list li .postcode-search {
+    background: #dee0e2;
+    display: inline-block;
+    width: 90%;
+    padding: 1.5em 5%;
+  }
+  
+  ol.app-task-list li .postcode-search .govuk-form-group {
+    margin-bottom: 0;
+  }
+  
+  ol.app-task-list li .postcode-search .govuk-form-group #postcode-search {
+    margin-bottom: 0;
+    background: #005ea5;
+    margin: 0 0 0 -0.3em;
+    padding: 5px 10px 0 10px;
+  }
+  
+  ol.app-task-list li .postcode-search .govuk-form-group #postcode-search span {
+    display: inline-block;
+    background: white;
+    width: 1.25em;
+    height: 1.25em;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36' width='40' height='40'%3E%3Cpath d='M25.7 24.8L21.9 21c.7-1 1.1-2.2 1.1-3.5 0-3.6-2.9-6.5-6.5-6.5S10 13.9 10 17.5s2.9 6.5 6.5 6.5c1.6 0 3-.6 4.1-1.5l3.7 3.7 1.4-1.4zM12 17.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5-2 4.5-4.5 4.5-4.5-2-4.5-4.5z' fill='white'%3E%3C/path%3E%3C/svg%3E") #005ea5 no-repeat 50% 50%;
+    background-size: 200%;
+  }
+  
+  ol.app-task-list li .postcode-search .govuk-form-group #postcode-search span.text {
+    text-indent: -1000em;
+    display: none;
+  }
+  
+  .icon-basket {
+    display: inline-block;
+    width: 2.5em;
+    height: 2.5em;
+    float: left;
+    margin: 0 0.5em 0 0;
+    background: url("../images/favourite-unchecked-black.svg") no-repeat;
+    background-size: contain;
+  }
+  
+   ol.app-task-list {
+    margin-top: 1em;
+  }
+  
+   ol.app-task-list.training-provider {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+  }
+  
+   ol.app-task-list.training-provider li {
+    width: 26.3%;
+    margin-right: 3%;
+  }
+  
+   ol.app-task-list.training-provider li:nth-of-type(3n) {
+    margin-right: 0;
+  }
+  
+   ol.app-task-list.training-provider li .app-task-list__section {
+    font-size: 1.3rem;
+    min-height: 2.5em;
+  }
+  
+   ol.app-task-list.training-provider li .training-provider-content {
+    margin-top: 0;
+    text-align: left;
+  }
+  
+   ol.app-task-list.training-provider li .training-provider-content .govuk-form-group {
+    margin: 0 0 1em 0;
+  }
+  
+   ol.app-task-list.training-provider li .training-provider-content .govuk-delete-link {
+    margin-top: 0.4em;
+  }
+  
+   ol.app-task-list.training-provider li .training-provider-content .govuk-button {
+    margin: 0 0 0.75em 0;
+  }
+  
+   ol.app-task-list li {
+    margin: 0 0 2em 0;
+    background: white;
+    padding: 1.5em;
+  }
+  
+   ol.app-task-list li:last-of-type {
+    border-bottom: none;
+  }
+  
+   ol.app-task-list li .app-task-list__section {
+    border-bottom: none;
+    margin: 0;
+  }
+  
+   ol.app-task-list li .app-task-list__section .postcode-search {
+    padding: 0;
+    background: none;
+    float: right;
+    width: auto;
+  }
+  
+   ol.app-task-list li .app-task-list__section .postcode-search .govuk-fieldset {
+    min-width: 10em;
+  }
+  
+   ol.app-task-list li .app-task-list__section .postcode-search .govuk-form-group {
+    width: 100%;
+  }
+  
+   ol.app-task-list li .app-task-list__section .postcode-search .govuk-form-group .govuk-button,  ol.app-task-list li .app-task-list__section .postcode-search .govuk-form-group input {
+    float: right;
+  }
+  
+   ol.app-task-list li .govuk-form-group {
+    display: inline-block;
+    float: left;
+    clear: both;
+    margin: 0;
+  }
+  
+   ol.app-task-list li .training-provider-content {
+    text-align: right;
+  }
+  
+   ol.app-task-list li .training-provider-content h1,  ol.app-task-list li .training-provider-content h2,  ol.app-task-list li .training-provider-content h3 {
+    display: inline-block;
+    margin: 0.5em 0 0 0;
+  }
+  
+   ol.app-task-list li .training-provider-content .provider-number,  ol.app-task-list li .training-provider-content .text-numbers {
+    float: right;
+  }

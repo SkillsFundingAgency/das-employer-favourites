@@ -19,25 +19,37 @@
   <!--[if !IE 8]><!-->
     <link href="/css/main.css" rel="stylesheet" />
     <!--<![endif]-->
+    
   <!--[if IE 8]>
     
   <![endif]-->
+
+  <link href="/css/application.css" rel="stylesheet" no-cdn/>
+
   <!--[if lt IE 9]>
     <script src="/libs/html5-shiv/html5shiv.js"></script>
   <![endif]-->
   <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
+
 </head>
 <body class="govuk-template__body ">
   <script nws-csp-add-nonce="true">
     document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
   </script>
   <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
   <partial name="_Header">
   <partial name="_Menu" model="@accountId">
-  <div class="govuk-width-container">
-    <main class="govuk-main-wrapper " id="main-content" role="main">
-      @RenderBody()
-    </main>
+  <div class="govuk-width-container app-account-header">
+    @RenderSection("BodyHeader", required: false)
+  </div>
+
+  <div class="app-account-main">
+    <div class="govuk-width-container" >
+      <main class="govuk-main-wrapper" id="main-content" role="main">
+        @RenderBody()
+      </main>
+    </div>
   </div>
   <partial name="_Footer">
 <script src="/libs/govuk-frontend/all.js"></script>
