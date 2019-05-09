@@ -1,12 +1,10 @@
-﻿using DfE.EmployerFavourites.ApplicationServices.Commands;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
-using Microsoft.AspNetCore.Authorization;
+using DfE.EmployerFavourites.ApplicationServices.Queries;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {

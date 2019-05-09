@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using DfE.EmployerFavourites.Api.Security;
@@ -8,8 +7,6 @@ using DfE.EmployerFavourites.ApplicationServices.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;

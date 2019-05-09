@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web;
 using DfE.EmployerFavourites.Web.Controllers;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
@@ -14,9 +13,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
-using SFA.DAS.EAS.Account.Api.Client;
-using System.Collections.Generic;
-using SFA.DAS.EAS.Account.Api.Types;
 using DfE.EmployerFavourites.ApplicationServices.Commands;
 
 namespace DfE.EmployerFavourites.UnitTests
