@@ -8,7 +8,7 @@ namespace DfE.EmployerFavourites.Api.Security
 {
     public static class SecurityServicesCollectionExtensions
     {
-        public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
 
                 var activeDirectoryConfig = configuration.GetSection("ActiveDirectory").Get<ActiveDirectoryConfiguration>();
