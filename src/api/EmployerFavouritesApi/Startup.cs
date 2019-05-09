@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using DfE.EmployerFavourites.Api.Security;
 using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
@@ -15,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Client;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace DfE.EmployerFavourites.Api
 {
@@ -48,6 +52,22 @@ namespace DfE.EmployerFavourites.Api
 
             services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>();
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Employer-Favourites-Api", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +88,17 @@ namespace DfE.EmployerFavourites.Api
             }
 
             app.UseAuthentication();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Employer Favourites Api V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseMvc();
         }
