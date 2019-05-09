@@ -1,12 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Account.Api.Client;
 
-namespace DfE.EmployerFavourites.ApplicationServices.Commands
+namespace DfE.EmployerFavourites.ApplicationServices.Queries
 {
     public class GetApprenticeshipFavouriteRequestHandler : IRequestHandler<GetApprenticeshipFavouritesRequest,ApprenticeshipFavourites>
     {
