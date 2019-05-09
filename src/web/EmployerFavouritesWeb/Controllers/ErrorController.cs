@@ -8,6 +8,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
     public class ErrorController : Controller
     {        
         [Route("error/{id?}")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(int id)
         {
             Response.StatusCode = id;

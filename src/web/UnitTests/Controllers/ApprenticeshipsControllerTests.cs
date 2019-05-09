@@ -51,6 +51,26 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         }
 
         [Fact]
+        public void Index_ReturnsViewResult_WithListOfApprenticeships()
+        {
+            var result = _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<ApprenticeshipFavourites>(viewResult.ViewData.Model);
+            Assert.Equal(3, model.Count());
+        }
+
+        [Fact]
+        public void Index_ReturnBadRequest_IfInvalidModel()
+        {
+            _sut.ModelState.AddModelError("error", "some error");
+
+            var result = _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Fact]
         public async Task Add_ReturnsRedirectResult_ForValidStandardId()
         {
             var result = await _sut.Add("20");
@@ -152,7 +172,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
                 Times.Never);
         }
 
-                [Fact]
+        [Fact]
         public async Task Add_IgnoresDuplicateUkprn_IfItAlreadyExistsForApprenticeship()
         {
              var result = await _sut.Add("70", 12345678);

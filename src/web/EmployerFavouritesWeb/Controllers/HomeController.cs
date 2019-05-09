@@ -24,18 +24,5 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             await HttpContext.SignOutAsync("oidc");
         }
-
-        public IActionResult Index()
-        {
-            _logger.LogInformation("This is a test log entry");
-            
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

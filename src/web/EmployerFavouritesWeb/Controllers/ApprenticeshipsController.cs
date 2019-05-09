@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authorization;
 using DfE.EmployerFavourites.Web.Validation;
 using EmployerFavouritesWeb.Security;
+using DfE.EmployerFavourites.Web.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
@@ -28,9 +30,19 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
         [Authorize]
         [HttpGet("accounts/{employerAccountId:minlength(6)}")]
-        public IActionResult Index(string employerAccountId)
+        public IActionResult Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var model = new ApprenticeshipFavourites();
+            model.Add(new ApprenticeshipFavourite("1"));
+            model.Add(new ApprenticeshipFavourite("2"));
+            model.Add(new ApprenticeshipFavourite("3"));
+
+            return View(model);
         }
 
         [Authorize]
