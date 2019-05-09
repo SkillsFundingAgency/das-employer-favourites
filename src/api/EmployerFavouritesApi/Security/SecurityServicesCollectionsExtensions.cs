@@ -10,8 +10,7 @@ namespace DfE.EmployerFavourites.Api.Security
     {
         public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            if (!hostingEnvironment.IsDevelopment())
-            {
+
                 var activeDirectoryConfig = configuration.GetSection("ActiveDirectory").Get<ActiveDirectoryConfiguration>();
                 
                 services.AddAuthorization(o =>
@@ -37,7 +36,7 @@ namespace DfE.EmployerFavourites.Api.Security
                         }
                     };
                 });
-            }
+            
         }
     }
 }

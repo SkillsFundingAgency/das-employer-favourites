@@ -32,12 +32,13 @@ namespace DfE.EmployerFavourites.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddADAuthentication(Configuration, Environment);
+            
             services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
 
             services.AddMvc(options => {
                 if (!Environment.IsDevelopment())
                 {
+                    services.AddADAuthentication(Configuration);
                     options.Filters.Add(new AuthorizeFilter("default"));
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
