@@ -21,5 +21,6 @@ namespace DfE.EmployerFavourites.ApplicationServices.Domain
 
         public string ApprenticeshipId { get; set; }
         public IList<int> Ukprns { get; set; }
+        public string Title { get; set; }
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -46,6 +47,10 @@ namespace DfE.EmployerFavourites.Api
             services.AddSingleton<IAccountApiConfiguration>(x => Configuration.GetSection("AccountApiConfiguration").Get<AccountApiConfiguration>());
             services.AddTransient<IAccountApiClient, AccountApiClient>();
             services.AddTransient<IEmployerAccountRepository, EmployerAccountApiRepository>();
+
+            services.AddTransient<IFatRepository, FatApiRepository>();
+            services.AddTransient<IStandardApiClient, StandardApiClient>(service => new StandardApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
+            services.AddTransient<IFrameworkApiClient, FrameworkApiClient>(service => new FrameworkApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
 
             services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>();
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
