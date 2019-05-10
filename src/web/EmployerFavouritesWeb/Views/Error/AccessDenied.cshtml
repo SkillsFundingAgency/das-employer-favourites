@@ -1,8 +1,15 @@
 @model ErrorViewModel
+@using Microsoft.Extensions.Options
+@inject IOptions<ExternalLinks> options;
+
+@{
+    var accountsHomePage = options.Value.AccountsHomePage;
+}
+
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
         <h1 class="govuk-heading-xl">Access denied</h1>
         <p class="govuk-body">Your account does not have sufficient privileges</p>
-        <p><a href="/" class="govuk-button">Go back to the service homepage</a></p>
+        <p><a href="@accountsHomePage" class="govuk-button">Go back to the service homepage</a></p>
     </div>
 </div>

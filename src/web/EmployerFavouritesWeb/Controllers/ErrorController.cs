@@ -13,7 +13,21 @@ namespace DfE.EmployerFavourites.Web.Controllers
         {
             Response.StatusCode = id;
 
-            return View(new ErrorViewModel { StatusCode = id, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(GetViewNameForStatus(id), new ErrorViewModel { StatusCode = id, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private string GetViewNameForStatus(int statusCode)
+        {
+            switch(statusCode)
+            {
+                case (int)HttpStatusCode.NotFound:
+                    return "PageNotFound";
+                case (int)HttpStatusCode.Forbidden:
+                case (int)HttpStatusCode.Unauthorized:
+                    return "AccessDenied";
+                default:
+                    return "Error";
+            }
         }
     }
 }
