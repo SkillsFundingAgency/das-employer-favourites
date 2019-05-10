@@ -17,6 +17,7 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using SFA.DAS.Employer.Shared.UI;
 using DfE.EmployerFavourites.Web.Controllers;
+using DfE.EmployerFavourites.Web.Infrastructure.Configuration;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -79,6 +80,7 @@ namespace DfE.EmployerFavourites.Web
         {
             services.AddSingleton<IAccountApiConfiguration>(x => Configuration.GetSection("AccountApiConfiguration").Get<AccountApiConfiguration>());
             services.AddTransient<IAccountApiClient, AccountApiClient>();
+            services.AddScoped<AdTokenGenerator>();
 
             services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>();
         }
@@ -88,6 +90,7 @@ namespace DfE.EmployerFavourites.Web
             services.Configure<ExternalLinks>(Configuration.GetSection("ExternalLinks"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<CdnConfig>(Configuration.GetSection("cdn"));
+            services.Configure<EmployerFavouritesApiConfig>(Configuration.GetSection("EmployerFavouritesApi"));
         }
     }
 }
