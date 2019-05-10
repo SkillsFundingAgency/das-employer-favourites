@@ -1,4 +1,5 @@
 ﻿using DfE.EmployerFavourites.ApplicationServices.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using SFA.DAS.Apprenticeships.Api.Client;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
@@ -16,7 +17,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 
         public string GetApprenticeshipName(string apprenticeshipId)
         {
-            if (isStandard(apprenticeshipId))
+            if (IsStandard(apprenticeshipId))
             {
                 return _standardApiClient.Get(apprenticeshipId).Title;
             }
@@ -26,7 +27,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             }
         }
 
-        private bool isStandard(string apprenticeshipId)
+        private bool IsStandard(string apprenticeshipId)
         {
             int standardId;
             return int.TryParse(apprenticeshipId, out standardId);

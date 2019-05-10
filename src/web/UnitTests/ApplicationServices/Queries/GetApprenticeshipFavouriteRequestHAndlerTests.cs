@@ -3,6 +3,7 @@ using DfE.EmployerFavourites.ApplicationServices.Domain;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Threading.Tasks;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using DfE.EmployerFavourites.ApplicationServices.Queries;
 using Xunit;
 

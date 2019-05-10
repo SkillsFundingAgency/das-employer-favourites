@@ -6,6 +6,7 @@ using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

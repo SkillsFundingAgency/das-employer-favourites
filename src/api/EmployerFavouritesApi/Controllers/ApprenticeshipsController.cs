@@ -55,12 +55,12 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
             catch (ArgumentException e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e,"Invalid arguments were provided for get apprenticeship favourites");
                 return BadRequest();
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.LogError(e, "Error in get apprenticeship favourites");
                 return StatusCode(500);
             }
         }
