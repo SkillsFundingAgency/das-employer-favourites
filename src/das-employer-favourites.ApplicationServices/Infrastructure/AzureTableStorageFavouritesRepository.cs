@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 
-namespace DfE.EmployerFavourites.Web.Infrastructure
+namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
     public class AzureTableStorageFavouritesRepository : IFavouritesRepository
     {

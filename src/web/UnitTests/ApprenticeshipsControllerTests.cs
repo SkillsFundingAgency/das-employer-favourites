@@ -2,10 +2,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web;
 using DfE.EmployerFavourites.Web.Controllers;
 using DfE.EmployerFavourites.Web.Configuration;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
-using SFA.DAS.EAS.Account.Api.Client;
-using System.Collections.Generic;
-using SFA.DAS.EAS.Account.Api.Types;
-using DfE.EmployerFavourites.Web.Commands;
+using DfE.EmployerFavourites.ApplicationServices.Commands;
 
 namespace DfE.EmployerFavourites.UnitTests
 {
@@ -28,7 +24,7 @@ namespace DfE.EmployerFavourites.UnitTests
         public const string USER_ID = "User123";
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         private readonly Mock<IFavouritesRepository> _mockRepository;
-        private readonly Mock<IAccountApiClient> _mockAccountApiClient;
+        private readonly Mock<IEmployerAccountRepository> _mockEmployerAccountRepostiory;
         private readonly ApprenticeshipsController _sut;
 
         public ApprenticeshipsControllerTests()
@@ -36,8 +32,10 @@ namespace DfE.EmployerFavourites.UnitTests
             _mockRepository = new Mock<IFavouritesRepository>();
             _mockRepository.Setup(x => x.GetApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetTestRepositoryFavourites());
 
-            _mockAccountApiClient = new Mock<IAccountApiClient>();
-            _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
+
+            _mockEmployerAccountRepostiory = new Mock<IEmployerAccountRepository>();
+            _mockEmployerAccountRepostiory.Setup(s => s.GetEmployerAccountId(It.IsAny<string>()))
+                .ReturnsAsync(EMPLOYER_ACCOUNT_ID);
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsHomePage = new Uri(TEST_MA_ACCOUNTS_HOME_URL) });
@@ -215,23 +213,7 @@ namespace DfE.EmployerFavourites.UnitTests
             return list;
         }
 
-        private static List<AccountDetailViewModel> GetListOfAccounts()
-        {
 
-            return new List<AccountDetailViewModel>
-            {
-                // Account API in TEST not currently values back correctly. Will rely on the order being deterministic from 
-                // the api with the first item being the oldest.
-                // new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
-                new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
-                new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
-                new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
-                new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
-            };
-        }
 
         private void SetupUserInContext()
         {
@@ -249,10 +231,10 @@ namespace DfE.EmployerFavourites.UnitTests
         private ServiceProvider BuildDependencies()
         {
             var services = new ServiceCollection();
-            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
             services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
-            services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
+            services.AddTransient<IEmployerAccountRepository>(c => _mockEmployerAccountRepostiory.Object);
             var provider = services.BuildServiceProvider();
             return provider;
         }

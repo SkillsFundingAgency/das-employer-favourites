@@ -6,13 +6,21 @@
     <RootNamespace>DfE.EmployerFavourites.Api</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.Api</AssemblyName>
     <UserSecretsId>employer-favourites-api</UserSecretsId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="7.0.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.0" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj" />
   </ItemGroup>
 
   <ItemGroup>

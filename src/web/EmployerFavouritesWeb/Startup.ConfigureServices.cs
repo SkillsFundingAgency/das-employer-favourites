@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using DfE.EmployerFavourites.ApplicationServices.Commands;
+using DfE.EmployerFavourites.ApplicationServices.Configuration;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.Web.Security;
-using DfE.EmployerFavourites.Web.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,8 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DfE.EmployerFavourites.Web.Infrastructure;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
+using DfE.EmployerFavourites.Web.Configuration;
 using SFA.DAS.EAS.Account.Api.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -31,7 +33,7 @@ namespace DfE.EmployerFavourites.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
 
             services.Configure<CookiePolicyOptions>(options =>
             {
