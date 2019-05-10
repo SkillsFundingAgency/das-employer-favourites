@@ -21,11 +21,14 @@
     <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="2.0.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.19" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0" />
-    <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="1.0.4"/>
+    <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="1.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mappers\" />
   </ItemGroup>
 </Project>

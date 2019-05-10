@@ -18,6 +18,8 @@ using SFA.DAS.EAS.Account.Api.Client;
 using System.Collections.Generic;
 using SFA.DAS.EAS.Account.Api.Types;
 using DfE.EmployerFavourites.Web.Commands;
+using DfE.EmployerFavourites.Web.Models;
+using DfE.EmployerFavourites.Web.Queries;
 
 namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
@@ -38,6 +40,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
 
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
+            _mockAccountApiClient.Setup(x => x.GetAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetAccount());
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsHomePage = new Uri(TEST_MA_ACCOUNTS_HOME_URL) });
@@ -45,27 +48,50 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             ServiceProvider provider = BuildDependencies();
             var mediator = provider.GetService<IMediator>();
 
-            _sut = new ApprenticeshipsController(Mock.Of<ILogger<ApprenticeshipsController>>(), _mockConfig.Object, mediator);
+            _sut = new ApprenticeshipsController(_mockConfig.Object, mediator);
 
             SetupUserInContext();
         }
 
         [Fact]
-        public void Index_ReturnsViewResult_WithListOfApprenticeships()
+        public async Task Index_ReturnsViewResult_WithListOfApprenticeships()
         {
-            var result = _sut.Index(EMPLOYER_ACCOUNT_ID);
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
 
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<ApprenticeshipFavourites>(viewResult.ViewData.Model);
-            Assert.Equal(3, model.Count());
+            var model = Assert.IsAssignableFrom<ApprenticeshipFavouritesViewModel>(viewResult.ViewData.Model);
+            Assert.Equal(3, model.Items.Count());
         }
 
         [Fact]
-        public void Index_ReturnBadRequest_IfInvalidModel()
+        public async Task Index_ReturnsModel_WithNameOfEmployer()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+            
+            Assert.Equal("Test Company Ltd", model.EmployerName);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsInditcateProgrammeType()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.True(model.Items.Single(x => x.Id == "420-2-1").IsFramework);
+            Assert.False(model.Items.Single(x => x.Id == "30").IsFramework);
+        }
+
+        [Fact]
+        public async Task Index_ReturnBadRequest_IfInvalidModel()
         {
             _sut.ModelState.AddModelError("error", "some error");
 
-            var result = _sut.Index(EMPLOYER_ACCOUNT_ID);
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -163,7 +189,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         [Fact]
         public async Task Add_IgnoresApprenticeship_IfItAlreadyExists()
         {
-             var result = await _sut.Add("50");
+             var result = await _sut.Add("420-2-1");
 
             _mockRepository.Verify(x => 
                 x.SaveApprenticeshipFavourites(
@@ -229,7 +255,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
             var list = new ApprenticeshipFavourites();
             list.Add(new ApprenticeshipFavourite("30"));
-            list.Add(new ApprenticeshipFavourite("50"));
+            list.Add(new ApprenticeshipFavourite("420-2-1"));
             list.Add(new ApprenticeshipFavourite("70", 12345678));
 
             return list;
@@ -253,6 +279,15 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             };
         }
 
+
+        private AccountDetailViewModel GetAccount()
+        {
+            return new AccountDetailViewModel
+            {
+                DasAccountName = "Test Company Ltd"
+            };
+        }
+
         private void SetupUserInContext()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -273,6 +308,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
+            services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
             var provider = services.BuildServiceProvider();
             return provider;
         }

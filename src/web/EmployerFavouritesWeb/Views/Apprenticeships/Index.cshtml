@@ -1,9 +1,11 @@
+@model ApprenticeshipFavouritesViewModel
+
 @section BodyHeader{
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-xl">
                 <span class="govuk-caption-xl">Your employer account</span>
-                [Employer Name]
+                @Model.EmployerName
             </h1>
         </div>
     </div>
@@ -12,13 +14,13 @@
 <div class="hero-container">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-                <h1 class="govuk-heading-l">
-                    <span class="icon-basket"></span>
-                    Favourite apprenticeships
-                    <span class="govuk-caption-xl app-bookmarked-numbers">
-                        <span class="app-number">2</span> Apprenticeships
-                    </span>
-                </h1>
+            <h1 class="govuk-heading-l">
+                <span class="icon-basket"></span>
+                Favourite apprenticeships
+                <span class="govuk-caption-xl app-bookmarked-numbers">
+                    <span class="app-number">@Model.Items.Count</span> Apprenticeships
+                </span>
+            </h1>
         </div>
     </div>
 </div>
@@ -26,85 +28,58 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <ol class="app-task-list">
-            <li>
-                <h2 class="app-task-list__section">
-                    <span class="app-task-list__section-number">1. </span> <a href="#" class="govuk-link">Business Administrator</a>
-                    <a href="#" class="govuk-button">Choose training provider</a>
-                </h2>
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <div class="govuk-body govuk-!-margin-bottom-2 app-new ">new</div>
-                        <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
-                            <dt class="govuk-!-font-weight-bold">Level:</dt>
-                            <dd>3 (equivalent to A levels at grades A to E)</dd>
-                            <dt class="govuk-!-font-weight-bold">Typical length:</dt>
-                            <dd>18 months</dd>
-                        </dl>
-                        <div class="govuk-form-group">
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <li>
+                    <h2 class="app-task-list__section">
+                        <span class="app-task-list__section-number">@(i + 1). </span> 
+                        @Model.Items[i].Title
+                        @*<a href="#" class="govuk-link">@Model.Items[i].Title</a>*@
+                        @*<a href="#" class="govuk-button">Choose training provider</a>
+                        
+                        <section class="postcode-search">
+                            <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
+                            <fieldset class="govuk-fieldset">
+                                <div class="govuk-form-group">
+                                    <!-- <label class="govuk-label" for="provider-list-postcode">
+                        Postcode
+                    </label> -->
+                                    <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
+                                    <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
+                                </div>
+                            </fieldset>
+                        </section>*@
+                    </h2>
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <div class="govuk-body govuk-!-margin-bottom-2 app-new ">new</div>
+                            @*<dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
+                                <dt class="govuk-!-font-weight-bold">Level:</dt>
+                                <dd>3 (equivalent to A levels at grades A to E)</dd>
+                                <dt class="govuk-!-font-weight-bold">Typical length:</dt>
+                                <dd>18 months</dd>
+                            </dl>
+                            <div class="govuk-form-group">
                                 <fieldset class="govuk-fieldset">
                                     <div class="govuk-checkboxes">
                                         <div class="govuk-checkboxes__item">
                                             <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
                                             <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
-                                                    Compare
+                                                Compare
                                             </label>
                                         </div>
                                         <a href="#" class="govuk-link govuk-delete-link">Remove</a>
                                     </div>
                                 </fieldset>
+                            </div>*@
                         </div>
+                        @*<div class="govuk-grid-column-one-third training-provider-content">
+                            <h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number">5</span></h3>
+                            <a href="#" class="govuk-link">Reserve funding</a><br><a href="#" class="govuk-link">Recruit an apprentice</a>
+                        </div>*@
                     </div>
-                    <div class="govuk-grid-column-one-third training-provider-content">
-                        <h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number">5</span></h3>
-                        <a href="#" class="govuk-link">Reserve funding</a><br><a href="#" class="govuk-link">Recruit an apprentice</a>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <h2 class="app-task-list__section">
-                    <span class="app-task-list__section-number">2. </span> <a href="#" class="govuk-link">Business to business sales professional</a>
-                    <section class="postcode-search">
-                        <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
-                        <fieldset class="govuk-fieldset">
-                                <div class="govuk-form-group">
-                                    <!-- <label class="govuk-label" for="provider-list-postcode">
-                                        Postcode
-                                    </label> -->
-                                    <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
-                                    <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
-                                </div>
-                        </fieldset>
-                    </section>
-                </h2>
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <div class="govuk-body govuk-!-margin-bottom-2 app-new">new</div>
-                        <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0 app-apprenticeship-details">
-                            <dt class="govuk-!-font-weight-bold">Level:</dt>
-                            <dd>3 (equivalent to A levels at grades A to E)</dd>
-                            <dt class="govuk-!-font-weight-bold">Typical length:</dt>
-                            <dd>18 months</dd>
-                        </dl>
-                        <div class="govuk-form-group">
-                                <fieldset class="govuk-fieldset">
-                                    <div class="govuk-checkboxes">
-                                        <div class="govuk-checkboxes__item">
-                                            <input class="govuk-checkboxes__input" id="compare-app-2" name="compare-app" type="checkbox" value="carcasses">
-                                            <label class="govuk-label govuk-checkboxes__label" for="compare-app-2">
-                                                    Compare
-                                            </label>
-                                        </div>
-                                        <a href="#" class="govuk-link govuk-delete-link">Remove</a>
-                                    </div>
-                                </fieldset>
-                        </div>
-                    </div>
-                    <div class="govuk-grid-column-one-third training-provider-content">
-                        <h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number zero">0</span></h3>
-                        <a href="#" class="govuk-link">Reserve funding</a><br><a href="#" class="govuk-link">Recruit an apprentice</a>
-                    </div>
-                </div>
-            </li>
+                </li>
+            }
         </ol>
     </div>
 </div>

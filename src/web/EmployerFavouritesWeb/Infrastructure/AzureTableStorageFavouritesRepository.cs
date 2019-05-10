@@ -54,7 +54,7 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
                     _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
-                return entity?.ToApprenticeshipFavourites();
+                return entity?.ToApprenticeshipFavourites() ?? new ApprenticeshipFavourites();
             }
             catch (StorageException ex)
             {
@@ -67,7 +67,7 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
         {
             if (apprenticeshipFavourite == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(apprenticeshipFavourite));
             }
 
             try

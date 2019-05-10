@@ -1,46 +1,52 @@
-﻿using System.Security.Claims;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Security;
 using DfE.EmployerFavourites.Web.Commands;
 using DfE.EmployerFavourites.Web.Configuration;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Authorization;
+using DfE.EmployerFavourites.Web.Mappers;
+using DfE.EmployerFavourites.Web.Models;
+using DfE.EmployerFavourites.Web.Queries;
 using DfE.EmployerFavourites.Web.Validation;
 using EmployerFavouritesWeb.Security;
-using DfE.EmployerFavourites.Web.Domain;
-using System.ComponentModel.DataAnnotations;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
     public class ApprenticeshipsController : Controller
     {
-        private readonly ILogger<ApprenticeshipsController> _logger;
         private readonly ExternalLinks _externalLinks;
         private readonly IMediator _mediator;
 
-        public ApprenticeshipsController(ILogger<ApprenticeshipsController> logger, IOptions<ExternalLinks> externalLinks, IMediator mediator)
+        public ApprenticeshipsController(IOptions<ExternalLinks> externalLinks, IMediator mediator)
         {
-            _logger = logger;
             _externalLinks = externalLinks.Value;
             _mediator = mediator;
         }
 
         [Authorize]
         [HttpGet("accounts/{employerAccountId:minlength(6)}")]
-        public IActionResult Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
+        public async Task<IActionResult> Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            var model = new ApprenticeshipFavourites();
-            model.Add(new ApprenticeshipFavourite("1"));
-            model.Add(new ApprenticeshipFavourite("2"));
-            model.Add(new ApprenticeshipFavourite("3"));
+            var response = await _mediator.Send(new ViewEmployerFavouritesQuery
+            {
+                EmployerAccountId = employerAccountId
+            });
+
+            var mapper = new ApprenticeshipFavouriteMapper();
+
+            var model = new ApprenticeshipFavouritesViewModel
+            {
+                EmployerName = response.EmployerAccount.Name,
+                Items = response.EmployerFavourites.Select(mapper.Map).ToList()
+            };
 
             return View(model);
         }
