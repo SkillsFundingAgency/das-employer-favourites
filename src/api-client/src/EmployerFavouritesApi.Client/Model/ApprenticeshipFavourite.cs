@@ -36,10 +36,12 @@ namespace EmployerFavouritesApi.Client.Model
         /// </summary>
         /// <param name="apprenticeshipId">apprenticeshipId.</param>
         /// <param name="ukprns">ukprns.</param>
-        public ApprenticeshipFavourite(string apprenticeshipId = default(string), List<int> ukprns = default(List<int>))
+        /// <param name="title">title.</param>
+        public ApprenticeshipFavourite(string apprenticeshipId = default(string), List<int> ukprns = default(List<int>), string title = default(string))
         {
             this.ApprenticeshipId = apprenticeshipId;
             this.Ukprns = ukprns;
+            this.Title = title;
         }
         
         /// <summary>
@@ -55,6 +57,12 @@ namespace EmployerFavouritesApi.Client.Model
         public List<int> Ukprns { get; set; }
 
         /// <summary>
+        /// Gets or Sets Title
+        /// </summary>
+        [DataMember(Name="title", EmitDefaultValue=false)]
+        public string Title { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -64,6 +72,7 @@ namespace EmployerFavouritesApi.Client.Model
             sb.Append("class ApprenticeshipFavourite {\n");
             sb.Append("  ApprenticeshipId: ").Append(ApprenticeshipId).Append("\n");
             sb.Append("  Ukprns: ").Append(Ukprns).Append("\n");
+            sb.Append("  Title: ").Append(Title).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -108,6 +117,11 @@ namespace EmployerFavouritesApi.Client.Model
                     this.Ukprns != null &&
                     input.Ukprns != null &&
                     this.Ukprns.SequenceEqual(input.Ukprns)
+                ) && 
+                (
+                    this.Title == input.Title ||
+                    (this.Title != null &&
+                    this.Title.Equals(input.Title))
                 );
         }
 
@@ -124,6 +138,8 @@ namespace EmployerFavouritesApi.Client.Model
                     hashCode = hashCode * 59 + this.ApprenticeshipId.GetHashCode();
                 if (this.Ukprns != null)
                     hashCode = hashCode * 59 + this.Ukprns.GetHashCode();
+                if (this.Title != null)
+                    hashCode = hashCode * 59 + this.Title.GetHashCode();
                 return hashCode;
             }
         }

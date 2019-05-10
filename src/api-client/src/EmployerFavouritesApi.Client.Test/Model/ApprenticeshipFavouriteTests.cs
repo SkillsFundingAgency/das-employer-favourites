@@ -73,6 +73,14 @@ namespace EmployerFavouritesApi.Client.Test
         {
             // TODO unit test for the property 'Ukprns'
         }
+        /// <summary>
+        /// Test the property 'Title'
+        /// </summary>
+        [Fact]
+        public void TitleTest()
+        {
+            // TODO unit test for the property 'Title'
+        }
 
     }
 
