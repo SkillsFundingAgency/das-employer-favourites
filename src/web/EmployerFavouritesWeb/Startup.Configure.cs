@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Security;
 using Microsoft.AspNetCore.Builder;

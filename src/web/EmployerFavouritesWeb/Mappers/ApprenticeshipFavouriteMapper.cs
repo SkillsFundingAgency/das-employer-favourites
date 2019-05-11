@@ -1,5 +1,5 @@
-﻿using DfE.EmployerFavourites.Web.Models;
-using DfE.EmployerFavourites.Web.Domain;
+﻿using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Web.Models;
 
 namespace DfE.EmployerFavourites.Web.Mappers
 {

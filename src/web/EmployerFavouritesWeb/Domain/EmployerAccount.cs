@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace DfE.EmployerFavourites.Web.Domain
+namespace DfE.EmployerFavourites.Domain
 {
     public class EmployerAccount
     {

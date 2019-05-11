@@ -1,4 +1,4 @@
-namespace DfE.EmployerFavourites.Web.Controllers
+namespace DfE.EmployerFavourites.Web.Configuration
 {
     public static class RouteNames
     {

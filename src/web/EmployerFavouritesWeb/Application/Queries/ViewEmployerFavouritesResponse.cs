@@ -1,7 +1,6 @@
-using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.Domain;
 
-namespace DfE.EmployerFavourites.Web.Queries
+namespace DfE.EmployerFavourites.Application.Queries
 {
     public class ViewEmployerFavouritesResponse
     {

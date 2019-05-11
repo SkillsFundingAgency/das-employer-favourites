@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Domain;
-using DfE.EmployerFavourites.Web.Infrastructure.Configuration;
+using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Infrastructure.Configuration;
 using EmployerFavouritesApi.Client.Api;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Polly;
 using Polly.Retry;
 
-namespace DfE.EmployerFavourites.Web.Infrastructure
+namespace DfE.EmployerFavourites.Infrastructure
 {
     public class ApiFavouritesRepository : IFavouritesRepository
     {

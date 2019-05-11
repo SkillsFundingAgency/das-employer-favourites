@@ -9,15 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DfE.EmployerFavourites.Web.Infrastructure;
-using DfE.EmployerFavourites.Web.Domain;
 using SFA.DAS.EAS.Account.Api.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using SFA.DAS.Employer.Shared.UI;
-using DfE.EmployerFavourites.Web.Controllers;
-using DfE.EmployerFavourites.Web.Infrastructure.Configuration;
+using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Infrastructure.Configuration;
+using DfE.EmployerFavourites.Infrastructure;
 
 namespace DfE.EmployerFavourites.Web
 {

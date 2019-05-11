@@ -1,4 +1,4 @@
-﻿namespace DfE.EmployerFavourites.Web.Infrastructure.Configuration
+﻿namespace DfE.EmployerFavourites.Infrastructure.Configuration
 {
     public class EmployerFavouritesApiConfig
     {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace DfE.EmployerFavourites.Domain
+namespace DfE.EmployerFavourites.ApplicationServices.Domain
 {
     public interface IFavouritesRepository
     {

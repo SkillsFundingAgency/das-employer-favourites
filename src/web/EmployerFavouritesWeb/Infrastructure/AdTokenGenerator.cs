@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
-namespace DfE.EmployerFavourites.Web.Infrastructure
+namespace DfE.EmployerFavourites.Infrastructure
 {
     public class AdTokenGenerator
     {

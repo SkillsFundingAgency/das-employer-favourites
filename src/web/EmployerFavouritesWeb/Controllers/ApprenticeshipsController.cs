@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Commands;
+using DfE.EmployerFavourites.Application.Commands;
+using DfE.EmployerFavourites.Application.Queries;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Mappers;
 using DfE.EmployerFavourites.Web.Models;
-using DfE.EmployerFavourites.Web.Queries;
 using DfE.EmployerFavourites.Web.Validation;
 using EmployerFavouritesWeb.Security;
 using MediatR;

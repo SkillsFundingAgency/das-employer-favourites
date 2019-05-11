@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace DfE.EmployerFavourites.Web.Queries
+namespace DfE.EmployerFavourites.Application.Queries
 {
     public class ViewEmployerFavouritesQuery : IRequest<ViewEmployerFavouritesResponse>
     {

@@ -1,4 +1,4 @@
-namespace DfE.EmployerFavourites.Web.Configuration
+namespace DfE.EmployerFavourites.Infrastructure.Configuration
 {
     public class ConnectionStrings
     {

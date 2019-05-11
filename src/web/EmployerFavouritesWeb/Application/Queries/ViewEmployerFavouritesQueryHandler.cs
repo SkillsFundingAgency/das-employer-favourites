@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Client;
 
-namespace DfE.EmployerFavourites.Web.Queries
+namespace DfE.EmployerFavourites.Application.Queries
 {
     public class ViewEmployerFavouritesQueryHandler : IRequestHandler<ViewEmployerFavouritesQuery, ViewEmployerFavouritesResponse>
     {

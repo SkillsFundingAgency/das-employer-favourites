@@ -1,4 +1,4 @@
-namespace DfE.EmployerFavourites.Web.Cookies
+namespace DfE.EmployerFavourites.Web.Configuration
 {
     public class CookieNames
     {

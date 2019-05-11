@@ -1,11 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using DfE.EmployerFavourites.Application.Commands;
+using DfE.EmployerFavourites.Application.Queries;
+using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Web;
-using DfE.EmployerFavourites.Web.Controllers;
 using DfE.EmployerFavourites.Web.Configuration;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.Web.Controllers;
+using DfE.EmployerFavourites.Web.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,13 +17,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using Xunit;
 using SFA.DAS.EAS.Account.Api.Client;
-using System.Collections.Generic;
 using SFA.DAS.EAS.Account.Api.Types;
-using DfE.EmployerFavourites.Web.Commands;
-using DfE.EmployerFavourites.Web.Models;
-using DfE.EmployerFavourites.Web.Queries;
+using Xunit;
 
 namespace DfE.EmployerFavourites.UnitTests.Controllers
 {

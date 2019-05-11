@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Domain;
-using DfE.EmployerFavourites.Infrastructure.Configuration;
+using DfE.EmployerFavourites.ApplicationServices.Configuration;
+using DfE.EmployerFavourites.ApplicationServices.Domain;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 
-namespace DfE.EmployerFavourites.Infrastructure
+namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
     public class AzureTableStorageFavouritesRepository : IFavouritesRepository
     {
@@ -54,7 +54,7 @@ namespace DfE.EmployerFavourites.Infrastructure
                     _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
-                return entity?.ToApprenticeshipFavourites() ?? new ApprenticeshipFavourites();
+                return entity?.ToApprenticeshipFavourites();
             }
             catch (StorageException ex)
             {
@@ -67,7 +67,7 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             if (apprenticeshipFavourite == null)
             {
-                throw new ArgumentNullException(nameof(apprenticeshipFavourite));
+                throw new ArgumentNullException("entity");
             }
 
             try

@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Models;
+﻿using System.Threading.Tasks;
+using DfE.EmployerFavourites.Web.Configuration;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 

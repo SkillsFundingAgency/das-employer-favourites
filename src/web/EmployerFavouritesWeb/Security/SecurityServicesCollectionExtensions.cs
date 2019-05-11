@@ -3,7 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Cookies;
+using DfE.EmployerFavourites.Web.Configuration;
 using EmployerFavouritesWeb.Security;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;

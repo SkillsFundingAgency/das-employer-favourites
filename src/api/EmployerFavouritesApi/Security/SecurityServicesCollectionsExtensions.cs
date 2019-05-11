@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,10 +7,9 @@ namespace DfE.EmployerFavourites.Api.Security
 {
     public static class SecurityServicesCollectionExtensions
     {
-        public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public static void AddADAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            if (!hostingEnvironment.IsDevelopment())
-            {
+
                 var activeDirectoryConfig = configuration.GetSection("ActiveDirectory").Get<ActiveDirectoryConfiguration>();
                 
                 services.AddAuthorization(o =>
@@ -37,7 +35,7 @@ namespace DfE.EmployerFavourites.Api.Security
                         }
                     };
                 });
-            }
+            
         }
     }
 }

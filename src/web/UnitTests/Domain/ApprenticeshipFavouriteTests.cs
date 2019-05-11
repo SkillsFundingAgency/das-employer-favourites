@@ -1,5 +1,5 @@
 ﻿using System;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.Domain;
 using Xunit;
 
 namespace DfE.EmployerFavourites.UnitTests.Domain
