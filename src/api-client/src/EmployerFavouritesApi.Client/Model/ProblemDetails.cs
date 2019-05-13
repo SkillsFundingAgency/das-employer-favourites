@@ -138,8 +138,7 @@ namespace EmployerFavouritesApi.Client.Model
                 ) && base.Equals(input) && 
                 (
                     this.Status == input.Status ||
-                    (this.Status != null &&
-                    this.Status.Equals(input.Status))
+                    this.Status.Equals(input.Status)
                 ) && base.Equals(input) && 
                 (
                     this.Detail == input.Detail ||
@@ -166,7 +165,6 @@ namespace EmployerFavouritesApi.Client.Model
                     hashCode = hashCode * 59 + this.Type.GetHashCode();
                 if (this.Title != null)
                     hashCode = hashCode * 59 + this.Title.GetHashCode();
-                if (this.Status != null)
                     hashCode = hashCode * 59 + this.Status.GetHashCode();
                 if (this.Detail != null)
                     hashCode = hashCode * 59 + this.Detail.GetHashCode();

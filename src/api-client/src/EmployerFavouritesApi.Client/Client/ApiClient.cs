@@ -313,7 +313,7 @@ namespace EmployerFavouritesApi.Client.Client
                     request.RequestFormat = DataFormat.Json;
                 }
 
-                request.AddBody(options.Data);
+                request.AddXmlBody(options.Data);
             }
 
             if (options.FileParameters != null)
