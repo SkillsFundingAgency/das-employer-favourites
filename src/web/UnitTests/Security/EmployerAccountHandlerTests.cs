@@ -19,7 +19,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
     public class EmployerAccountHandlerTests
     {
         private Mock<IOptions<ExternalLinks>> _mockExternalLinks;
-        private Uri _testRegistrationLink = new Uri("http://test.com");
+        private Uri _testRegistrationLink = new Uri("http://test.com/");
 
         public EmployerAccountHandlerTests()
         {
@@ -29,13 +29,13 @@ namespace DfE.EmployerFavourites.UnitTests.Security
         }
 
         [Fact]
-        public async Task HandleRequirementAsync_UserDoesNotHaveMatchingAccountId_Success()
+        public async Task HandleRequirementAsync_UserDoesNotHaveAccountId_Success()
         {
             var requirements = new [] { new EmployerAccountRequirement()};
             var user = new ClaimsPrincipal(
                         new ClaimsIdentity(
                             new Claim[] {
-                                new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "['ABC123']")
+                                new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "")
                             },
                             "Basic")
                         );
@@ -52,13 +52,13 @@ namespace DfE.EmployerFavourites.UnitTests.Security
         }
 
         [Fact]
-        public async Task HandleRequirementAsync_UserDoesNotHaveMatchingAccountId_RedirectsToRegistration()
+        public async Task HandleRequirementAsync_UserDoesNotHaveAccountId_RedirectsToRegistration()
         {
             var requirements = new[] { new EmployerAccountRequirement() };
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
                     new Claim[] {
-                        new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "['ABC123']")
+                        new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "")
                     },
                     "Basic")
             );
@@ -77,11 +77,11 @@ namespace DfE.EmployerFavourites.UnitTests.Security
             Assert.IsType<RedirectResult>(result.Result);
             var redirectResult = result.Result as RedirectResult;
 
-            Assert.Equal(_testRegistrationLink.AbsolutePath,redirectResult.Url);
+            Assert.Equal(_testRegistrationLink.AbsoluteUri + "?returnUrl=:///", redirectResult.Url);
         }
 
         [Fact]
-        public async Task HandleRequirementAsync_UserDoesNotHaveMatchingAccountIdInClaim_Fail()
+        public async Task HandleRequirementAsync_UserDoesNotHaveMatchingAccountId_Fail()
         {
             var requirements = new[] { new EmployerAccountRequirement() };
             var user = new ClaimsPrincipal(
