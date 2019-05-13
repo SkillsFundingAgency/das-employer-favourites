@@ -22,6 +22,7 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
 
         public string ApprenticeshipId { get; set; }
         public IList<int> Ukprns { get; set; }
+        public string Title { get; set; }
         public bool IsFramework => TestForFramework();
 
         private bool TestForFramework()

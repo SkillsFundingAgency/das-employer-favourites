@@ -11,7 +11,7 @@ namespace DfE.EmployerFavourites.UnitTests.Domain.ReadModel
         {
             var sut = new ApprenticeshipFavourites
             {
-                new ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Ukprns = new List<int>{ 1, 2, 3}},
+                new ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Ukprns = new List<int>{ 1, 2, 3 }},
                 new ApprenticeshipFavourite { ApprenticeshipId = "XYZ123" }
             };
 

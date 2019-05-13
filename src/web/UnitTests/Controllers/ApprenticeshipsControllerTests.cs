@@ -93,6 +93,18 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         }
 
         [Fact]
+        public async Task Index_ReturnsModel_ItemsContainTitle()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal("Framework-420-2-1", model.Items.Single(x => x.Id == "420-2-1").Title);
+            Assert.Equal("Standard-30", model.Items.Single(x => x.Id == "30").Title);
+        }
+
+        [Fact]
         public async Task Index_ReturnBadRequest_IfInvalidModel()
         {
             _sut.ModelState.AddModelError("error", "some error");
@@ -260,9 +272,9 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         private static ReadModel.ApprenticeshipFavourites GetTestRepositoryFavourites()
         {
             var list = new ReadModel.ApprenticeshipFavourites();
-            list.Add(new ReadModel.ApprenticeshipFavourite("30"));
-            list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1"));
-            list.Add(new ReadModel.ApprenticeshipFavourite("70", 12345678));
+            list.Add(new ReadModel.ApprenticeshipFavourite("30") { Title = "Standard-30" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("70", 12345678) { Title = "Standard-70" });
 
             return list;
         }

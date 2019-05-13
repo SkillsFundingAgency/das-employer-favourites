@@ -1,5 +1,4 @@
-﻿using DfE.EmployerFavourites.Domain;
-using DfE.EmployerFavourites.Web.Models;
+﻿using DfE.EmployerFavourites.Web.Models;
 
 namespace DfE.EmployerFavourites.Web.Mappers
 {
@@ -10,7 +9,7 @@ namespace DfE.EmployerFavourites.Web.Mappers
             return new ApprenticeshipFavouriteViewModel
             {
                 Id = src.ApprenticeshipId,
-                Title = "This is a place holder",
+                Title = src.Title,
                 IsFramework = src.IsFramework
             };
         }

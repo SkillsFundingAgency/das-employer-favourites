@@ -52,26 +52,29 @@
                     </h2>
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-two-thirds">
+                        @if (!Model.Items[i].IsFramework)
+                        {
                             <div class="govuk-body govuk-!-margin-bottom-2 app-new ">new</div>
-                            @*<dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
-                                <dt class="govuk-!-font-weight-bold">Level:</dt>
-                                <dd>3 (equivalent to A levels at grades A to E)</dd>
-                                <dt class="govuk-!-font-weight-bold">Typical length:</dt>
-                                <dd>18 months</dd>
-                            </dl>
-                            <div class="govuk-form-group">
-                                <fieldset class="govuk-fieldset">
-                                    <div class="govuk-checkboxes">
-                                        <div class="govuk-checkboxes__item">
-                                            <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
-                                            <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
-                                                Compare
-                                            </label>
-                                        </div>
-                                        <a href="#" class="govuk-link govuk-delete-link">Remove</a>
+                        }
+                        @*<dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
+                            <dt class="govuk-!-font-weight-bold">Level:</dt>
+                            <dd>3 (equivalent to A levels at grades A to E)</dd>
+                            <dt class="govuk-!-font-weight-bold">Typical length:</dt>
+                            <dd>18 months</dd>
+                        </dl>
+                        <div class="govuk-form-group">
+                            <fieldset class="govuk-fieldset">
+                                <div class="govuk-checkboxes">
+                                    <div class="govuk-checkboxes__item">
+                                        <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
+                                        <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
+                                            Compare
+                                        </label>
                                     </div>
-                                </fieldset>
-                            </div>*@
+                                    <a href="#" class="govuk-link govuk-delete-link">Remove</a>
+                                </div>
+                            </fieldset>
+                        </div>*@
                         </div>
                         @*<div class="govuk-grid-column-one-third training-provider-content">
                             <h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number">5</span></h3>

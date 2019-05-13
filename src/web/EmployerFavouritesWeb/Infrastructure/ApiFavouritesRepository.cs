@@ -53,7 +53,12 @@ namespace DfE.EmployerFavourites.Infrastructure
             if (src == null || src.Count == 0)
                 return dest;
 
-            dest.AddRange(src.Select(x => new Domain.ReadModel.ApprenticeshipFavourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns }));
+            dest.AddRange(src.Select(x => new Domain.ReadModel.ApprenticeshipFavourite 
+                { 
+                    ApprenticeshipId = x.ApprenticeshipId, 
+                    Title = x.Title,
+                    Ukprns = x.Ukprns 
+                }));
 
             return dest;
         }
