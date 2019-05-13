@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
@@ -10,16 +11,16 @@ namespace DfE.EmployerFavourites.Application.Queries
     public class ViewEmployerFavouritesQueryHandler : IRequestHandler<ViewEmployerFavouritesQuery, ViewEmployerFavouritesResponse>
     {
         private readonly ILogger<ViewEmployerFavouritesQueryHandler> _logger;
-        private readonly IFavouritesRepository _repository;
+        private readonly IFavouritesRepository _apiRepository;
         private readonly IAccountApiClient _accountApi;
 
         public ViewEmployerFavouritesQueryHandler(
             ILogger<ViewEmployerFavouritesQueryHandler> logger,
-            IFavouritesRepository repository, 
+            Func<string, IFavouritesRepository> repoAccessor, 
             IAccountApiClient accountApiClient)
         {
             _logger = logger;
-            _repository = repository;
+            _apiRepository = repoAccessor("Api");
             _accountApi = accountApiClient;
         }
         public async Task<ViewEmployerFavouritesResponse> Handle(ViewEmployerFavouritesQuery request, CancellationToken cancellationToken)
@@ -28,7 +29,7 @@ namespace DfE.EmployerFavourites.Application.Queries
             var accountTask = _accountApi.GetAccount(request.EmployerAccountId);
 
             // Get favourites for account
-            var favouritesTask = _repository.GetApprenticeshipFavourites(request.EmployerAccountId);
+            var favouritesTask = _apiRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
             await Task.WhenAll(accountTask, favouritesTask);
 

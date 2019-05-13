@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "web\UnitTests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployerFavourites.ApplicationServices", "das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj", "{899ABE6C-CDA2-4CCA-84C5-ABF87B4BAC9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployerFavouritesApi.Client", "api-client\src\EmployerFavouritesApi.Client\EmployerFavouritesApi.Client.csproj", "{60C5B278-BD98-4BEC-AF22-86BFD2669F00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{899ABE6C-CDA2-4CCA-84C5-ABF87B4BAC9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{899ABE6C-CDA2-4CCA-84C5-ABF87B4BAC9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{899ABE6C-CDA2-4CCA-84C5-ABF87B4BAC9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60C5B278-BD98-4BEC-AF22-86BFD2669F00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60C5B278-BD98-4BEC-AF22-86BFD2669F00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60C5B278-BD98-4BEC-AF22-86BFD2669F00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60C5B278-BD98-4BEC-AF22-86BFD2669F00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

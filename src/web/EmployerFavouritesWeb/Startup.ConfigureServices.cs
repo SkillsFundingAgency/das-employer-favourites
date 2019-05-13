@@ -17,6 +17,8 @@ using SFA.DAS.Employer.Shared.UI;
 using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using DfE.EmployerFavourites.Infrastructure;
+using System;
+using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -81,7 +83,22 @@ namespace DfE.EmployerFavourites.Web
             services.AddTransient<IAccountApiClient, AccountApiClient>();
             services.AddScoped<AdTokenGenerator>();
 
-            services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>();
+            services.AddScoped<ApiFavouritesRepository>();
+            services.AddScoped<AzureTableStorageFavouritesRepository>();
+
+            // TODO: This is a temporary measure while we don't have a create method on the API.
+            services.AddScoped<Func<string, IFavouritesRepository>>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case "Api":
+                        return serviceProvider.GetService<ApiFavouritesRepository>();
+                    case "Azure":
+                        return serviceProvider.GetService<AzureTableStorageFavouritesRepository>();
+                    default:
+                        throw new KeyNotFoundException(); 
+                }
+            });
         }
 
         private void AddConfiguration(IServiceCollection services)

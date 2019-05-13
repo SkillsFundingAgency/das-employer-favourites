@@ -1,0 +1,23 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployerFavouritesApi", "EmployerFavouritesApi.csproj", "{63CF13F9-13E2-4DC7-A052-A0636EE702C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployerFavourites.ApplicationServices", "..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj", "{F1132E2B-F551-4758-BAFB-9A6BFEB38E78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{63CF13F9-13E2-4DC7-A052-A0636EE702C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63CF13F9-13E2-4DC7-A052-A0636EE702C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63CF13F9-13E2-4DC7-A052-A0636EE702C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63CF13F9-13E2-4DC7-A052-A0636EE702C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1132E2B-F551-4758-BAFB-9A6BFEB38E78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1132E2B-F551-4758-BAFB-9A6BFEB38E78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1132E2B-F551-4758-BAFB-9A6BFEB38E78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1132E2B-F551-4758-BAFB-9A6BFEB38E78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -5,12 +5,12 @@ using DfE.EmployerFavourites.Infrastructure.Configuration;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 
 namespace DfE.EmployerFavourites.Infrastructure
 {
+    // TODO: This class will become obsolete when the API supports create.
     public class AzureTableStorageFavouritesRepository : IFavouritesRepository
     {
         private const string TABLE_NAME = "EmployerFavourites";
@@ -39,28 +39,9 @@ namespace DfE.EmployerFavourites.Infrastructure
                 throw;
             }
         }
-        public async Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
+        public Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
         {
-            try
-            {
-                var table = await GetTable();
-                TableOperation retrieveOperation = TableOperation.Retrieve<ApprenticeshipFavouritesEntity>(employerAccountId, ApprenticeshipFavouritesEntity.ROW_KEY);
-                
-                TableResult result = await _retryPolicy.ExecuteAsync(context => table.ExecuteAsync(retrieveOperation), new Context(nameof(GetApprenticeshipFavourites)));
-                ApprenticeshipFavouritesEntity entity = result.Result as ApprenticeshipFavouritesEntity;
-                
-                if (entity != null)
-                {
-                    _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
-                }
-
-                return entity?.ToApprenticeshipFavourites() ?? new ApprenticeshipFavourites();
-            }
-            catch (StorageException ex)
-            {
-                _logger.LogError(ex, "Unable to Get Apprenticeship Favourites");
-                throw;
-            }
+            throw new NotSupportedException();
         }
 
         public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
