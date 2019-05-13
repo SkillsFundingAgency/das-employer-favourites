@@ -11,7 +11,6 @@ namespace DfE.EmployerFavourites.Api.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
     public class ApprenticeshipsController : ControllerBase
     {
         private readonly ILogger<ApprenticeshipsController> _logger;

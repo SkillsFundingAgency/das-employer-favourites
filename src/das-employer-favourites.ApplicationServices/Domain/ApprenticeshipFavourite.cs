@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Domain
@@ -22,5 +23,17 @@ namespace DfE.EmployerFavourites.ApplicationServices.Domain
         public string ApprenticeshipId { get; set; }
         public IList<int> Ukprns { get; set; }
         public string Title { get; set; }
+
+        public bool IsFramework => TestForFramework();
+
+        private bool TestForFramework()
+        {
+            if (string.IsNullOrWhiteSpace(ApprenticeshipId))
+                throw new ArgumentException("Needs to have a value", nameof(ApprenticeshipId));
+
+            return !int.TryParse(ApprenticeshipId, out int _);
+        }
     }
 }
+
+

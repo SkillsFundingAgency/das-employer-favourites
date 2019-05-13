@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using DfE.EmployerFavourites.ApplicationServices.Commands;
-using DfE.EmployerFavourites.ApplicationServices.Configuration;
-using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.Web.Security;
+using DfE.EmployerFavourites.Web.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,11 +9,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
-using DfE.EmployerFavourites.Web.Configuration;
 using SFA.DAS.EAS.Account.Api.Client;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using SFA.DAS.Employer.Shared.UI;
+using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Infrastructure.Configuration;
+using DfE.EmployerFavourites.Infrastructure;
+using System;
+using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -23,17 +26,19 @@ namespace DfE.EmployerFavourites.Web
     {
         public IConfiguration Configuration { get; }
         private IHostingEnvironment _hostingEnvironment;
+        private readonly OidcConfiguration _authConfig;
 
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
             _hostingEnvironment = env;
+            _authConfig = Configuration.GetSection("Oidc").Get<OidcConfiguration>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
+            services.AddMediatR(typeof(Startup).Assembly);
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -51,6 +56,9 @@ namespace DfE.EmployerFavourites.Web
                     formatter.SupportedMediaTypes
                         .Add(Microsoft.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/csp-report"));
                 }
+
+                options.Filters.Add(new AuthorizeFilter("EmployerAccountPolicy"));
+
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             JsonConvert.DefaultSettings = () =>
@@ -60,7 +68,10 @@ namespace DfE.EmployerFavourites.Web
                 return settings;
             };
 
-            services.AddAuthenticationService(Configuration, _hostingEnvironment);
+            services.AddMaMenuConfiguration(Configuration, RouteNames.Logout_Get, _authConfig.ClientId);
+
+            services.AddAuthenticationService(_authConfig, _hostingEnvironment);
+            services.AddAuthorizationService();
 
             AddConfiguration(services);
             AddInfrastructureServices(services);
@@ -70,14 +81,18 @@ namespace DfE.EmployerFavourites.Web
         {
             services.AddSingleton<IAccountApiConfiguration>(x => Configuration.GetSection("AccountApiConfiguration").Get<AccountApiConfiguration>());
             services.AddTransient<IAccountApiClient, AccountApiClient>();
+            services.AddScoped<AdTokenGenerator>();
 
-            services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>();
+            services.AddScoped<IFavouritesReadRepository, ApiFavouritesRepository>();
+            services.AddScoped<IFavouritesWriteRepository, AzureTableStorageFavouritesRepository>();
         }
 
         private void AddConfiguration(IServiceCollection services)
         {
             services.Configure<ExternalLinks>(Configuration.GetSection("ExternalLinks"));
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<CdnConfig>(Configuration.GetSection("cdn"));
+            services.Configure<EmployerFavouritesApiConfig>(Configuration.GetSection("EmployerFavouritesApi"));
         }
     }
 }

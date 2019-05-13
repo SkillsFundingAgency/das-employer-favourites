@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>DfE.EmployerFavourites.UnitTests</RootNamespace>
@@ -16,5 +16,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj" />
     <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\ReadModel\" />
   </ItemGroup>
 </Project>

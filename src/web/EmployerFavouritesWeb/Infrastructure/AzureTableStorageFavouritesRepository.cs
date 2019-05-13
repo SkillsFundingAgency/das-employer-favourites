@@ -1,22 +1,23 @@
 using System;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.ApplicationServices.Configuration;
-using DfE.EmployerFavourites.Web.Domain;
+using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Infrastructure.Configuration;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 
-namespace DfE.EmployerFavourites.Web.Infrastructure
+namespace DfE.EmployerFavourites.Infrastructure
 {
-    public class AzureTableStorageFavouritesRepository : IFavouritesRepository
+    // TODO: This class will become obsolete when the API supports create.
+    public class AzureTableStorageFavouritesRepository : IFavouritesWriteRepository
     {
         private const string TABLE_NAME = "EmployerFavourites";
         private readonly ILogger<AzureTableStorageFavouritesRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
         private readonly CloudStorageAccount _storageAccount;
+
 
         public AzureTableStorageFavouritesRepository(ILogger<AzureTableStorageFavouritesRepository> logger, IOptions<ConnectionStrings> option)
         {
@@ -39,35 +40,12 @@ namespace DfE.EmployerFavourites.Web.Infrastructure
                 throw;
             }
         }
-        public async Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
-        {
-            try
-            {
-                var table = await GetTable();
-                TableOperation retrieveOperation = TableOperation.Retrieve<ApprenticeshipFavouritesEntity>(employerAccountId, ApprenticeshipFavouritesEntity.ROW_KEY);
-                
-                TableResult result = await _retryPolicy.ExecuteAsync(context => table.ExecuteAsync(retrieveOperation), new Context(nameof(GetApprenticeshipFavourites)));
-                ApprenticeshipFavouritesEntity entity = result.Result as ApprenticeshipFavouritesEntity;
-                
-                if (entity != null)
-                {
-                    _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
-                }
 
-                return entity?.ToApprenticeshipFavourites();
-            }
-            catch (StorageException ex)
-            {
-                _logger.LogError(ex, "Unable to Get Apprenticeship Favourites");
-                throw;
-            }
-        }
-
-        public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
+        public async Task SaveApprenticeshipFavourites(string employerAccountId, Domain.WriteModel.ApprenticeshipFavourites apprenticeshipFavourite)
         {
             if (apprenticeshipFavourite == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(apprenticeshipFavourite));
             }
 
             try

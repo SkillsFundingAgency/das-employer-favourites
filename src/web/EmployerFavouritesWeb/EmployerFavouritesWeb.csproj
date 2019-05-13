@@ -17,13 +17,27 @@
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.1" />
     <PackageReference Include="Polly" Version="7.1.0" />
+    <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.16" />
+    <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="2.0.0" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.19" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0" />
+    <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="1.0.4" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj" />
+    <ProjectReference Include="..\..\api-client\src\EmployerFavouritesApi.Client\EmployerFavouritesApi.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mappers\" />
+    <Folder Include="Infrastructure\Configuration\" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\Commands\" />
+    <Folder Include="Application\Queries\" />
+    <Folder Include="Domain\ReadModel\" />
+    <Folder Include="Domain\WriteModel\" />
   </ItemGroup>
 </Project>
