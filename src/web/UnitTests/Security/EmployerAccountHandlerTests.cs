@@ -35,7 +35,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
             var user = new ClaimsPrincipal(
                         new ClaimsIdentity(
                             new Claim[] {
-                                new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "['ABC123']")
+                                new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "")
                             },
                             "Basic")
                         );
@@ -58,7 +58,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
             var user = new ClaimsPrincipal(
                 new ClaimsIdentity(
                     new Claim[] {
-                        new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "['ABC123']")
+                        new Claim(EmployerClaims.AccountsClaimsTypeIdentifier, "")
                     },
                     "Basic")
             );
@@ -77,11 +77,11 @@ namespace DfE.EmployerFavourites.UnitTests.Security
             Assert.IsType<RedirectResult>(result.Result);
             var redirectResult = result.Result as RedirectResult;
 
-            Assert.Equal(_testRegistrationLink.AbsolutePath,redirectResult.Url);
+            Assert.Equal(_testRegistrationLink.AbsoluteUri + "?returnUrl=:///",redirectResult.Url);
         }
 
         [Fact]
-        public async Task HandleRequirementAsync_UserDoesNotHaveMatchingAccountIdInClaim_Fail()
+        public async Task HandleRequirementAsync_UserDoesNotHaveMatchingAccountId_Fail()
         {
             var requirements = new[] { new EmployerAccountRequirement() };
             var user = new ClaimsPrincipal(
