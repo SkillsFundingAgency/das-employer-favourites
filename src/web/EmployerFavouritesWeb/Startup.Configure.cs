@@ -119,7 +119,10 @@ namespace DfE.EmployerFavourites.Web
             
             if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsHomePage.AbsoluteUri))
                 destinations.Add(linksConfig.AccountsHomePage.AbsoluteUri);
-            
+
+            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsRegistrationPage.AbsoluteUri))
+                destinations.Add(linksConfig.AccountsRegistrationPage.AbsoluteUri);
+
             return destinations.ToArray();
         }
     }
