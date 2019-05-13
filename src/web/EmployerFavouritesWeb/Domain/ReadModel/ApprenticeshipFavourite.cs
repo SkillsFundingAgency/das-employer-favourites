@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DfE.EmployerFavourites.Domain
+namespace DfE.EmployerFavourites.Domain.ReadModel
 {
     public class ApprenticeshipFavourite
     {

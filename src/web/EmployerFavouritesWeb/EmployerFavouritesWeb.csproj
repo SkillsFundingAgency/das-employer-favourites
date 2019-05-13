@@ -37,5 +37,7 @@
     <Folder Include="Application\" />
     <Folder Include="Application\Commands\" />
     <Folder Include="Application\Queries\" />
+    <Folder Include="Domain\ReadModel\" />
+    <Folder Include="Domain\WriteModel\" />
   </ItemGroup>
 </Project>

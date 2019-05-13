@@ -83,22 +83,8 @@ namespace DfE.EmployerFavourites.Web
             services.AddTransient<IAccountApiClient, AccountApiClient>();
             services.AddScoped<AdTokenGenerator>();
 
-            services.AddScoped<ApiFavouritesRepository>();
-            services.AddScoped<AzureTableStorageFavouritesRepository>();
-
-            // TODO: This is a temporary measure while we don't have a create method on the API.
-            services.AddScoped<Func<string, IFavouritesRepository>>(serviceProvider => key =>
-            {
-                switch (key)
-                {
-                    case "Api":
-                        return serviceProvider.GetService<ApiFavouritesRepository>();
-                    case "Azure":
-                        return serviceProvider.GetService<AzureTableStorageFavouritesRepository>();
-                    default:
-                        throw new KeyNotFoundException(); 
-                }
-            });
+            services.AddScoped<IFavouritesReadRepository, ApiFavouritesRepository>();
+            services.AddScoped<IFavouritesWriteRepository, AzureTableStorageFavouritesRepository>();
         }
 
         private void AddConfiguration(IServiceCollection services)

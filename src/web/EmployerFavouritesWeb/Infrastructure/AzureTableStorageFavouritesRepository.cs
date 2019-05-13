@@ -11,12 +11,13 @@ using Polly.Retry;
 namespace DfE.EmployerFavourites.Infrastructure
 {
     // TODO: This class will become obsolete when the API supports create.
-    public class AzureTableStorageFavouritesRepository : IFavouritesRepository
+    public class AzureTableStorageFavouritesRepository : IFavouritesWriteRepository
     {
         private const string TABLE_NAME = "EmployerFavourites";
         private readonly ILogger<AzureTableStorageFavouritesRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
         private readonly CloudStorageAccount _storageAccount;
+
 
         public AzureTableStorageFavouritesRepository(ILogger<AzureTableStorageFavouritesRepository> logger, IOptions<ConnectionStrings> option)
         {
@@ -39,12 +40,8 @@ namespace DfE.EmployerFavourites.Infrastructure
                 throw;
             }
         }
-        public Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
-        {
-            throw new NotSupportedException();
-        }
 
-        public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
+        public async Task SaveApprenticeshipFavourites(string employerAccountId, Domain.WriteModel.ApprenticeshipFavourites apprenticeshipFavourite)
         {
             if (apprenticeshipFavourite == null)
             {

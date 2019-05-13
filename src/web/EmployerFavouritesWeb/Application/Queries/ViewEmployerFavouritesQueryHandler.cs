@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
@@ -11,16 +10,16 @@ namespace DfE.EmployerFavourites.Application.Queries
     public class ViewEmployerFavouritesQueryHandler : IRequestHandler<ViewEmployerFavouritesQuery, ViewEmployerFavouritesResponse>
     {
         private readonly ILogger<ViewEmployerFavouritesQueryHandler> _logger;
-        private readonly IFavouritesRepository _apiRepository;
+        private readonly IFavouritesReadRepository _readRepository;
         private readonly IAccountApiClient _accountApi;
 
         public ViewEmployerFavouritesQueryHandler(
             ILogger<ViewEmployerFavouritesQueryHandler> logger,
-            Func<string, IFavouritesRepository> repoAccessor, 
+            IFavouritesReadRepository readRepository,
             IAccountApiClient accountApiClient)
         {
             _logger = logger;
-            _apiRepository = repoAccessor("Api");
+            _readRepository = readRepository;
             _accountApi = accountApiClient;
         }
         public async Task<ViewEmployerFavouritesResponse> Handle(ViewEmployerFavouritesQuery request, CancellationToken cancellationToken)
@@ -29,19 +28,19 @@ namespace DfE.EmployerFavourites.Application.Queries
             var accountTask = _accountApi.GetAccount(request.EmployerAccountId);
 
             // Get favourites for account
-            var favouritesTask = _apiRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
+            var favouritesTask = _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
             await Task.WhenAll(accountTask, favouritesTask);
 
             // Build view model
             return new ViewEmployerFavouritesResponse
             {
-                EmployerAccount = new EmployerAccount
+                EmployerAccount = new Domain.ReadModel.EmployerAccount
                 {
                     EmployerAccountId = request.EmployerAccountId,
                     Name = accountTask.Result.DasAccountName
                 },
-                EmployerFavourites = favouritesTask.Result ?? new ApprenticeshipFavourites()
+                EmployerFavourites = favouritesTask.Result ?? new Domain.ReadModel.ApprenticeshipFavourites()
             };
         }
     }

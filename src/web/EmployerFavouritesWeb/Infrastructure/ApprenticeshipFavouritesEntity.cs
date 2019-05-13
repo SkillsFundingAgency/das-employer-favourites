@@ -1,4 +1,3 @@
-using DfE.EmployerFavourites.Domain;
 using Microsoft.Azure.Cosmos.Table;
 using Newtonsoft.Json;
 
@@ -12,7 +11,7 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
         }
 
-        public ApprenticeshipFavouritesEntity(string employerAccountId, ApprenticeshipFavourites favourites)
+        public ApprenticeshipFavouritesEntity(string employerAccountId, Domain.WriteModel.ApprenticeshipFavourites favourites)
         {
             PartitionKey = employerAccountId;
             RowKey = ROW_KEY;
@@ -21,9 +20,9 @@ namespace DfE.EmployerFavourites.Infrastructure
 
         public string Favourites { get; set; }
 
-        public ApprenticeshipFavourites ToApprenticeshipFavourites()
+        public Domain.ReadModel.ApprenticeshipFavourites ToApprenticeshipFavourites()
         {
-            return JsonConvert.DeserializeObject<ApprenticeshipFavourites>(Favourites);
+            return JsonConvert.DeserializeObject<Domain.ReadModel.ApprenticeshipFavourites>(Favourites);
         }
     }
 }

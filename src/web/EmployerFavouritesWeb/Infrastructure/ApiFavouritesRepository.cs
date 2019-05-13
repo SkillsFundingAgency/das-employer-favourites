@@ -12,7 +12,7 @@ using Polly.Retry;
 
 namespace DfE.EmployerFavourites.Infrastructure
 {
-    public class ApiFavouritesRepository : IFavouritesRepository
+    public class ApiFavouritesRepository : IFavouritesReadRepository
     {
         private readonly ILogger<ApiFavouritesRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
@@ -29,7 +29,8 @@ namespace DfE.EmployerFavourites.Infrastructure
             _apiConfig = options.Value;
             _tokenGenerator = tokenGenerator;
         }
-        public async Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
+
+        public virtual async Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
         {
             try
             {
@@ -45,21 +46,16 @@ namespace DfE.EmployerFavourites.Infrastructure
             }
         }
 
-        private ApprenticeshipFavourites Map(List<EmployerFavouritesApi.Client.Model.ApprenticeshipFavourite> src)
+        private Domain.ReadModel.ApprenticeshipFavourites Map(List<EmployerFavouritesApi.Client.Model.ApprenticeshipFavourite> src)
         {
-            var dest = new ApprenticeshipFavourites();
+            var dest = new Domain.ReadModel.ApprenticeshipFavourites();
 
             if (src == null || src.Count == 0)
                 return dest;
 
-            dest.AddRange(src.Select(x => new ApprenticeshipFavourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns }));
+            dest.AddRange(src.Select(x => new Domain.ReadModel.ApprenticeshipFavourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns }));
 
             return dest;
-        }
-
-        public Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
-        {
-            throw new NotImplementedException();
         }
 
         private Polly.Retry.AsyncRetryPolicy GetRetryPolicy()

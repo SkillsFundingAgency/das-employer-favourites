@@ -1,8 +1,8 @@
 ﻿using System;
-using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Domain.ReadModel;
 using Xunit;
 
-namespace DfE.EmployerFavourites.UnitTests.Domain
+namespace DfE.EmployerFavourites.UnitTests.Domain.ReadModel
 {
     public class ApprenticeshipFavouriteTests
     {

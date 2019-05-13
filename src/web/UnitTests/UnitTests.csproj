@@ -17,4 +17,7 @@
     <ProjectReference Include="..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj" />
     <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\ReadModel\" />
+  </ItemGroup>
 </Project>

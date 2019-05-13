@@ -12,34 +12,37 @@ namespace DfE.EmployerFavourites.Application.Commands
     public class SaveApprenticeshipFavouriteCommandHandler : AsyncRequestHandler<SaveApprenticeshipFavouriteCommand>
     {
         private readonly ILogger<SaveApprenticeshipFavouriteCommandHandler> _logger;
-        private readonly IFavouritesRepository _apiRepository;
-        private readonly IFavouritesRepository _azureRepository;
+        private readonly IFavouritesReadRepository _readRepository;
+        private readonly IFavouritesWriteRepository _writeRepository;
         private readonly IAccountApiClient _accountApiClient;
 
         public SaveApprenticeshipFavouriteCommandHandler(
             ILogger<SaveApprenticeshipFavouriteCommandHandler> logger,
-            Func<string, IFavouritesRepository> repoAccessor,
+            IFavouritesReadRepository readRepository,
+            IFavouritesWriteRepository writeRepository,
             IAccountApiClient accountApiClient)
         {
             _logger = logger;
-            _apiRepository = repoAccessor("Api");
-            _azureRepository = repoAccessor("Azure");
+            _readRepository = readRepository;
+            _writeRepository = writeRepository;
             _accountApiClient = accountApiClient;
         }
 
         protected override async Task Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
         {
             var employerAccountId = await GetEmployerAccountId(request.UserId);
-            var favourites = (await _apiRepository.GetApprenticeshipFavourites(employerAccountId)) ?? new ApprenticeshipFavourites();
+            var favourites = (await _readRepository.GetApprenticeshipFavourites(employerAccountId)) ?? new Domain.ReadModel.ApprenticeshipFavourites();
+
+            var writeModel = favourites.MapToWriteModel();
 
             var existing = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
 
             if (existing == null)
             {
                 if (request.Ukprn.HasValue)
-                    favourites.Add(new ApprenticeshipFavourite(request.ApprenticeshipId, request.Ukprn.Value));
+                    writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId, request.Ukprn.Value));
                 else
-                    favourites.Add(new ApprenticeshipFavourite(request.ApprenticeshipId));
+                    writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId));
             }
             else
             {
@@ -51,7 +54,7 @@ namespace DfE.EmployerFavourites.Application.Commands
                     existing.Ukprns.Add(request.Ukprn.Value);
             }
 
-            await _azureRepository.SaveApprenticeshipFavourites(employerAccountId, favourites);
+            await _writeRepository.SaveApprenticeshipFavourites(employerAccountId, writeModel);
         }
 
         private async Task<string> GetEmployerAccountId(string userId)

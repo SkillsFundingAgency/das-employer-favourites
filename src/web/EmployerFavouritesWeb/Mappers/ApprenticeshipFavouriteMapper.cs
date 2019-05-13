@@ -5,7 +5,7 @@ namespace DfE.EmployerFavourites.Web.Mappers
 {
     internal class ApprenticeshipFavouriteMapper
     {
-        public ApprenticeshipFavouriteViewModel Map(ApprenticeshipFavourite src)
+        public ApprenticeshipFavouriteViewModel Map(Domain.ReadModel.ApprenticeshipFavourite src)
         {
             return new ApprenticeshipFavouriteViewModel
             {

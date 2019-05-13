@@ -20,6 +20,8 @@ using Moq;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using Xunit;
+using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
+using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 
 namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
@@ -29,14 +31,18 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         public const string EMPLOYER_ACCOUNT_ID = "XXX123";
         public const string USER_ID = "User123";
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
-        private readonly Mock<IFavouritesRepository> _mockRepository;
+        private Mock<IFavouritesReadRepository> _mockFavouritesReadRepository;
+        private Mock<IFavouritesWriteRepository> _mockFavouritesWriteRepository;
         private readonly Mock<IAccountApiClient> _mockAccountApiClient;
         private readonly ApprenticeshipsController _sut;
 
         public ApprenticeshipsControllerTests()
         {
-            _mockRepository = new Mock<IFavouritesRepository>();
-            _mockRepository.Setup(x => x.GetApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetTestRepositoryFavourites());
+
+            _mockFavouritesReadRepository = new Mock<IFavouritesReadRepository>();
+            _mockFavouritesReadRepository.Setup(x => x.GetApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetTestRepositoryFavourites());
+
+            _mockFavouritesWriteRepository = new Mock<IFavouritesWriteRepository>();
 
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
@@ -157,8 +163,8 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
             var result = await _sut.Add("40");
 
-            _mockRepository.Verify(x => 
-                x.SaveApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID, It.IsAny<ApprenticeshipFavourites>()),
+            _mockFavouritesWriteRepository.Verify(x => 
+                x.SaveApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID, It.IsAny<WriteModel.ApprenticeshipFavourites>()),
                 Times.Once);
         }
 
@@ -167,10 +173,10 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
             var result = await _sut.Add("40");
 
-            _mockRepository.Verify(x => 
+            _mockFavouritesWriteRepository.Verify(x => 
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(),
-                    It.Is<ApprenticeshipFavourites>(a => ContainsExistingPlusNewApprenticeship(a, "40"))),
+                    It.Is<WriteModel.ApprenticeshipFavourites>(a => ContainsExistingPlusNewApprenticeship(a, "40"))),
                 Times.Once);
         }
 
@@ -179,10 +185,10 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
             var result = await _sut.Add("60", 12345678);
 
-            _mockRepository.Verify(x =>
+            _mockFavouritesWriteRepository.Verify(x =>
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(),
-                    It.Is<ApprenticeshipFavourites>(a => ContainsExistingAndNewApprenticeshipWithUkprn(a, "60", 12345678))),
+                    It.Is<WriteModel.ApprenticeshipFavourites>(a => ContainsExistingAndNewApprenticeshipWithUkprn(a, "60", 12345678))),
                 Times.Once);
         }
 
@@ -191,10 +197,10 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
              var result = await _sut.Add("420-2-1");
 
-            _mockRepository.Verify(x => 
+            _mockFavouritesWriteRepository.Verify(x => 
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(),
-                    It.IsAny<ApprenticeshipFavourites>()), 
+                    It.IsAny<WriteModel.ApprenticeshipFavourites>()), 
                 Times.Never);
         }
 
@@ -203,10 +209,10 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
              var result = await _sut.Add("70", 12345678);
 
-            _mockRepository.Verify(x => 
+            _mockFavouritesWriteRepository.Verify(x => 
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(), 
-                    It.IsAny<ApprenticeshipFavourites>()), 
+                    It.IsAny<WriteModel.ApprenticeshipFavourites>()), 
                 Times.Never);
         }
 
@@ -215,10 +221,10 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
              var result = await _sut.Add("30", 12345678);
 
-            _mockRepository.Verify(x => 
+            _mockFavouritesWriteRepository.Verify(x => 
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(), 
-                    It.Is<ApprenticeshipFavourites>(a => ContainsNewUkprnForExistingApprenticeship(a, "30", 12345678))), 
+                    It.Is<WriteModel.ApprenticeshipFavourites>(a => ContainsNewUkprnForExistingApprenticeship(a, "30", 12345678))), 
                 Times.Once);
         }
 
@@ -227,36 +233,36 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
              var result = await _sut.Add("30", 12345678);
 
-            _mockRepository.Verify(x => 
+            _mockFavouritesWriteRepository.Verify(x => 
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(), 
-                    It.Is<ApprenticeshipFavourites>(a => ContainsNewUkprnForExistingApprenticeship(a, "30", 12345678))), 
+                    It.Is<WriteModel.ApprenticeshipFavourites>(a => ContainsNewUkprnForExistingApprenticeship(a, "30", 12345678))), 
                 Times.Once);
         }
 
-        private static bool ContainsExistingAndNewApprenticeshipWithUkprn(ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
+        private static bool ContainsExistingAndNewApprenticeshipWithUkprn(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
         {
             return ContainsExistingPlusNewApprenticeship(a, apprenticeshipId) 
                 && a.Any(b => b.ApprenticeshipId == apprenticeshipId && b.Ukprns.Contains(ukprn));
         }
 
-        private static bool ContainsNewUkprnForExistingApprenticeship(ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
+        private static bool ContainsNewUkprnForExistingApprenticeship(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
         {
             return a.Count == GetTestRepositoryFavourites().Count 
                 && a.Any(b => b.ApprenticeshipId == apprenticeshipId && b.Ukprns.Contains(ukprn));
         }
 
-        private static bool ContainsExistingPlusNewApprenticeship(ApprenticeshipFavourites a, string apprenticeshipId)
+        private static bool ContainsExistingPlusNewApprenticeship(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId)
         {
             return a.Count == (GetTestRepositoryFavourites().Count + 1) && a.Any(b => b.ApprenticeshipId == apprenticeshipId);
         }
 
-        private static ApprenticeshipFavourites GetTestRepositoryFavourites()
+        private static ReadModel.ApprenticeshipFavourites GetTestRepositoryFavourites()
         {
-            var list = new ApprenticeshipFavourites();
-            list.Add(new ApprenticeshipFavourite("30"));
-            list.Add(new ApprenticeshipFavourite("420-2-1"));
-            list.Add(new ApprenticeshipFavourite("70", 12345678));
+            var list = new ReadModel.ApprenticeshipFavourites();
+            list.Add(new ReadModel.ApprenticeshipFavourite("30"));
+            list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1"));
+            list.Add(new ReadModel.ApprenticeshipFavourite("70", 12345678));
 
             return list;
         }
@@ -305,7 +311,8 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
             var services = new ServiceCollection();
             services.AddMediatR(typeof(Startup).Assembly);
-            services.AddTransient<IFavouritesRepository>(c => _mockRepository.Object);
+            services.AddTransient<IFavouritesReadRepository>(c => _mockFavouritesReadRepository.Object);
+            services.AddTransient<IFavouritesWriteRepository>(c => _mockFavouritesWriteRepository.Object);
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
