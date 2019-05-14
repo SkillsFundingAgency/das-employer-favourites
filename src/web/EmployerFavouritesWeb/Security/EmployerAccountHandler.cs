@@ -2,6 +2,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Web.Configuration;
 using EmployerFavouritesWeb.Security;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ namespace DfE.EmployerFavourites.Web.Security
                     if (employerAccounts.Any() == false)
                     {
                         mvcContext.Result = new RedirectResult($"{_externalLinks.Value.AccountsRegistrationPage}?returnUrl={mvcContext.HttpContext.Request.GetEncodedUrl()}");
+                        mvcContext.HttpContext.SignOutAsync("Cookies");
 
                         //Although not a 'success', the redirect only works if calling Succeed(), please see: https://stackoverflow.com/questions/41707051
                         context.Succeed(requirement);
