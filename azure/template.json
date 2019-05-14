@@ -75,6 +75,9 @@
         "AccountsHomePage": {
             "type": "string"
         },
+        "AccountsRegistrationPage": {
+            "type": "string"
+        },
         "AccountsApiBaseUrl": {
             "type": "string"
         },
@@ -304,6 +307,10 @@
                             {
                                 "name": "ExternalLinks:AccountsHomePage",
                                 "value": "[parameters('AccountsHomePage')]"
+                            },
+                            {
+                                "name": "ExternalLinks:AccountsRegistrationPage",
+                                "value": "[parameters('AccountsRegistrationPage')]"
                             },
                             {
                                 "name": "AccountApiConfiguration:ApiBaseUrl",
