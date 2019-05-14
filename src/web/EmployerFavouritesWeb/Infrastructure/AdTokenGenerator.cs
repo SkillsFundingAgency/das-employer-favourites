@@ -15,6 +15,7 @@ namespace DfE.EmployerFavourites.Infrastructure
         public AdTokenGenerator(IHostingEnvironment environment)
         {
             _environment = environment;
+            _tokenLookup = new Dictionary<string, Token>();
         }
 
         private class Token
@@ -27,11 +28,6 @@ namespace DfE.EmployerFavourites.Infrastructure
 
             public string TokenValue { get; set; }
             public DateTime Expires { get; set; }
-        }
-
-        public AdTokenGenerator()
-        {
-            _tokenLookup = new Dictionary<string, Token>();
         }
 
         public async Task<string> Generate(string tenant, string clientId, string secret, string identifierUri)
@@ -57,5 +53,4 @@ namespace DfE.EmployerFavourites.Infrastructure
             return result.AccessToken;
         }
     }
-
 }
