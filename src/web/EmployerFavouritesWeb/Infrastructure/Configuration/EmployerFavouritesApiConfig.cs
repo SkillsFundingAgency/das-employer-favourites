@@ -1,4 +1,8 @@
-﻿namespace DfE.EmployerFavourites.Infrastructure.Configuration
+﻿using System;
+using System.Linq;
+using System.Reflection;
+
+namespace DfE.EmployerFavourites.Infrastructure.Configuration
 {
     public class EmployerFavouritesApiConfig
     {
@@ -7,5 +11,14 @@
         public string ClientSecret { get; set; }
         public string IdentifierUri { get; set; }
         public string Tenant { get; set; }
+
+        public bool HasEmptyProperties()
+        {
+            var type = GetType();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var hasProperty = properties.Select(x => x.GetValue(this, null))
+                .Any(y => y != null && !String.IsNullOrWhiteSpace(y.ToString()));
+            return !hasProperty;
+        }
     }
 }

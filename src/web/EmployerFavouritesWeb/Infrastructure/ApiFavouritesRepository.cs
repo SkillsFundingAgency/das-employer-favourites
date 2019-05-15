@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
+using RestSharp;
 
 namespace DfE.EmployerFavourites.Infrastructure
 {
@@ -81,17 +82,19 @@ namespace DfE.EmployerFavourites.Infrastructure
         private async Task<ApprenticeshipsApi> GetClient()
         {
             string basePath = _apiConfig.ApiBaseUrl;
-            string bearerToken = await _tokenGenerator.Generate(_apiConfig.Tenant, _apiConfig.ClientId, _apiConfig.ClientSecret, _apiConfig.IdentifierUri);
+            string bearerToken = String.Empty;
+
+            if (!_apiConfig.HasEmptyProperties())
+            {
+                bearerToken = await _tokenGenerator.Generate(_apiConfig.Tenant, _apiConfig.ClientId, _apiConfig.ClientSecret, _apiConfig.IdentifierUri);
+            }
 
             var clientConfig = new EmployerFavouritesApi.Client.Client.Configuration
             {
                 BasePath = basePath
             };
 
-            //Add the key to the Authorization header
-            clientConfig.ApiKey["Authorization"] = bearerToken;
-            // //Add the key prefix (if one is to be used)
-            clientConfig.ApiKeyPrefix["Authorization"] = "Bearer";
+            clientConfig.AccessToken = bearerToken;
 
             return new ApprenticeshipsApi(clientConfig);
         }

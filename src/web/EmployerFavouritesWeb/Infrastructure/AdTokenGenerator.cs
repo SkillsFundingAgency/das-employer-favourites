@@ -32,10 +32,6 @@ namespace DfE.EmployerFavourites.Infrastructure
 
         public async Task<string> Generate(string tenant, string clientId, string secret, string identifierUri)
         {
-            if (_environment.IsDevelopment())
-            {
-                return string.Empty;
-            }
 
             var key = string.Format(KeyPattern, tenant, clientId, secret, identifierUri);
             var token = _tokenLookup.GetValueOrDefault(key);
