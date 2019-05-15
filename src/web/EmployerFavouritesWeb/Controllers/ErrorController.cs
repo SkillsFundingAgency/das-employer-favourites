@@ -24,12 +24,16 @@ namespace DfE.EmployerFavourites.Web.Controllers
         {
             Response.StatusCode = id;
 
+            LogException();
+
             return View(GetViewNameForStatus(id), new ErrorViewModel { StatusCode = id, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private string GetViewNameForStatus(int statusCode)
+        private void LogException()
         {
             var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
+
+            _logger.LogDebug($"Exception found: {exceptionFeature != null}");
 
             if (exceptionFeature != null)
             {
@@ -46,7 +50,10 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
                 _logger.LogError(exception, "Unhandled exception on path: {route}", routeWhereExceptionOccurred);
             }
+        }
 
+        private string GetViewNameForStatus(int statusCode)
+        { 
             switch(statusCode)
             {
                 case (int)HttpStatusCode.NotFound:

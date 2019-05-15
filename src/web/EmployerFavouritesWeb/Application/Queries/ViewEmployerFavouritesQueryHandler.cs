@@ -24,6 +24,8 @@ namespace DfE.EmployerFavourites.Application.Queries
         }
         public async Task<ViewEmployerFavouritesResponse> Handle(ViewEmployerFavouritesQuery request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation($"Handling ViewEmployerFavouritesQuery for {request.EmployerAccountId}");
+
             // Get Account
             var accountTask = _accountApi.GetAccount(request.EmployerAccountId);
 
@@ -31,6 +33,9 @@ namespace DfE.EmployerFavourites.Application.Queries
             var favouritesTask = _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
             await Task.WhenAll(accountTask, favouritesTask);
+
+            _logger.LogDebug($"Get Accounts Task(Status:{accountTask.Status})");
+            _logger.LogDebug($"Get Favourites Task(Status:{favouritesTask.Status})");
 
             // Build view model
             return new ViewEmployerFavouritesResponse
