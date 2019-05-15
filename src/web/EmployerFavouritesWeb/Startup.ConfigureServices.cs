@@ -61,13 +61,6 @@ namespace DfE.EmployerFavourites.Web
 
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            JsonConvert.DefaultSettings = () =>
-            {
-                var settings = new JsonSerializerSettings();
-                settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                return settings;
-            };
-
             services.AddMaMenuConfiguration(Configuration, RouteNames.Logout_Get, _authConfig.ClientId);
 
             services.AddAuthenticationService(_authConfig, _hostingEnvironment);
