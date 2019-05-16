@@ -30,6 +30,8 @@ namespace DfE.EmployerFavourites.Application.Commands
 
         protected override async Task Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
         {
+            _logger.LogInformation($"Handling SaveApprenticeshipFavouriteCommand for {request.ApprenticeshipId}");
+
             var employerAccountId = await GetEmployerAccountId(request.UserId);
             var favourites = (await _readRepository.GetApprenticeshipFavourites(employerAccountId)) ?? new Domain.ReadModel.ApprenticeshipFavourites();
 

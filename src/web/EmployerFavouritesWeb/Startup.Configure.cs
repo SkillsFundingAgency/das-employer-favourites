@@ -3,6 +3,7 @@ using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -27,7 +28,11 @@ namespace DfE.EmployerFavourites.Web
             
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                var configuration = app.ApplicationServices.GetService<Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration>();
+                configuration.DisableTelemetry = true;
+
+                app.UseExceptionHandler("/Error/Error");
+                //app.UseDeveloperExceptionPage();
             }
             else
             {
