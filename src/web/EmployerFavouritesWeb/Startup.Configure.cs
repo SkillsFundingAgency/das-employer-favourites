@@ -31,8 +31,7 @@ namespace DfE.EmployerFavourites.Web
                 var configuration = app.ApplicationServices.GetService<Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration>();
                 configuration.DisableTelemetry = true;
 
-                app.UseExceptionHandler("/Error/Error");
-                //app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();
             }
             else
             {

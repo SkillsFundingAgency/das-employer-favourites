@@ -1,7 +1,8 @@
 ﻿@{
     string accountId = (string)this.ViewContext.RouteData.Values["employerAccountId"];
-    ViewBag.HideHeaderBorder = true; 
+    ViewBag.HideHeaderBorder = true;
 }
+
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
 <head>
@@ -29,35 +30,32 @@
       <script src="/libs/html5-shiv/html5shiv.js"></script>
     <![endif]-->
     <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
-    @Html.Raw(JavaScriptSnippet.FullScript)
+    @Html.Raw(AiJsHelper.Script)
+
 </head>
 <body class="govuk-template__body ">
-  <script nws-csp-add-nonce="true">
-    document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
-  </script>
-  <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <script nws-csp-add-nonce="true">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-<partial name="_Header" />
-<partial name="_Menu" model="@accountId"/>
-  <div class="govuk-width-container app-account-header">
-    @RenderSection("BodyHeader", required: false)
-  </div>
-
-  <div class="das-section--dashboard">
-    <div class="govuk-width-container" >
-      <main class="govuk-main-wrapper" id="main-content" role="main">
-        @RenderBody()
-      </main>
+    <partial name="_Header" />
+    <partial name="_Menu" model="@accountId" />
+    <div class="govuk-width-container app-account-header">
+        @RenderSection("BodyHeader", required: false)
     </div>
-  </div>
-<partial name="_Footer"/>
-<script src="/libs/govuk-frontend/all.js"></script>
-<script src="/libs/jquery/jquery.min.js"></script>
-<script src="/js/das-all.js"></script>
-<script src="/js/app.min.js"></script>
-<script>
-    window.GOVUKFrontend.initAll();
-    window.DASFrontend.initAll();
-</script>
+
+    <div class="das-section--dashboard">
+        <div class="govuk-width-container">
+            <main class="govuk-main-wrapper" id="main-content" role="main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <partial name="_Footer" />
+    <script src="/libs/govuk-frontend/all.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script src="/js/das-all.js"></script>
+    <script src="/js/app.min.js"></script>
+    <script>window.GOVUKFrontend.initAll();
+        window.DASFrontend.initAll();</script>
 </body>
 </html>

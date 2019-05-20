@@ -15,6 +15,7 @@ using SFA.DAS.Employer.Shared.UI;
 using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using DfE.EmployerFavourites.Infrastructure;
+using DfE.EmployerFavourites.Web.Helpers;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -66,6 +67,8 @@ namespace DfE.EmployerFavourites.Web
 
             AddConfiguration(services);
             AddInfrastructureServices(services);
+
+            services.AddScoped<ApplicationInsightsJsHelper>();
         }
 
         private void AddInfrastructureServices(IServiceCollection services)
