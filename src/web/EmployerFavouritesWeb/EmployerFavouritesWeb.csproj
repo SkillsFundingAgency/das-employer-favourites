@@ -19,7 +19,7 @@
     <PackageReference Include="Polly" Version="7.1.0" />
     <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.16" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="2.0.0" />
-    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.19" />
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.38" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="2.2.0" />
     <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="1.0.4" />
   </ItemGroup>
