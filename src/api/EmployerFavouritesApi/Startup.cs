@@ -45,8 +45,6 @@ namespace DfE.EmployerFavourites.Api
                 }
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddSingleton<IAccountApiConfiguration>(x => Configuration.GetSection("AccountApiConfiguration").Get<AccountApiConfiguration>());
-            services.AddTransient<IAccountApiClient, AccountApiClient>();
             services.AddTransient<IEmployerAccountRepository, EmployerAccountApiRepository>();
 
             services.AddTransient<IFatRepository, FatApiRepository>();
