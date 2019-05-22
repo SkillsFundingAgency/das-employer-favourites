@@ -65,9 +65,11 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 return BadRequest();
 
             var userId = User.GetUserId();
-            await _mediator.Send(new SaveApprenticeshipFavouriteCommand { UserId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
+            var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteCommand { UserId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
 
-            return Redirect(_externalLinks.AccountsHomePage.AbsoluteUri);
+            var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
+
+            return Redirect(redirectUrl);
         }
     }
 }

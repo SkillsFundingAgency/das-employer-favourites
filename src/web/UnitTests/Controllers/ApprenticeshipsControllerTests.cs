@@ -27,7 +27,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
     public class ApprenticeshipsControllerTests
     {
-        public const string TEST_MA_ACCOUNTS_HOME_URL = "https://ma-accounts-home.com/";
+        public const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
         public const string EMPLOYER_ACCOUNT_ID = "XXX123";
         public const string USER_ID = "User123";
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
@@ -49,7 +49,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             _mockAccountApiClient.Setup(x => x.GetAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetAccount());
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
-            _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsHomePage = new Uri(TEST_MA_ACCOUNTS_HOME_URL) });
+            _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
 
             ServiceProvider provider = BuildDependencies();
             var mediator = provider.GetService<IMediator>();
@@ -162,12 +162,13 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task Add_ReturnRedirectUrl_FromConfig()
+        public async Task Add_ReturnRedirectUrlToDashboard_ForAccountSavedAgainst()
         {
             var result = await _sut.Add("30", 12345678);
+            var expectedUrl = string.Format(TEST_MA_ACCOUNT_DASHBOARD_URL, EMPLOYER_ACCOUNT_ID);
 
             var response = Assert.IsType<RedirectResult>(result);
-            Assert.Equal(TEST_MA_ACCOUNTS_HOME_URL, response.Url);
+            Assert.Equal(expectedUrl, response.Url);
         }
 
         [Fact]

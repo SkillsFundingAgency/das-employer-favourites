@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.Application.Commands
 {
-    public class SaveApprenticeshipFavouriteCommandHandler : AsyncRequestHandler<SaveApprenticeshipFavouriteCommand>
+    public class SaveApprenticeshipFavouriteCommandHandler : IRequestHandler<SaveApprenticeshipFavouriteCommand, string>
     {
         private readonly ILogger<SaveApprenticeshipFavouriteCommandHandler> _logger;
         private readonly IFavouritesReadRepository _readRepository;
@@ -28,7 +28,7 @@ namespace DfE.EmployerFavourites.Application.Commands
             _accountApiClient = accountApiClient;
         }
 
-        protected override async Task Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Handling SaveApprenticeshipFavouriteCommand for {request.ApprenticeshipId}");
 
@@ -49,14 +49,16 @@ namespace DfE.EmployerFavourites.Application.Commands
             else
             {
                 if (!request.Ukprn.HasValue)
-                    return;
+                    return employerAccountId;
                 else if (existing.Ukprns.Contains(request.Ukprn.Value))
-                    return;
+                    return employerAccountId;
                 else    
                     existing.Ukprns.Add(request.Ukprn.Value);
             }
 
             await _writeRepository.SaveApprenticeshipFavourites(employerAccountId, writeModel);
+
+            return employerAccountId;
         }
 
         private async Task<string> GetEmployerAccountId(string userId)
