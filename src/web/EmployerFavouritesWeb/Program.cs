@@ -42,14 +42,20 @@ namespace DfE.EmployerFavourites.Web
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
                     config.AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false);
-                    config.AddUserSecrets<Startup>();
                     config.AddAzureTableStorage(options => {
                         options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Shared.UI" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                     });
+                    config.AddAzureTableStorage(options => {
+                        options.ConfigurationKeys = new[] { "SFA.DAS.EmployerFavouritesWeb" };
+                        options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
+                        options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
+                        options.PreFixConfigurationKeys = false;
+                    });
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
+                    config.AddUserSecrets<Startup>();
                 })
                 .UseUrls("https://localhost:5040")
                 .UseNLog();

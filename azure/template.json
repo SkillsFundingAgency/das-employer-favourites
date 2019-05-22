@@ -38,57 +38,6 @@
         },
         "azureStorageConnectionString": {
             "type": "string"
-        },
-        "OdicAuthority": {
-            "type": "string"
-        },
-        "OdicMetaDataAddress": {
-            "type": "string"
-        },
-        "OdicClientSecret": {
-            "type": "string"
-        },
-        "OdicID":{
-            "type":"string"
-        },
-        "ActiveDirectoryid":{
-            "type": "string"
-        },
-        "ActiveDirectorytenant":{
-            "type": "string"
-        },
-        "ActiveDirectoryidentifier": {
-            "type": "string"
-        },
-        "ApiBaseUrl": {
-            "type": "string"
-        },
-        "ClientId": {
-            "type": "string"  
-        },
-        "ClientSecret": {
-            "type": "string" 
-        },
-        "IdentifierUri": {
-            "type": "string"
-        },
-        "AccountsHomePage": {
-            "type": "string"
-        },
-        "AccountsRegistrationPage": {
-            "type": "string"
-        },
-        "AccountsApiBaseUrl": {
-            "type": "string"
-        },
-        "AccountsApiClientSecret": { 
-            "type": "string"  
-        },
-        "AccountsApiIdentifierUri": {
-            "type": "string"
-        },
-        "AccountsApiClientId": {
-            "type": "string"
         }
     },
     "variables": {
@@ -191,18 +140,6 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('internal-api-app-insights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "ActiveDirectory:AppId",
-                                "value": "[parameters('ActiveDirectoryid')]"
-                            },
-                            {
-                                "name": "ActiveDirectory:Tenant",
-                                "value": "[parameters('ActiveDirectorytenant')]"
-                            },
-                            {
-                                "name": "ActiveDirectory:IdentifierUri",
-                                "value": "[parameters('ActiveDirectoryidentifier')]"
                             }
                         ]
                     },
@@ -267,71 +204,6 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('app-service-app-insights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "Oidc:Authority",
-                                "value": "[parameters('OdicAuthority')]"
-                            },
-                            {
-                                "name": "Oidc:MetaDataAddress",
-                                "value": "[parameters('OdicMetaDataAddress')]"
-                            },
-                            {
-                                "name": "Oidc:ClientSecret",
-                                "value": "[parameters('OdicClientSecret')]"
-                            },
-                            {
-                                "name":"Oidc:ClientId",
-                                "value": "[parameters('OdicID')]"
-                            },
-                            {
-                                "name": "EmployerFavouritesApi:ApiBaseUrl",
-                                "value": "[parameters('ApiBaseUrl')]"
-                            },
-                            {
-                                "name": "EmployerFavouritesApi:ClientId",
-                                "value": "[parameters('ClientId')]"
-                            },
-                            {
-                                "name": "EmployerFavouritesApi:ClientSecret",
-                                "value": "[parameters('ClientSecret')]"
-                            },
-                            {
-                                "name": "EmployerFavouritesApi:IdentifierUri",
-                                "value": "[parameters('IdentifierUri')]"
-                            },
-                            {
-                                "name": "EmployerFavouritesApi:Tenant",
-                                "value": "[parameters('ActiveDirectorytenant')]"
-                            },
-                            {
-                                "name": "ExternalLinks:AccountsHomePage",
-                                "value": "[parameters('AccountsHomePage')]"
-                            },
-                            {
-                                "name": "ExternalLinks:AccountsRegistrationPage",
-                                "value": "[parameters('AccountsRegistrationPage')]"
-                            },
-                            {
-                                "name": "AccountApiConfiguration:ApiBaseUrl",
-                                "value": "[parameters('AccountsApiBaseUrl')]"
-                            },
-                            {
-                                "name": "AccountApiConfiguration:ClientSecret",
-                                "value": "[parameters('AccountsApiClientSecret')]"
-                            },
-                            {
-                                "name": "AccountApiConfiguration:IdentifierUri",
-                                "value": "[parameters('AccountsApiIdentifierUri')]"
-                            },
-                            
-                            {
-                                "name": "AccountApiConfiguration:ClientId",
-                                "value": "[parameters('AccountsApiClientId')]"
-                            },
-                            {
-                                "name": "AccountApiConfiguration:Tenant",
-                                "value": "[parameters('ActiveDirectorytenant')]"
                             }
                         ]
                     },
