@@ -35,6 +35,7 @@ namespace DfE.EmployerFavourites.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry();
             services.AddADAuthentication(Configuration);
             services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
 
@@ -77,9 +78,12 @@ namespace DfE.EmployerFavourites.Api
             applicationLifetime.ApplicationStarted.Register(() => logger.LogInformation("Host fully started"));
             applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation("Host shutting down...waiting to complete requests."));
             applicationLifetime.ApplicationStopped.Register(() => logger.LogInformation("Host fully stopped. All requests processed."));
-            
+
             if (env.IsDevelopment())
             {
+                var configuration = app.ApplicationServices.GetService<Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration>();
+                configuration.DisableTelemetry = true;
+
                 app.UseDeveloperExceptionPage();
             }
             else

@@ -34,9 +34,6 @@ namespace DfE.EmployerFavourites.Application.Queries
 
             await Task.WhenAll(accountTask, favouritesTask);
 
-            _logger.LogDebug($"Get Accounts Task(Status:{accountTask.Status})");
-            _logger.LogDebug($"Get Favourites Task(Status:{favouritesTask.Status})");
-
             // Build view model
             return new ViewEmployerFavouritesResponse
             {

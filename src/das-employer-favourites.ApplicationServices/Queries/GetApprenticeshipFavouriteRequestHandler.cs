@@ -25,7 +25,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Queries
 
         public async Task<ApprenticeshipFavourites> Handle(GetApprenticeshipFavouritesRequest request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Get apprenticeships favourites requested for account id: {request.EmployerAccountID}");
+            _logger.LogInformation($"Handling GetApprenticeshipFavouritesRequest for {request.EmployerAccountID}");
 
             if (string.IsNullOrWhiteSpace(request.EmployerAccountID))
             {

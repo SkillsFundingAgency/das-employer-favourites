@@ -1,4 +1,7 @@
-﻿@using DfE.EmployerFavourites.Web.Models
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+@inject DfE.EmployerFavourites.Web.Helpers.ApplicationInsightsJsHelper AiJsHelper
+
+@using DfE.EmployerFavourites.Web.Models
 @using DfE.EmployerFavourites.Web.Configuration
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, WebEssentials.AspNetCore.CdnTagHelpers

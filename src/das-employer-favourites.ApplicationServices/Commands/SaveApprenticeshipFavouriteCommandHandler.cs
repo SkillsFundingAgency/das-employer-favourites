@@ -25,6 +25,8 @@ namespace DfE.EmployerFavourites.ApplicationServices.Commands
         protected override async Task Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
         {
             var employerAccountId = await _employerAccountRepository.GetEmployerAccountId(request.UserId);
+            _logger.LogInformation($"Handling SaveApprenticeshipFavouriteCommand for {employerAccountId}");
+
             var favourites = (await _repository.GetApprenticeshipFavourites(employerAccountId)) ?? new ApprenticeshipFavourites();
 
             var existing = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);

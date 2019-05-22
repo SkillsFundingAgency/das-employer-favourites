@@ -10,15 +10,12 @@ using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EAS.Account.Api.Client;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using SFA.DAS.Employer.Shared.UI;
 using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using DfE.EmployerFavourites.Infrastructure;
-using System;
-using System.Collections.Generic;
+using DfE.EmployerFavourites.Web.Helpers;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -38,6 +35,8 @@ namespace DfE.EmployerFavourites.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddApplicationInsightsTelemetry();
+
             services.AddMediatR(typeof(Startup).Assembly);
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -68,6 +67,8 @@ namespace DfE.EmployerFavourites.Web
 
             AddConfiguration(services);
             AddInfrastructureServices(services);
+
+            services.AddScoped<ApplicationInsightsJsHelper>();
         }
 
         private void AddInfrastructureServices(IServiceCollection services)

@@ -33,8 +33,6 @@ namespace DfE.EmployerFavourites.Web.Controllers
         {
             var exceptionFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
 
-            _logger.LogDebug($"Exception found: {exceptionFeature != null}");
-
             if (exceptionFeature != null)
             {
                 string routeWhereExceptionOccurred = exceptionFeature.Path;
