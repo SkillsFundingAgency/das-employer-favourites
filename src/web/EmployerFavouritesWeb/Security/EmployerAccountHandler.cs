@@ -20,33 +20,37 @@ namespace DfE.EmployerFavourites.Web.Security
         }
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, EmployerAccountRequirement requirement)
         {
-            if (context.Resource is AuthorizationFilterContext mvcContext && mvcContext.RouteData.Values.ContainsKey("employerAccountId"))
+            if (context.Resource is AuthorizationFilterContext mvcContext)
             {
-                if (context.User.HasClaim(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)))
+                var employerAccounts = context.User.GetEmployerAccounts().ToList();
+
+                if (employerAccounts.Any() == false)
                 {
-                    var accountIdFromUrl = mvcContext.RouteData.Values["employerAccountId"].ToString().ToUpper();
-                    var employerAccounts = context.User.GetEmployerAccounts().ToList();
+                    mvcContext.Result = new RedirectResult($"{_externalLinks.Value.AccountsRegistrationPage}?returnUrl={mvcContext.HttpContext.Request.GetEncodedUrl()}");
+                    mvcContext.HttpContext.SignOutAsync("Cookies");
 
-                    if (employerAccounts.Any() == false)
+                    //Although not a 'success', the redirect only works if calling Succeed(), please see: https://stackoverflow.com/questions/41707051
+                    context.Succeed(requirement);
+                }
+
+                if (mvcContext.RouteData.Values.ContainsKey("employerAccountId"))
+                {
+                    if (context.User.HasClaim(c => c.Type.Equals(EmployerClaims.AccountsClaimsTypeIdentifier)))
                     {
-                        mvcContext.Result = new RedirectResult($"{_externalLinks.Value.AccountsRegistrationPage}?returnUrl={mvcContext.HttpContext.Request.GetEncodedUrl()}");
-                        mvcContext.HttpContext.SignOutAsync("Cookies");
+                        var accountIdFromUrl = mvcContext.RouteData.Values["employerAccountId"].ToString().ToUpper();
+                      
 
-                        //Although not a 'success', the redirect only works if calling Succeed(), please see: https://stackoverflow.com/questions/41707051
-                        context.Succeed(requirement);
-                    }
-
-                    if (employerAccounts.Contains(accountIdFromUrl))
-                    {
-                        context.Succeed(requirement);
+                        if (employerAccounts.Contains(accountIdFromUrl))
+                        {
+                            context.Succeed(requirement);
+                        }
                     }
                 }
+                else
+                {
+                    context.Succeed(requirement);
+                }
             }
-            else
-            {
-                context.Succeed(requirement);
-            }
-
             return Task.CompletedTask;
         }
     }
