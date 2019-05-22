@@ -33,7 +33,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="appsettings.json.orig" />
-  </ItemGroup>
 </Project>

@@ -41,19 +41,17 @@ namespace DfE.EmployerFavourites.Application.Commands
 
             if (existing == null)
             {
-                if (request.Ukprn.HasValue)
-                    writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId, request.Ukprn.Value));
-                else
-                    writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId));
+                writeModel.Add(request.Ukprn.HasValue
+                    ? new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId, request.Ukprn.Value)
+                    : new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId));
+            }
+            else if (!request.Ukprn.HasValue || existing.Ukprns.Contains(request.Ukprn.Value))
+            {
+                return employerAccountId;
             }
             else
             {
-                if (!request.Ukprn.HasValue)
-                    return employerAccountId;
-                else if (existing.Ukprns.Contains(request.Ukprn.Value))
-                    return employerAccountId;
-                else    
-                    existing.Ukprns.Add(request.Ukprn.Value);
+                existing.Ukprns.Add(request.Ukprn.Value);
             }
 
             await _writeRepository.SaveApprenticeshipFavourites(employerAccountId, writeModel);
@@ -69,7 +67,7 @@ namespace DfE.EmployerFavourites.Application.Commands
                 
                 return accounts.First().HashedAccountId;
 
-                    // Currenly the API isn't passing through the correct details
+                    // Currently the API isn't passing through the correct details
                     // of the registered date
                     // We may be able to rely on the order from the api. They do 
                     // look like they're returned in the order they are created.
