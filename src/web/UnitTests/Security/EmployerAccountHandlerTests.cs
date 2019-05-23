@@ -21,7 +21,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
     public class EmployerAccountHandlerTests
     {
         private Mock<IOptions<ExternalLinks>> _mockExternalLinks;
-        private Uri _testRegistrationLink = new Uri("http://test.com");
+        private string _testRegistrationLink = "http://test.com";
 
         public EmployerAccountHandlerTests()
         {
@@ -99,7 +99,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
             Assert.IsType<RedirectResult>(result.Result);
             var redirectResult = result.Result as RedirectResult;
 
-            Assert.Equal(_testRegistrationLink.AbsoluteUri + "?returnUrl=:///",redirectResult.Url);
+            Assert.Equal(_testRegistrationLink + "?returnUrl=:///",redirectResult.Url);
         }
 
         [Fact]
@@ -138,7 +138,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
             Assert.IsType<RedirectResult>(result.Result);
             var redirectResult = result.Result as RedirectResult;
 
-            Assert.Equal(_testRegistrationLink.AbsoluteUri + "?returnUrl=:///", redirectResult.Url);
+            Assert.Equal(_testRegistrationLink + "?returnUrl=:///", redirectResult.Url);
 
             authServiceMock.Verify(v => v.SignOutAsync(It.IsAny<HttpContext>(), "Cookies", It.IsAny<AuthenticationProperties>()),Times.Once);
         }

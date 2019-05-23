@@ -121,11 +121,11 @@ namespace DfE.EmployerFavourites.Web
             if (!string.IsNullOrWhiteSpace(authConfig?.Authority))
                 destinations.Add(authConfig.Authority.Replace("identity", string.Empty));
             
-            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsHomePage.AbsoluteUri))
-                destinations.Add(linksConfig.AccountsHomePage.AbsoluteUri);
+            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsHomePage))
+                destinations.Add(linksConfig.AccountsHomePage);
 
-            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsRegistrationPage.AbsoluteUri))
-                destinations.Add(linksConfig.AccountsRegistrationPage.AbsoluteUri);
+            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsRegistrationPage))
+                destinations.Add(linksConfig.AccountsRegistrationPage);
 
             return destinations.ToArray();
         }

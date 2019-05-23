@@ -9,7 +9,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.Application.Commands
 {
-    public class SaveApprenticeshipFavouriteCommandHandler : AsyncRequestHandler<SaveApprenticeshipFavouriteCommand>
+    public class SaveApprenticeshipFavouriteCommandHandler : IRequestHandler<SaveApprenticeshipFavouriteCommand, string>
     {
         private readonly ILogger<SaveApprenticeshipFavouriteCommandHandler> _logger;
         private readonly IFavouritesReadRepository _readRepository;
@@ -28,7 +28,7 @@ namespace DfE.EmployerFavourites.Application.Commands
             _accountApiClient = accountApiClient;
         }
 
-        protected override async Task Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Handling SaveApprenticeshipFavouriteCommand for {request.ApprenticeshipId}");
 
@@ -41,22 +41,22 @@ namespace DfE.EmployerFavourites.Application.Commands
 
             if (existing == null)
             {
-                if (request.Ukprn.HasValue)
-                    writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId, request.Ukprn.Value));
-                else
-                    writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId));
+                writeModel.Add(request.Ukprn.HasValue
+                    ? new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId, request.Ukprn.Value)
+                    : new Domain.WriteModel.ApprenticeshipFavourite(request.ApprenticeshipId));
+            }
+            else if (!request.Ukprn.HasValue || existing.Ukprns.Contains(request.Ukprn.Value))
+            {
+                return employerAccountId;
             }
             else
             {
-                if (!request.Ukprn.HasValue)
-                    return;
-                else if (existing.Ukprns.Contains(request.Ukprn.Value))
-                    return;
-                else    
-                    existing.Ukprns.Add(request.Ukprn.Value);
+                existing.Ukprns.Add(request.Ukprn.Value);
             }
 
             await _writeRepository.SaveApprenticeshipFavourites(employerAccountId, writeModel);
+
+            return employerAccountId;
         }
 
         private async Task<string> GetEmployerAccountId(string userId)
@@ -67,7 +67,7 @@ namespace DfE.EmployerFavourites.Application.Commands
                 
                 return accounts.First().HashedAccountId;
 
-                    // Currenly the API isn't passing through the correct details
+                    // Currently the API isn't passing through the correct details
                     // of the registered date
                     // We may be able to rely on the order from the api. They do 
                     // look like they're returned in the order they are created.
