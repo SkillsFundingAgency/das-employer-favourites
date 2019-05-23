@@ -38,6 +38,8 @@ namespace DfE.EmployerFavourites.Web
                 .UseStartup<Startup>()
                 .ConfigureAppConfiguration((hostingContext, config) =>
                 {
+                    config.Sources.Clear();
+
                     var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
