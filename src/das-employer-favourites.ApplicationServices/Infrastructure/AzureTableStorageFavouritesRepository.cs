@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,14 +17,19 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
         private const string TABLE_NAME = "EmployerFavourites";
         private readonly ILogger<AzureTableStorageFavouritesRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
+        private readonly IFatRepository _fatRepository;
         private readonly CloudStorageAccount _storageAccount;
 
-        public AzureTableStorageFavouritesRepository(ILogger<AzureTableStorageFavouritesRepository> logger, IOptions<ConnectionStrings> option)
+        public AzureTableStorageFavouritesRepository(
+            ILogger<AzureTableStorageFavouritesRepository> logger, 
+            IOptions<ConnectionStrings> option,
+            IFatRepository fatRepository)
         {
             
             _logger = logger;
             _retryPolicy = GetRetryPolicy();
-            
+            _fatRepository = fatRepository;
+
             try
             {
                 _storageAccount = CloudStorageAccount.Parse(option.Value.AzureStorage);
@@ -54,7 +60,15 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
                     _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
-                return entity?.ToApprenticeshipFavourites();
+                var favourites = entity?.ToApprenticeshipFavourites();
+
+                Parallel.ForEach(favourites, (apprenticeship) =>
+                {
+                    apprenticeship.Title = _fatRepository.GetApprenticeshipName(apprenticeship.ApprenticeshipId);
+                });
+
+                return favourites;
+
             }
             catch (StorageException ex)
             {

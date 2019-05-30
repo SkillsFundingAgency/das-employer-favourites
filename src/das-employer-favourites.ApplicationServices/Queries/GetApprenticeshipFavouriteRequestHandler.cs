@@ -35,24 +35,6 @@ namespace DfE.EmployerFavourites.ApplicationServices.Queries
 
             var favourites = (await _repository.GetApprenticeshipFavourites(request.EmployerAccountID)) ?? new ApprenticeshipFavourites();
 
-
-
-            foreach (var apprenticeship in favourites)
-            {
-                apprenticeship.Title = _fatRepository.GetApprenticeshipName(apprenticeship.ApprenticeshipId);
-
-                foreach(var ukprn in apprenticeship.Ukprns)
-                {
-
-                }
-            }
-
-            Parallel.ForEach(favourites, (apprenticeship) =>
-               {
-                   apprenticeship.Title = _fatRepository.GetApprenticeshipName(apprenticeship.ApprenticeshipId);
-               });
-
-
             return favourites;
         }
     }
