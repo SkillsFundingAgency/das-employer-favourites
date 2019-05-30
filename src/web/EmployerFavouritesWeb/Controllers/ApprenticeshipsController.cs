@@ -27,7 +27,6 @@ namespace DfE.EmployerFavourites.Web.Controllers
             _mediator = mediator;
         }
 
-        [Authorize]
         [HttpGet("accounts/{employerAccountId:minlength(6)}")]
         public async Task<IActionResult> Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
         {
@@ -52,7 +51,6 @@ namespace DfE.EmployerFavourites.Web.Controllers
             return View(model);
         }
 
-        [Authorize]
         [HttpGet("save-apprenticeship-favourites")]
         public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
         {
@@ -70,6 +68,13 @@ namespace DfE.EmployerFavourites.Web.Controllers
             var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
 
             return Redirect(redirectUrl);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("provider")]
+        public IActionResult TrainingProvider()
+        {
+            return View();
         }
     }
 }
