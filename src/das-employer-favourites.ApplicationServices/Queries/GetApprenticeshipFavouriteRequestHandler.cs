@@ -5,18 +5,19 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
+using DfE.EmployerFavourites.ApplicationServices.Domain.ReadModel;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Queries
 {
     public class GetApprenticeshipFavouriteRequestHandler : IRequestHandler<GetApprenticeshipFavouritesRequest, ApprenticeshipFavourites>
     {
         private readonly ILogger<GetApprenticeshipFavouriteRequestHandler> _logger;
-        private readonly IFavouritesRepository _repository;
+        private readonly IFavouritesReadRepository _repository;
         private readonly IFatRepository _fatRepository;
 
         public GetApprenticeshipFavouriteRequestHandler(
             ILogger<GetApprenticeshipFavouriteRequestHandler> logger,
-            IFavouritesRepository repository, IFatRepository fatRepository)
+            IFavouritesReadRepository repository, IFatRepository fatRepository)
         {
             _logger = logger;
             _repository = repository;
@@ -34,6 +35,17 @@ namespace DfE.EmployerFavourites.ApplicationServices.Queries
 
             var favourites = (await _repository.GetApprenticeshipFavourites(request.EmployerAccountID)) ?? new ApprenticeshipFavourites();
 
+
+
+            foreach (var apprenticeship in favourites)
+            {
+                apprenticeship.Title = _fatRepository.GetApprenticeshipName(apprenticeship.ApprenticeshipId);
+
+                foreach(var ukprn in apprenticeship.Ukprns)
+                {
+
+                }
+            }
 
             Parallel.ForEach(favourites, (apprenticeship) =>
                {

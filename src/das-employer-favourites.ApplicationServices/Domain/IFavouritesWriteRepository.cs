@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
+using DfE.EmployerFavourites.ApplicationServices.Domain.WriteModel;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Domain
 {
-    public interface IFavouritesRepository
+    public interface IFavouritesWriteRepository
     {
-        Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId);
         Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite);
     }
 }

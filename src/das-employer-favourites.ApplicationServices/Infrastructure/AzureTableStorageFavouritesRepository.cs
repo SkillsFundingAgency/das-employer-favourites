@@ -11,7 +11,7 @@ using Polly.Retry;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
-    public class AzureTableStorageFavouritesRepository : IFavouritesRepository
+    public class AzureTableStorageFavouritesRepository : IFavouritesReadRepository, IFavouritesWriteRepository
     {
         private const string TABLE_NAME = "EmployerFavourites";
         private readonly ILogger<AzureTableStorageFavouritesRepository> _logger;
@@ -39,7 +39,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
                 throw;
             }
         }
-        public async Task<ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
+        public async Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
         {
             try
             {
@@ -63,7 +63,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             }
         }
 
-        public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
+        public async Task SaveApprenticeshipFavourites(string employerAccountId, Domain.WriteModel.ApprenticeshipFavourites apprenticeshipFavourite)
         {
             if (apprenticeshipFavourite == null)
             {

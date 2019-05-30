@@ -12,7 +12,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
         {
         }
 
-        public ApprenticeshipFavouritesEntity(string employerAccountId, ApprenticeshipFavourites favourites)
+        public ApprenticeshipFavouritesEntity(string employerAccountId, Domain.WriteModel.ApprenticeshipFavourites favourites)
         {
             PartitionKey = employerAccountId;
             RowKey = ROW_KEY;
@@ -21,9 +21,9 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 
         public string Favourites { get; set; }
 
-        public ApprenticeshipFavourites ToApprenticeshipFavourites()
+        public Domain.ReadModel.ApprenticeshipFavourites ToApprenticeshipFavourites()
         {
-            return JsonConvert.DeserializeObject<ApprenticeshipFavourites>(Favourites);
+            return JsonConvert.DeserializeObject<Domain.ReadModel.ApprenticeshipFavourites>(Favourites);
         }
     }
 }

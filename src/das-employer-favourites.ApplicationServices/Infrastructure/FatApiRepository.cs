@@ -1,6 +1,6 @@
-﻿using DfE.EmployerFavourites.ApplicationServices.Domain;
-using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
+﻿using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using SFA.DAS.Apprenticeships.Api.Client;
+using SFA.DAS.Providers.Api.Client;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
@@ -8,11 +8,16 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
     {
         private readonly IStandardApiClient _standardApiClient;
         private readonly IFrameworkApiClient _frameworkApiClient;
+        private readonly IProviderApiClient _providerApiClient;
 
-        public FatApiRepository(IStandardApiClient standardApiClient, IFrameworkApiClient frameworkApiClient)
+        public FatApiRepository(
+            IStandardApiClient standardApiClient, 
+            IFrameworkApiClient frameworkApiClient,
+            IProviderApiClient providerApiClient)
         {
             _standardApiClient = standardApiClient;
             _frameworkApiClient = frameworkApiClient;
+            _providerApiClient = providerApiClient;
         }
 
         public string GetApprenticeshipName(string apprenticeshipId)
@@ -25,6 +30,11 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             {
                 return _frameworkApiClient.Get(apprenticeshipId).Title;
             }
+        }
+
+        public string GetProviderName(string ukprn)
+        {
+            return _providerApiClient.Get(ukprn)?.ProviderName;
         }
 
         private bool IsStandard(string apprenticeshipId)
