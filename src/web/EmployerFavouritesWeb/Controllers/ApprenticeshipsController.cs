@@ -72,9 +72,30 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("provider")]
-        public IActionResult TrainingProvider()
+        public async Task<IActionResult> TrainingProvider([RegularExpression(@"^.{6,}$")]string employerAccountId, string apprenticeshipId, int ukprn)
         {
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
+            {
+                EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId,
+                Ukprn = ukprn
+            });
+
+            var model = new TrainingProviderViewModel
+            {
+                ProviderName = "Test Provider Ltd",
+                TrainingOptions = "day release, at your location",
+                EmployerSatisfaction = "65%",
+                LearnerSatisfaction = "65%",
+                AcheivementRate = "65%",
+            };
+
+            return await Task.FromResult(View(model));
         }
     }
 }

@@ -30,6 +30,9 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         public const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
         public const string EMPLOYER_ACCOUNT_ID = "XXX123";
         public const string USER_ID = "User123";
+        public const string APPRENTICESHIPID = "123";
+        public const int UKPRN = 10000020;
+
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         private Mock<IFavouritesReadRepository> _mockFavouritesReadRepository;
         private Mock<IFavouritesWriteRepository> _mockFavouritesWriteRepository;
@@ -110,6 +113,86 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             _sut.ModelState.AddModelError("error", "some error");
 
             var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+                
+        [Fact]
+        public async Task TrainingProvider_ReturnsViewResult_WithProviderDetails()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = Assert.IsAssignableFrom<TrainingProviderViewModel>(viewResult.ViewData.Model);
+        }
+
+       [Fact]
+       public async Task TrainingProvider_ReturnsModel_WithNameOfTrainingProvider()
+       {
+           var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+           var viewResult = Assert.IsType<ViewResult>(result);
+           var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+           Assert.Equal("Test Provider Ltd", model.ProviderName);
+       }
+
+        [Fact]
+        public async Task TrainingProvider_ReturnsModel_WithTrainingOptions()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+            Assert.Equal("day release, at your location", model.TrainingOptions);
+        }
+
+        [Theory]
+        [InlineData(65, "65%")]
+        //[InlineData(null, "no data available")]
+        public async Task TrainingProvider_ReturnsModel_WithEmployerSatisfaction(double? value, string expectedValue)
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+            Assert.Equal(expectedValue, model.EmployerSatisfaction);
+        }
+
+        [Theory]
+        [InlineData(65, "65%")]
+        //[InlineData(null, "no data available")]
+        public async Task TrainingProvider_ReturnsModel_WithLearnerSatisfaction(double? value, string expectedValue)
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+            Assert.Equal(expectedValue, model.LearnerSatisfaction);
+        }
+
+        [Theory]
+        [InlineData(65, "65%")]
+        //[InlineData(null, "no data available")]
+        public async Task TrainingProvider_ReturnsModel_WithAchievementRate(double? value, string expectedValue)
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+            Assert.Equal(expectedValue, model.AcheivementRate);
+        }
+
+        [Fact]
+        public async Task TrainingProvider_ReturnBadRequest_IfInvalidModel()
+        {
+            _sut.ModelState.AddModelError("error", "some error");
+
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -329,6 +412,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
+            services.AddTransient<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>(x => Mock.Of<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>());
             var provider = services.BuildServiceProvider();
             return provider;
         }
