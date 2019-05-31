@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Domain.ReadModel;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Client;
@@ -37,13 +39,19 @@ namespace DfE.EmployerFavourites.Application.Queries
             // Build view model
             return new ViewTrainingProviderForApprenticeshipFavouriteResponse
             {
-                EmployerAccount = new Domain.ReadModel.EmployerAccount
-                {
-                    EmployerAccountId = request.EmployerAccountId,
-                    Name = accountTask.Result.DasAccountName
-                },
-                EmployerFavourites = favouritesTask.Result ?? new Domain.ReadModel.ApprenticeshipFavourites()
+                Provider = GetProvider(favouritesTask.Result, request.ApprenticeshipId, request.Ukprn)
             };
         }
+
+        private Provider GetProvider(ApprenticeshipFavourites favourites, string apprenticeshipId, int ukprn)
+        {
+            var provider = (from fav in favourites
+                            from prov in fav.Providers
+                            where fav.ApprenticeshipId == apprenticeshipId
+                            && prov.Ukprn == ukprn
+                            select prov).SingleOrDefault();
+
+            return provider;
+        } 
     }
 }

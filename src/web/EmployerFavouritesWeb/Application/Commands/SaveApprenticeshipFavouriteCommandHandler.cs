@@ -37,7 +37,7 @@ namespace DfE.EmployerFavourites.Application.Commands
 
             var writeModel = favourites.MapToWriteModel();
 
-            var existing = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
+            var existing = writeModel.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
 
             if (existing == null)
             {

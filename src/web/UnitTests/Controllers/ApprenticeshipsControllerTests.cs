@@ -22,6 +22,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using Xunit;
 using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Domain.ReadModel;
 
 namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
@@ -69,7 +70,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<ApprenticeshipFavouritesViewModel>(viewResult.ViewData.Model);
-            Assert.Equal(3, model.Items.Count());
+            Assert.Equal(4, model.Items.Count());
         }
 
         [Fact]
@@ -123,7 +124,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
             var viewResult = Assert.IsType<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<TrainingProviderViewModel>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<TrainingProviderViewModel>(viewResult.ViewData.Model);
         }
 
        [Fact]
@@ -358,7 +359,8 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             var list = new ReadModel.ApprenticeshipFavourites();
             list.Add(new ReadModel.ApprenticeshipFavourite("30") { Title = "Standard-30" });
             list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1" });
-            list.Add(new ReadModel.ApprenticeshipFavourite("70", 12345678) { Title = "Standard-70" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("70", new Provider { Ukprn = 12345678 }) { Title = "Standard-70" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd" } ) { Title = "Standard -123" });
 
             return list;
         }

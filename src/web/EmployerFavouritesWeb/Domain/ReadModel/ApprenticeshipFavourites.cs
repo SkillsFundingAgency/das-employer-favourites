@@ -12,7 +12,7 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
             model.AddRange(this.Select(x => new Domain.WriteModel.ApprenticeshipFavourite
             {
                 ApprenticeshipId = x.ApprenticeshipId,
-                Ukprns = x.Ukprns
+                Ukprns = x?.Providers.Select(y => y.Ukprn).ToList() ?? new List<int>(0)
             }));
 
             return model;

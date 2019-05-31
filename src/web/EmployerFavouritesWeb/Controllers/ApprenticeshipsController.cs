@@ -27,7 +27,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("accounts/{employerAccountId:minlength(6)}")]
+        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships")]
         public async Task<IActionResult> Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
         {
             if (!ModelState.IsValid)
@@ -71,7 +71,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("provider")]
+        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers/{ukprn}")]
         public async Task<IActionResult> TrainingProvider([RegularExpression(@"^.{6,}$")]string employerAccountId, string apprenticeshipId, int ukprn)
         {
             if (!ModelState.IsValid)
@@ -88,7 +88,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var model = new TrainingProviderViewModel
             {
-                ProviderName = "Test Provider Ltd",
+                ProviderName = response.Provider.Name,
                 TrainingOptions = "day release, at your location",
                 EmployerSatisfaction = "65%",
                 LearnerSatisfaction = "65%",

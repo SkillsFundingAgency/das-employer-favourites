@@ -7,7 +7,7 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
     {
         public ApprenticeshipFavourite()
         {
-            Ukprns = new List<int>();
+            Providers = new List<Provider>();
         }
 
         public ApprenticeshipFavourite(string apprenticeshipId) : this()
@@ -15,13 +15,13 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
             ApprenticeshipId = apprenticeshipId;
         }
 
-        public ApprenticeshipFavourite(string apprenticeshipId, int ukprn) : this(apprenticeshipId)
+        public ApprenticeshipFavourite(string apprenticeshipId, Provider provider) : this(apprenticeshipId)
         {
-            Ukprns.Add(ukprn);
+            Providers.Add(provider);
         }
 
         public string ApprenticeshipId { get; set; }
-        public IList<int> Ukprns { get; set; }
+        public IList<Provider> Providers { get; set; }
         public string Title { get; set; }
         public bool IsFramework => TestForFramework();
 

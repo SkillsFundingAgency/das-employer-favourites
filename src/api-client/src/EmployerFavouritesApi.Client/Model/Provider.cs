@@ -26,41 +26,33 @@ using OpenAPIDateConverter = EmployerFavouritesApi.Client.Client.OpenAPIDateConv
 namespace EmployerFavouritesApi.Client.Model
 {
     /// <summary>
-    /// ApprenticeshipFavourite
+    /// Provider
     /// </summary>
     [DataContract]
-    public partial class ApprenticeshipFavourite :  IEquatable<ApprenticeshipFavourite>, IValidatableObject
+    public partial class Provider :  IEquatable<Provider>, IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="ApprenticeshipFavourite" /> class.
+        /// Initializes a new instance of the <see cref="Provider" /> class.
         /// </summary>
-        /// <param name="apprenticeshipId">apprenticeshipId.</param>
-        /// <param name="providers">providers.</param>
-        /// <param name="title">title.</param>
-        public ApprenticeshipFavourite(string apprenticeshipId = default(string), List<Provider> providers = default(List<Provider>), string title = default(string))
+        /// <param name="ukprn">ukprn.</param>
+        /// <param name="name">name.</param>
+        public Provider(int ukprn = default(int), string name = default(string))
         {
-            this.ApprenticeshipId = apprenticeshipId;
-            this.Providers = providers;
-            this.Title = title;
+            this.Ukprn = ukprn;
+            this.Name = name;
         }
         
         /// <summary>
-        /// Gets or Sets ApprenticeshipId
+        /// Gets or Sets Ukprn
         /// </summary>
-        [DataMember(Name="apprenticeshipId", EmitDefaultValue=false)]
-        public string ApprenticeshipId { get; set; }
+        [DataMember(Name="ukprn", EmitDefaultValue=false)]
+        public int Ukprn { get; set; }
 
         /// <summary>
-        /// Gets or Sets Providers
+        /// Gets or Sets Name
         /// </summary>
-        [DataMember(Name="providers", EmitDefaultValue=false)]
-        public List<Provider> Providers { get; set; }
-
-        /// <summary>
-        /// Gets or Sets Title
-        /// </summary>
-        [DataMember(Name="title", EmitDefaultValue=false)]
-        public string Title { get; set; }
+        [DataMember(Name="name", EmitDefaultValue=false)]
+        public string Name { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -69,10 +61,9 @@ namespace EmployerFavouritesApi.Client.Model
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.Append("class ApprenticeshipFavourite {\n");
-            sb.Append("  ApprenticeshipId: ").Append(ApprenticeshipId).Append("\n");
-            sb.Append("  Providers: ").Append(Providers).Append("\n");
-            sb.Append("  Title: ").Append(Title).Append("\n");
+            sb.Append("class Provider {\n");
+            sb.Append("  Ukprn: ").Append(Ukprn).Append("\n");
+            sb.Append("  Name: ").Append(Name).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -93,35 +84,28 @@ namespace EmployerFavouritesApi.Client.Model
         /// <returns>Boolean</returns>
         public override bool Equals(object input)
         {
-            return this.Equals(input as ApprenticeshipFavourite);
+            return this.Equals(input as Provider);
         }
 
         /// <summary>
-        /// Returns true if ApprenticeshipFavourite instances are equal
+        /// Returns true if Provider instances are equal
         /// </summary>
-        /// <param name="input">Instance of ApprenticeshipFavourite to be compared</param>
+        /// <param name="input">Instance of Provider to be compared</param>
         /// <returns>Boolean</returns>
-        public bool Equals(ApprenticeshipFavourite input)
+        public bool Equals(Provider input)
         {
             if (input == null)
                 return false;
 
             return 
                 (
-                    this.ApprenticeshipId == input.ApprenticeshipId ||
-                    (this.ApprenticeshipId != null &&
-                    this.ApprenticeshipId.Equals(input.ApprenticeshipId))
+                    this.Ukprn == input.Ukprn ||
+                    this.Ukprn.Equals(input.Ukprn)
                 ) && 
                 (
-                    this.Providers == input.Providers ||
-                    this.Providers != null &&
-                    input.Providers != null &&
-                    this.Providers.SequenceEqual(input.Providers)
-                ) && 
-                (
-                    this.Title == input.Title ||
-                    (this.Title != null &&
-                    this.Title.Equals(input.Title))
+                    this.Name == input.Name ||
+                    (this.Name != null &&
+                    this.Name.Equals(input.Name))
                 );
         }
 
@@ -134,12 +118,9 @@ namespace EmployerFavouritesApi.Client.Model
             unchecked // Overflow is fine, just wrap
             {
                 int hashCode = 41;
-                if (this.ApprenticeshipId != null)
-                    hashCode = hashCode * 59 + this.ApprenticeshipId.GetHashCode();
-                if (this.Providers != null)
-                    hashCode = hashCode * 59 + this.Providers.GetHashCode();
-                if (this.Title != null)
-                    hashCode = hashCode * 59 + this.Title.GetHashCode();
+                hashCode = hashCode * 59 + this.Ukprn.GetHashCode();
+                if (this.Name != null)
+                    hashCode = hashCode * 59 + this.Name.GetHashCode();
                 return hashCode;
             }
         }
