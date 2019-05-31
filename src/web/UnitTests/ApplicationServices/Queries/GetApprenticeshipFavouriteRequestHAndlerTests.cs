@@ -6,33 +6,30 @@ using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using DfE.EmployerFavourites.ApplicationServices.Queries;
 using Xunit;
+using ReadModel = DfE.EmployerFavourites.ApplicationServices.Domain.ReadModel;
 
 namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Commands
 {
     public class GetApprenticeshipFavouriteRequestHandlerTests
     {
         private readonly GetApprenticeshipFavouriteRequestHandler _sut;
-        private readonly Mock<IFavouritesRepository> _mockFavouritesRepository;
+        private readonly Mock<IFavouritesReadRepository> _mockFavouritesRepository;
         private readonly Mock<ILogger<GetApprenticeshipFavouriteRequestHandler>> _mockLogger;
-        private readonly Mock<IFatRepository> _mockFatRepository;
-        private string _employerAccountId = "XXX123";
-        private ApprenticeshipFavourites _apprenticeFavourites;
+        private readonly string _employerAccountId = "XXX123";
+        private ReadModel.ApprenticeshipFavourites _apprenticeFavourites;
 
         public GetApprenticeshipFavouriteRequestHandlerTests()
         {
             _mockLogger = new Mock<ILogger<GetApprenticeshipFavouriteRequestHandler>>();
-            _mockFavouritesRepository = new Mock<IFavouritesRepository>();
-            _mockFatRepository = new Mock<IFatRepository>();
+            _mockFavouritesRepository = new Mock<IFavouritesReadRepository>();
 
-            _apprenticeFavourites = new ApprenticeshipFavourites() { new ApprenticeshipFavourite("123"),new ApprenticeshipFavourite("234")};
+            _apprenticeFavourites = new ReadModel.ApprenticeshipFavourites() { new ReadModel.ApprenticeshipFavourite("123", "apprenticeship1"), new ReadModel.ApprenticeshipFavourite("234", "apprenticeship2") };
 
 
             _mockFavouritesRepository.Setup(s => s.GetApprenticeshipFavourites(_employerAccountId))
                 .ReturnsAsync(_apprenticeFavourites);
-            _mockFatRepository.Setup(s => s.GetApprenticeshipName("123")).Returns("apprenticeship1");
-            _mockFatRepository.Setup(s => s.GetApprenticeshipName("234")).Returns("apprenticeship2");
 
-            _sut = new GetApprenticeshipFavouriteRequestHandler(_mockLogger.Object, _mockFavouritesRepository.Object, _mockFatRepository.Object);
+            _sut = new GetApprenticeshipFavouriteRequestHandler(_mockLogger.Object, _mockFavouritesRepository.Object);
         }
 
         [Theory]
@@ -57,15 +54,7 @@ namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Commands
         {
             var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = _employerAccountId }, default);
 
-            Assert.IsType<ApprenticeshipFavourites>(result);
-        }
-
-        [Fact]
-        public async Task Handle_WhenValidEmployerAccountId_ThenGetApprenticeshipNames()
-        {
-            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = _employerAccountId }, default);
-
-            _mockFatRepository.Verify(s => s.GetApprenticeshipName(It.IsAny<string>()),Times.Exactly(2));
+            Assert.IsType<ReadModel.ApprenticeshipFavourites>(result);
         }
 
         [Fact]

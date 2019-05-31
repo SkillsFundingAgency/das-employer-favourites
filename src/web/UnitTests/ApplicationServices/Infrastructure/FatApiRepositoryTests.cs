@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
 using Moq;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
+using SFA.DAS.Providers.Api.Client;
 using Xunit;
 
 namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
@@ -13,35 +15,38 @@ namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
     {
         private Mock<IStandardApiClient> _mockStandardApiClient;
         private Mock<IFrameworkApiClient> _mockFrameworkApiClient;
+        private Mock<IProviderApiClient> _mockProviderApiClient;
         private FatApiRepository _sut;
 
         public FatApiRepositoryTests()
         {
             _mockFrameworkApiClient = new Mock<IFrameworkApiClient>();
             _mockStandardApiClient = new Mock<IStandardApiClient>();
+            _mockProviderApiClient = new Mock<IProviderApiClient>();
 
-            _mockFrameworkApiClient.Setup(s => s.Get("420-1-2")).Returns(new Framework() {Title = "Apprenticeship1"});
-            _mockStandardApiClient.Setup(s => s.Get("123")).Returns(new Standard() {Title = "Apprenticeship2"});
+            _mockFrameworkApiClient.Setup(s => s.GetAsync("420-1-2")).ReturnsAsync(new Framework() {Title = "Apprenticeship1"});
+            _mockStandardApiClient.Setup(s => s.GetAsync("123")).ReturnsAsync(new Standard() {Title = "Apprenticeship2"});
 
-            _sut = new FatApiRepository(_mockStandardApiClient.Object,_mockFrameworkApiClient.Object);
+            _sut = new FatApiRepository(_mockStandardApiClient.Object,_mockFrameworkApiClient.Object, _mockProviderApiClient.Object);
         }
 
         [Fact]
-        public void WhenFrameworkID_ThenCallsFrameworkEndpoint()
+        public async Task WhenFrameworkID_ThenCallsFrameworkEndpoint()
         {
             var frameworkId = "420-1-2";
-          var result =  _sut.GetApprenticeshipName(frameworkId);
+          var result = await _sut.GetApprenticeshipNameAsync(frameworkId);
 
-          _mockFrameworkApiClient.Verify(s => s.Get(frameworkId),Times.Once);
+          _mockFrameworkApiClient.Verify(s => s.GetAsync(frameworkId),Times.Once);
           Assert.Equal("Apprenticeship1",result);
         }
+
         [Fact]
-        public void WhenStandardID_ThenCallsStandardEndpoint()
+        public async Task WhenStandardID_ThenCallsStandardEndpoint()
         {
             var standardId = "123";
-            var result = _sut.GetApprenticeshipName(standardId);
+            var result = await _sut.GetApprenticeshipNameAsync(standardId);
 
-            _mockStandardApiClient.Verify(s => s.Get(standardId), Times.Once);
+            _mockStandardApiClient.Verify(s => s.GetAsync(standardId), Times.Once);
             Assert.Equal("Apprenticeship2", result);
         }
     }

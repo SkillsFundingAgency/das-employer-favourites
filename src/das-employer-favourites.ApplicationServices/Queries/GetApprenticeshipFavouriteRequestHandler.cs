@@ -13,15 +13,13 @@ namespace DfE.EmployerFavourites.ApplicationServices.Queries
     {
         private readonly ILogger<GetApprenticeshipFavouriteRequestHandler> _logger;
         private readonly IFavouritesReadRepository _repository;
-        private readonly IFatRepository _fatRepository;
 
         public GetApprenticeshipFavouriteRequestHandler(
             ILogger<GetApprenticeshipFavouriteRequestHandler> logger,
-            IFavouritesReadRepository repository, IFatRepository fatRepository)
+            IFavouritesReadRepository repository)
         {
             _logger = logger;
             _repository = repository;
-            _fatRepository = fatRepository;
         }
 
         public async Task<ApprenticeshipFavourites> Handle(GetApprenticeshipFavouritesRequest request, CancellationToken cancellationToken)

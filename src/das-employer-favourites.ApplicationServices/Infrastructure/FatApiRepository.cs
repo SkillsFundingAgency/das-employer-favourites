@@ -1,4 +1,5 @@
-﻿using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
+﻿using System.Threading.Tasks;
+using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Providers.Api.Client;
 
@@ -20,27 +21,24 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             _providerApiClient = providerApiClient;
         }
 
-        public string GetApprenticeshipName(string apprenticeshipId)
+        public async Task<string> GetApprenticeshipNameAsync(string apprenticeshipId)
         {
             if (IsStandard(apprenticeshipId))
             {
-                return _standardApiClient.Get(apprenticeshipId).Title;
+                return (await _standardApiClient.GetAsync(apprenticeshipId)).Title;
             }
-            else
-            {
-                return _frameworkApiClient.Get(apprenticeshipId).Title;
-            }
+
+            return (await _frameworkApiClient.GetAsync(apprenticeshipId)).Title;
         }
 
-        public string GetProviderName(string ukprn)
+        public async Task<string> GetProviderNameAsync(int ukprn)
         {
-            return _providerApiClient.Get(ukprn)?.ProviderName;
+            return (await _providerApiClient.GetAsync(ukprn)).ProviderName;
         }
 
         private bool IsStandard(string apprenticeshipId)
         {
-            int standardId;
-            return int.TryParse(apprenticeshipId, out standardId);
+            return int.TryParse(apprenticeshipId, out int _);
         }
     }
 }

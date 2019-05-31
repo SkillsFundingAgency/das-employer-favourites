@@ -21,9 +21,9 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 
         public string Favourites { get; set; }
 
-        public Domain.ReadModel.ApprenticeshipFavourites ToApprenticeshipFavourites()
+        public Domain.WriteModel.ApprenticeshipFavourites ToApprenticeshipFavouritesWriteModel()
         {
-            return JsonConvert.DeserializeObject<Domain.ReadModel.ApprenticeshipFavourites>(Favourites);
+            return JsonConvert.DeserializeObject<Domain.WriteModel.ApprenticeshipFavourites>(Favourites);
         }
     }
 }

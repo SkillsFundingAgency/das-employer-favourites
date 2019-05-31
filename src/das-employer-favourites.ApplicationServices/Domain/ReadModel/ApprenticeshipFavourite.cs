@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Domain.ReadModel
@@ -7,32 +6,18 @@ namespace DfE.EmployerFavourites.ApplicationServices.Domain.ReadModel
     {
         public ApprenticeshipFavourite()
         {
-            Ukprns = new List<int>();
+            Providers = new List<Provider>();
         }
 
-        public ApprenticeshipFavourite(string apprenticeshipId) : this()
+        public ApprenticeshipFavourite(string apprenticeshipId, string title) : this()
         {
             ApprenticeshipId = apprenticeshipId;
-        }
-
-        public ApprenticeshipFavourite(string apprenticeshipId, int ukprn) : this(apprenticeshipId)
-        {
-            Ukprns.Add(ukprn);
+            Title = title;
         }
 
         public string ApprenticeshipId { get; set; }
-        public IList<int> Ukprns { get; set; }
+        public IList<Provider> Providers { get; set; }
         public string Title { get; set; }
-
-        public bool IsFramework => TestForFramework();
-
-        private bool TestForFramework()
-        {
-            if (string.IsNullOrWhiteSpace(ApprenticeshipId))
-                throw new ArgumentException("Needs to have a value", nameof(ApprenticeshipId));
-
-            return !int.TryParse(ApprenticeshipId, out int _);
-        }
     }
 }
 

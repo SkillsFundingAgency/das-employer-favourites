@@ -54,8 +54,8 @@ namespace DfE.EmployerFavourites.Api
             services.AddTransient<IFrameworkApiClient, FrameworkApiClient>(service => new FrameworkApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
             services.AddTransient<IProviderApiClient, ProviderApiClient>(service => new ProviderApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
 
-            services.AddScoped<IFavouritesReadRepository, AzureTableStorageFavouritesRepository>();
-            services.AddScoped<IFavouritesWriteRepository, AzureTableStorageFavouritesRepository>();
+            services.AddScoped<IFavouritesReadRepository, AzureTableStorageAndFatFavouritesRepository>();
+            services.AddScoped<IFavouritesWriteRepository, AzureTableStorageAndFatFavouritesRepository>();
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddSwaggerGen(c =>

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
@@ -12,20 +13,20 @@ using Polly.Retry;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
-    public class AzureTableStorageFavouritesRepository : IFavouritesReadRepository, IFavouritesWriteRepository
+    public class AzureTableStorageAndFatFavouritesRepository : IFavouritesReadRepository, IFavouritesWriteRepository
     {
         private const string TABLE_NAME = "EmployerFavourites";
-        private readonly ILogger<AzureTableStorageFavouritesRepository> _logger;
+        private readonly ILogger<AzureTableStorageAndFatFavouritesRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
         private readonly IFatRepository _fatRepository;
         private readonly CloudStorageAccount _storageAccount;
 
-        public AzureTableStorageFavouritesRepository(
-            ILogger<AzureTableStorageFavouritesRepository> logger, 
+        public AzureTableStorageAndFatFavouritesRepository(
+            ILogger<AzureTableStorageAndFatFavouritesRepository> logger,
             IOptions<ConnectionStrings> option,
             IFatRepository fatRepository)
         {
-            
+
             _logger = logger;
             _retryPolicy = GetRetryPolicy();
             _fatRepository = fatRepository;
@@ -45,30 +46,27 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
                 throw;
             }
         }
+
         public async Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
         {
             try
             {
                 var table = await GetTable();
-                TableOperation retrieveOperation = TableOperation.Retrieve<ApprenticeshipFavouritesEntity>(employerAccountId, ApprenticeshipFavouritesEntity.ROW_KEY);
-                
+                var retrieveOperation = TableOperation.Retrieve<ApprenticeshipFavouritesEntity>(employerAccountId, ApprenticeshipFavouritesEntity.ROW_KEY);
+
                 TableResult result = await _retryPolicy.ExecuteAsync(context => table.ExecuteAsync(retrieveOperation), new Context(nameof(GetApprenticeshipFavourites)));
-                ApprenticeshipFavouritesEntity entity = result.Result as ApprenticeshipFavouritesEntity;
-                
+                var entity = result.Result as ApprenticeshipFavouritesEntity;
+
                 if (entity != null)
                 {
                     _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
-                var favourites = entity?.ToApprenticeshipFavourites();
+                var favouritesFromTableStorage = entity?.ToApprenticeshipFavouritesWriteModel();
 
-                Parallel.ForEach(favourites, (apprenticeship) =>
-                {
-                    apprenticeship.Title = _fatRepository.GetApprenticeshipName(apprenticeship.ApprenticeshipId);
-                });
+                var favourites = await BuildReadModel(favouritesFromTableStorage);
 
                 return favourites;
-
             }
             catch (StorageException ex)
             {
@@ -77,11 +75,38 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             }
         }
 
+        private async Task<Domain.ReadModel.ApprenticeshipFavourites> BuildReadModel(Domain.WriteModel.ApprenticeshipFavourites favouritesFromTableStorage)
+        {
+            var buildFavouritesTasks = favouritesFromTableStorage.Select(x => BuildReadModelItem(x));
+
+            await Task.WhenAll(buildFavouritesTasks);
+
+            var favourites = new Domain.ReadModel.ApprenticeshipFavourites();
+            favourites.AddRange(buildFavouritesTasks.Select(x => x.Result));
+
+            return favourites;
+        }
+
+        private async Task<Domain.ReadModel.ApprenticeshipFavourite> BuildReadModelItem(Domain.WriteModel.ApprenticeshipFavourite src)
+        {
+            return new Domain.ReadModel.ApprenticeshipFavourite
+            {
+                ApprenticeshipId = src.ApprenticeshipId,
+                Title = await _fatRepository.GetApprenticeshipNameAsync(src.ApprenticeshipId),
+                Providers = await Task.WhenAll(src.Ukprns?.Select(async x => new Domain.ReadModel.Provider
+                {
+                    Ukprn = x,
+                    Name = await _fatRepository.GetProviderNameAsync(x)
+
+                }))
+            };
+        }
+
         public async Task SaveApprenticeshipFavourites(string employerAccountId, Domain.WriteModel.ApprenticeshipFavourites apprenticeshipFavourite)
         {
             if (apprenticeshipFavourite == null)
             {
-                throw new ArgumentNullException("entity");
+                throw new ArgumentNullException(nameof(apprenticeshipFavourite));
             }
 
             try
@@ -98,7 +123,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             }
             catch (StorageException ex)
             {
-                 _logger.LogError(ex, "Unable to Save Apprenticeship Favourites");
+                _logger.LogError(ex, "Unable to Save Apprenticeship Favourites");
                 throw;
             }
         }
@@ -108,9 +133,9 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             CloudTableClient tableClient = _storageAccount.CreateCloudTableClient(new TableClientConfiguration());
 
             CloudTable table = tableClient.GetTableReference(TABLE_NAME);
-                    
+
             var createdTable = await _retryPolicy.ExecuteAsync(context => table.CreateIfNotExistsAsync(), new Context(nameof(GetTable)));
-            
+
             if (createdTable)
             {
                 _logger.LogDebug($"Created Table named: {TABLE_NAME}");
