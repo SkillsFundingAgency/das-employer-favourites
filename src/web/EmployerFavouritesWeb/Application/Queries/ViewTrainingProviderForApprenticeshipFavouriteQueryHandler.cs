@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Web.Application.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Client;
@@ -50,6 +51,9 @@ namespace DfE.EmployerFavourites.Application.Queries
                             where fav.ApprenticeshipId == apprenticeshipId
                             && prov.Ukprn == ukprn
                             select prov).SingleOrDefault();
+
+            if (provider == null)
+                throw new EntityNotFoundException($"Cannot find apprenticeship favourite for apprenticeship: {apprenticeshipId}, provider: {ukprn}");
 
             return provider;
         } 

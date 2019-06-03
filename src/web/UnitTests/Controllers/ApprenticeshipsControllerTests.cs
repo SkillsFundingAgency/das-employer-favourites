@@ -23,6 +23,7 @@ using Xunit;
 using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Web.Application.Exceptions;
 
 namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
@@ -186,6 +187,18 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             var model = viewResult.ViewData.Model as TrainingProviderViewModel;
 
             Assert.Equal(expectedValue, model.AcheivementRate);
+        }
+
+        [Fact]
+        public async Task TrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
+        {
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "66666", UKPRN));
+        }
+
+        [Fact]
+        public async Task TrainingProvider_ThrowsException_WhenTrainingProviderForApprenticeshipNotInFavourites()
+        {
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, 99999999));
         }
 
         [Fact]
