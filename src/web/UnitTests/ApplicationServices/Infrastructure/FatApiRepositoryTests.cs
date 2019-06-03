@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
+using Microsoft.Extensions.Logging;
 using Moq;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
@@ -27,7 +28,7 @@ namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
             _mockFrameworkApiClient.Setup(s => s.GetAsync("420-1-2")).ReturnsAsync(new Framework() {Title = "Apprenticeship1"});
             _mockStandardApiClient.Setup(s => s.GetAsync("123")).ReturnsAsync(new Standard() {Title = "Apprenticeship2"});
 
-            _sut = new FatApiRepository(_mockStandardApiClient.Object,_mockFrameworkApiClient.Object, _mockProviderApiClient.Object);
+            _sut = new FatApiRepository(_mockStandardApiClient.Object,_mockFrameworkApiClient.Object, _mockProviderApiClient.Object, Mock.Of<ILogger<FatApiRepository>>());
         }
 
         [Fact]
