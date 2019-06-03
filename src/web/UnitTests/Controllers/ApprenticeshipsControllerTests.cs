@@ -109,12 +109,17 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             Assert.Equal("Standard-30", model.Items.Single(x => x.Id == "30").Title);
         }
 
-        [Fact]
-        public async Task Index_ReturnBadRequest_IfInvalidModel()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("1")]
+        [InlineData("22")]
+        [InlineData("AB12")]
+        [InlineData("1q3ef")]
+        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidEmployerAccountId(string id)
         {
-            _sut.ModelState.AddModelError("error", "some error");
-
-            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+            var result = await _sut.Index(id);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -201,12 +206,29 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, 99999999));
         }
 
-        [Fact]
-        public async Task TrainingProvider_ReturnBadRequest_IfInvalidModel()
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("-1")]
+        [InlineData("2-1-1")]
+        [InlineData("420-222-1")]
+        [InlineData("420-2-222")]
+        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidApprenticeshipId(string id)
         {
-            _sut.ModelState.AddModelError("error", "some error");
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, id, UKPRN);
 
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(100000000)]
+        [InlineData(9999999)]
+        [InlineData(-10000023)]
+        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidUkprn(int ukprn)
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, ukprn);
 
             Assert.IsType<BadRequestResult>(result);
         }

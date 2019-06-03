@@ -20,20 +20,20 @@ namespace DfE.EmployerFavourites.Web.Controllers
     {
         private readonly ExternalLinks _externalLinks;
         private readonly IMediator _mediator;
+        private readonly ApprenticeshipsParameterValidator _paramValidator;
 
         public ApprenticeshipsController(IOptions<ExternalLinks> externalLinks, IMediator mediator)
         {
             _externalLinks = externalLinks.Value;
             _mediator = mediator;
+            _paramValidator = new ApprenticeshipsParameterValidator();
         }
 
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships")]
         public async Task<IActionResult> Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
         {
-            if (!ModelState.IsValid)
-            {
+            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId))
                 return BadRequest();
-            }
 
             var response = await _mediator.Send(new ViewEmployerFavouritesQuery
             {
@@ -54,12 +54,10 @@ namespace DfE.EmployerFavourites.Web.Controllers
         [HttpGet("save-apprenticeship-favourites")]
         public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
         {
-            var validator = new ApprenticeshipsParameterValidator();
-            
-            if (!validator.IsValidApprenticeshipId(apprenticeshipId))
+            if (!_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
                 return BadRequest();
             
-            if (!validator.IsValidProviderUkprn(ukprn))
+            if (!_paramValidator.IsValidProviderUkprn(ukprn))
                 return BadRequest();
 
             var userId = User.GetUserId();
@@ -74,10 +72,11 @@ namespace DfE.EmployerFavourites.Web.Controllers
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers/{ukprn}")]
         public async Task<IActionResult> TrainingProvider([RegularExpression(@"^.{6,}$")]string employerAccountId, string apprenticeshipId, int ukprn)
         {
-            if (!ModelState.IsValid)
-            {
+            if (!_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
                 return BadRequest();
-            }
+
+            if (!_paramValidator.IsValidProviderUkprn(ukprn))
+                return BadRequest();
 
             var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
             {

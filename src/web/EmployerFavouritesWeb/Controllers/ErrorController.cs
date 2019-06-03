@@ -68,6 +68,8 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 case (int)HttpStatusCode.Forbidden:
                 case (int)HttpStatusCode.Unauthorized:
                     return "AccessDenied";
+                case (int)HttpStatusCode.BadRequest:
+                    return "BadRequest";
                 default:
                     return "Error";
             }
