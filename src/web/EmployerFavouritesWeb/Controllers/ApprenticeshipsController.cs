@@ -87,11 +87,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var model = new TrainingProviderViewModel
             {
-                ProviderName = response.Provider.Name,
-                TrainingOptions = "day release, at your location",
-                EmployerSatisfaction = "65%",
-                LearnerSatisfaction = "65%",
-                AcheivementRate = "65%",
+                ProviderName = response.Provider.Name
             };
 
             return await Task.FromResult(View(model));

@@ -144,55 +144,56 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
            Assert.Equal("Test Provider Ltd", model.ProviderName);
        }
 
-        [Fact]
-        public async Task TrainingProvider_ReturnsModel_WithTrainingOptions()
-        {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+        // TODO: Uncomment when story delivered to include details.
+        //[Fact]
+        //public async Task TrainingProvider_ReturnsModel_WithTrainingOptions()
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
 
-            Assert.Equal("day release, at your location", model.TrainingOptions);
-        }
+        //    Assert.Equal("day release, at your location", model.TrainingOptions);
+        //}
 
-        [Theory]
-        [InlineData(65, "65%")]
+        //[Theory]
+        //[InlineData(65, "65%")]
         //[InlineData(null, "no data available")]
-        public async Task TrainingProvider_ReturnsModel_WithEmployerSatisfaction(double? value, string expectedValue)
-        {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+        //public async Task TrainingProvider_ReturnsModel_WithEmployerSatisfaction(double? value, string expectedValue)
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
 
-            Assert.Equal(expectedValue, model.EmployerSatisfaction);
-        }
+        //    Assert.Equal(expectedValue, model.EmployerSatisfaction);
+        //}
 
-        [Theory]
-        [InlineData(65, "65%")]
+        //[Theory]
+        //[InlineData(65, "65%")]
         //[InlineData(null, "no data available")]
-        public async Task TrainingProvider_ReturnsModel_WithLearnerSatisfaction(double? value, string expectedValue)
-        {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+        //public async Task TrainingProvider_ReturnsModel_WithLearnerSatisfaction(double? value, string expectedValue)
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
 
-            Assert.Equal(expectedValue, model.LearnerSatisfaction);
-        }
+        //    Assert.Equal(expectedValue, model.LearnerSatisfaction);
+        //}
 
-        [Theory]
-        [InlineData(65, "65%")]
+        //[Theory]
+        //[InlineData(65, "65%")]
         //[InlineData(null, "no data available")]
-        public async Task TrainingProvider_ReturnsModel_WithAchievementRate(double? value, string expectedValue)
-        {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+        //public async Task TrainingProvider_ReturnsModel_WithAchievementRate(double? value, string expectedValue)
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
 
-            Assert.Equal(expectedValue, model.AcheivementRate);
-        }
+        //    Assert.Equal(expectedValue, model.AcheivementRate);
+        //}
 
         [Fact]
         public async Task TrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
