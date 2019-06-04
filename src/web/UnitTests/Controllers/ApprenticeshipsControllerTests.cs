@@ -59,7 +59,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             ServiceProvider provider = BuildDependencies();
             var mediator = provider.GetService<IMediator>();
 
-            _sut = new ApprenticeshipsController(_mockConfig.Object, mediator);
+            _sut = new ApprenticeshipsController(_mockConfig.Object, mediator, Mock.Of<ILogger<ApprenticeshipsController>>());
 
             SetupUserInContext();
         }
