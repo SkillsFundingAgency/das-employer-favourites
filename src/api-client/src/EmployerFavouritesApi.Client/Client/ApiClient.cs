@@ -28,6 +28,7 @@ using RestSharp;
 using RestSharp.Deserializers;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 using RestSharpMethod = RestSharp.Method;
+using RestSharp.Authenticators;
 
 namespace EmployerFavouritesApi.Client.Client
 {
@@ -377,6 +378,11 @@ namespace EmployerFavouritesApi.Client.Client
         private async Task<ApiResponse<T>> Exec<T>(RestRequest req, IReadableConfiguration configuration)
         {
             RestClient client = new RestClient(_baseUrl);
+
+            if (!string.IsNullOrEmpty(configuration.AccessToken))
+            {
+                client.Authenticator = new JwtAuthenticator(configuration.AccessToken);
+            }
 
             client.ClearHandlers();
             var existingDeserializer = req.JsonSerializer as IDeserializer;
