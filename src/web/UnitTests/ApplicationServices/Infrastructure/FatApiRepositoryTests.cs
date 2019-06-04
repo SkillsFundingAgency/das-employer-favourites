@@ -14,10 +14,10 @@ namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
 {
     public class FatApiRepositoryTests
     {
-        private Mock<IStandardApiClient> _mockStandardApiClient;
-        private Mock<IFrameworkApiClient> _mockFrameworkApiClient;
-        private Mock<IProviderApiClient> _mockProviderApiClient;
-        private FatApiRepository _sut;
+        private readonly Mock<IStandardApiClient> _mockStandardApiClient;
+        private readonly Mock<IFrameworkApiClient> _mockFrameworkApiClient;
+        private readonly Mock<IProviderApiClient> _mockProviderApiClient;
+        private readonly FatApiRepository _sut;
 
         public FatApiRepositoryTests()
         {
