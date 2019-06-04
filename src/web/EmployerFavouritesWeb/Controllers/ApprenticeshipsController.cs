@@ -70,7 +70,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers/{ukprn}")]
-        public async Task<IActionResult> TrainingProvider([RegularExpression(@"^.{6,}$")]string employerAccountId, string apprenticeshipId, int ukprn)
+        public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId, int ukprn)
         {
             if (!_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
                 return BadRequest();
