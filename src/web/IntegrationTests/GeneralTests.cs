@@ -62,7 +62,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
             // Act
             var response = await client.GetAsync("accounts/ABC123/apprenticeships");
             var content = await HtmlHelpers.GetDocumentAsync(response);
-            var appNumberElement = content.QuerySelector(".app-number");
+            var appNumberElement = content.QuerySelector(".app-hero-container__number");
             var appTaskListElement = content.QuerySelector(".app-task-list");
 
             // Assert
@@ -70,7 +70,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
             Assert.Equal(ExpectedApprenticeshipCount, appTaskListElement.ChildElementCount); // Number of items in the list
 
             var firstAppItemElement = appTaskListElement.Children.First();
-            var nameElement = firstAppItemElement.QuerySelector(".app-task-list__section");
+            var nameElement = firstAppItemElement.QuerySelector(".app-task-list__heading");
             Assert.Contains("Test Standard1", nameElement.TextContent); // Item contains the name
 
             // Should only show 'View Training Provider' button if have associated providers
@@ -91,7 +91,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
             // Act
             var response = await client.GetAsync("accounts/ABC123/apprenticeships/123/providers/10000020");
             var content = await HtmlHelpers.GetDocumentAsync(response);
-            var providerNameElement = content.QuerySelector(".prov-name");
+            var providerNameElement = content.QuerySelector(".app-task-list__heading");
 
             Assert.Equal("Test Provider", providerNameElement.TextContent);
         }
