@@ -5,5 +5,7 @@ namespace DfE.EmployerFavourites.Web.Models
         public string Id { get; set; }
         public string Title { get; set; }
         public bool IsFramework { get; set; }
+        public bool HasTrainingProviders { get; set; }
+        public int? Ukprn { get; set; } // Note: Will be removed when we introduce multiple training providers
     }
 }

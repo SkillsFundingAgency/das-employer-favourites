@@ -77,8 +77,21 @@
                         </div>*@
                         </div>
                         <div class="govuk-grid-column-one-third training-provider-content">
-                            <h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number">5</span></h3>
-                            <a href="#" class="govuk-link">Reserve funding</a><br><a href="#" class="govuk-link">Recruit an apprentice</a>
+
+                        @if (Model.Items[i].HasTrainingProviders)
+                        {
+                            <a id="view-training-providers" 
+                                asp-controller="Apprenticeships" 
+                                asp-action="TrainingProvider" 
+                                asp-route-employerAccountId="@Model.EmployerAccountId" 
+                                asp-route-apprenticeshipId="@Model.Items[i].Id" 
+                                asp-route-ukprn="@Model.Items[i].Ukprn" 
+                                class="govuk-button govuk-button--search">
+                                <span></span><span class="text">View Training Provider</span></a>
+                        }
+
+                        @*<h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number">5</span></h3>
+                        <a href="#" class="govuk-link">Reserve funding</a><br><a href="#" class="govuk-link">Recruit an apprentice</a>*@
                         </div>
                     </div>
                 </li>

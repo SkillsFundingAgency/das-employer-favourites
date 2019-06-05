@@ -35,7 +35,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
         }
 
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships")]
-        public async Task<IActionResult> Index([RegularExpression(@"^.{6,}$")]string employerAccountId)
+        public async Task<IActionResult> Index(string employerAccountId)
         {
             if (!_paramValidator.IsValidEmployerAccountId(employerAccountId))
             {
@@ -53,6 +53,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var model = new ApprenticeshipFavouritesViewModel
             {
+                EmployerAccountId = employerAccountId,
                 EmployerName = response.EmployerAccount.Name,
                 Items = response.EmployerFavourites.Select(mapper.Map).ToList()
             };

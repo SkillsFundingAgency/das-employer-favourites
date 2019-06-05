@@ -53,10 +53,11 @@ namespace DfE.EmployerFavourites.IntegrationTests
         }
 
         [Fact]
-        public async Task Index_DisplaysNumberAndListOfFavourites()
+        public async Task Index_DisplaysListOfFavourites()
         {
             // Arrange
             var client = BuildClient();
+            const int ExpectedApprenticeshipCount = 3;
 
             // Act
             var response = await client.GetAsync("accounts/ABC123/apprenticeships");
@@ -65,12 +66,20 @@ namespace DfE.EmployerFavourites.IntegrationTests
             var appTaskListElement = content.QuerySelector(".app-task-list");
 
             // Assert
-            Assert.Equal("2", appNumberElement.TextContent); // Test Apprenticeship count
-            Assert.Equal(2, appTaskListElement.ChildElementCount); // Number of items in the list
+            Assert.Equal(ExpectedApprenticeshipCount.ToString(), appNumberElement.TextContent); // Test Apprenticeship count
+            Assert.Equal(ExpectedApprenticeshipCount, appTaskListElement.ChildElementCount); // Number of items in the list
 
             var firstAppItemElement = appTaskListElement.Children.First();
             var nameElement = firstAppItemElement.QuerySelector(".app-task-list__section");
             Assert.Contains("Test Standard1", nameElement.TextContent); // Item contains the name
+
+            // Should only show 'View Training Provider' button if have associated providers
+            var secondAppItemElement = appTaskListElement.Children.Skip(1).First();
+            var firstProviderButton = firstAppItemElement.QuerySelector("#view-training-providers");
+            var secondProviderButton = secondAppItemElement.QuerySelector("#view-training-providers");
+            Assert.NotNull(firstProviderButton);
+            Assert.Null(secondProviderButton);
+            Assert.Equal("/accounts/ABC123/apprenticeships/123/providers/10000020", firstProviderButton.Attributes["href"].Value);
         }
 
         [Fact]

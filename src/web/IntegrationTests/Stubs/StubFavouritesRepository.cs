@@ -24,7 +24,12 @@ namespace DfE.EmployerFavourites.IntegrationTests.Stubs
                 new ReadModel.ApprenticeshipFavourite
                 {
                     ApprenticeshipId = "456",
-                    Title = "Test Standard2",
+                    Title = "Test Standard2"
+                },
+                new ReadModel.ApprenticeshipFavourite
+                {
+                    ApprenticeshipId = "789",
+                    Title = "Test Standard3",
                     Providers = new List<ReadModel.Provider>
                     {
                         new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020 }

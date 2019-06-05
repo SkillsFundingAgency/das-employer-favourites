@@ -86,7 +86,18 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task Index_ReturnsModel_ItemsInditcateProgrammeType()
+        public async Task Index_ReturnsModel_WithEmployerAccountId()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal(EMPLOYER_ACCOUNT_ID, model.EmployerAccountId);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsIndicateProgrammeType()
         {
             var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
 
@@ -107,6 +118,30 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
 
             Assert.Equal("Framework-420-2-1", model.Items.Single(x => x.Id == "420-2-1").Title);
             Assert.Equal("Standard-30", model.Items.Single(x => x.Id == "30").Title);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsIndicatesIfItHasProviders()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.False(model.Items.Single(x => x.Id == "420-2-1").HasTrainingProviders);
+            Assert.True(model.Items.Single(x => x.Id == "70").HasTrainingProviders);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsContainUkprnOfProvider()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Null(model.Items.Single(x => x.Id == "420-2-1").Ukprn);
+            Assert.Equal(12345678, model.Items.Single(x => x.Id == "70").Ukprn);
         }
 
         [Theory]
