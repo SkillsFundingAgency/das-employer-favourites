@@ -1,3 +1,53 @@
 @model TrainingProviderViewModel
+@section BodyHeader{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+                <span class="govuk-caption-xl">Your saved favourites</span>
+                <span class="app-icon-basket"></span>
+                Training provider
+            </h1>
+        </div>
+    </div>
+}
 
-<h1>@Model.ProviderName</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <ol class="app-task-list">
+            <li class="app-task-list__item">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <h2 class="govuk-heading-l app-task-list__heading"><a href="#" class="govuk-link">@Model.ProviderName</a></h2>
+                        <details class="govuk-details">
+                            <summary class="govuk-details__summary">
+                                <span class="govuk-details__summary-text">
+                                    Training provider details
+                                </span>
+                            </summary>
+                            <div class="govuk-details__text">
+                                <dl class="govuk-list">
+                                    <dt class="app-training-provider__details-title">Distance:</dt>
+                                    <dd class="app-training-provider__details-definition">1.1 miles away <span class="govuk-!-font-weight-bold">3</span> locations</dd>
+                                    <dt class="app-training-provider__details-title">Training options:</dt>
+                                    <dd class="app-training-provider__details-definition">day release block release at your location</dd>
+                                    <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
+                                    <dd class="app-training-provider__details-definition">86%</dd>
+                                    <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
+                                    <dd class="app-training-provider__details-definition">91%</dd>
+                                    <dt class="app-training-provider__details-title">Achievement rate:</dt>
+                                    <dd class="app-training-provider__details-definition">65%</dd>
+                                </dl>
+                            </div>
+                        </details>
+                    </div>
+                    <div class="govuk-grid-column-one-third">
+                        <a href="#" class="govuk-button app-task-list__training-provider-content">Recruit an apprentice</a>
+                        <a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>
+                    </div>
+                </div>
+            </liapp-task-list__item>
+        </ol>
+    </div>
+</div>
+
+            
