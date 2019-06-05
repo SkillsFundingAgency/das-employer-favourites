@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Security;
@@ -117,15 +118,20 @@ namespace DfE.EmployerFavourites.Web
         private static string[] GetAllowableDestinations(OidcConfiguration authConfig, ExternalLinks linksConfig)
         {
             var destinations = new List<string>();
+
+            var lee = new Uri(linksConfig.AccountsDashboardPage).GetLeftPart(UriPartial.Authority);
             
             if (!string.IsNullOrWhiteSpace(authConfig?.Authority))
-                destinations.Add(authConfig.Authority.Replace("identity", string.Empty));
+                destinations.Add(new Uri(authConfig.Authority).GetLeftPart(UriPartial.Authority));
             
             if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsHomePage))
-                destinations.Add(linksConfig.AccountsHomePage);
+                destinations.Add(new Uri(linksConfig.AccountsHomePage).GetLeftPart(UriPartial.Authority));
+
+            if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsDashboardPage))
+                destinations.Add(new Uri(linksConfig.AccountsDashboardPage).GetLeftPart(UriPartial.Authority));
 
             if (!string.IsNullOrWhiteSpace(linksConfig?.AccountsRegistrationPage))
-                destinations.Add(linksConfig.AccountsRegistrationPage);
+                destinations.Add(new Uri(linksConfig.AccountsRegistrationPage).GetLeftPart(UriPartial.Authority));
 
             return destinations.ToArray();
         }

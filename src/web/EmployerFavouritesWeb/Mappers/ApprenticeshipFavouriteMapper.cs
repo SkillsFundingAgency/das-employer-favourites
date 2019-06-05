@@ -1,4 +1,5 @@
-﻿using DfE.EmployerFavourites.Web.Models;
+﻿using System.Linq;
+using DfE.EmployerFavourites.Web.Models;
 
 namespace DfE.EmployerFavourites.Web.Mappers
 {
@@ -10,7 +11,9 @@ namespace DfE.EmployerFavourites.Web.Mappers
             {
                 Id = src.ApprenticeshipId,
                 Title = src.Title,
-                IsFramework = src.IsFramework
+                IsFramework = src.IsFramework,
+                HasTrainingProviders = src.Providers.Any(),
+                Ukprn = src.Providers.FirstOrDefault()?.Ukprn
             };
         }
     }
