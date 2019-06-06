@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
     <RootNamespace>DfE.EmployerFavourites.Api</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.Api</AssemblyName>
     <UserSecretsId>employer-favourites-api</UserSecretsId>

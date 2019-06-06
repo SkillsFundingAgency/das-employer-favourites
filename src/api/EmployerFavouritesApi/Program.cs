@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using DfE.EmployerFavourites.Api.Helpers;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,10 +13,11 @@ namespace DfE.EmployerFavourites.Api
     {
         public static void Main(string[] args)
         {
+            var instance = HostingHelper.GetWebsiteInstanceId(); ;
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {
-                logger.Info("Starting up host");
+                logger.Info($"Starting up host: ({instance})");
                 var host = CreateWebHostBuilder(args).Build();
 
                 host.Run();
