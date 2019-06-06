@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using DfE.EmployerFavourites.Web.Configuration;
+using DfE.EmployerFavourites.Web.Helpers;
 using DfE.EmployerFavourites.Web.Security;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,9 +22,10 @@ namespace DfE.EmployerFavourites.Web
             IOptions<CdnConfig> cdnConfig, 
             ILogger<Startup> logger)
         {
-            applicationLifetime.ApplicationStarted.Register(() => logger.LogInformation("Host fully started"));
-            applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation("Host shutting down...waiting to complete requests."));
-            applicationLifetime.ApplicationStopped.Register(() => logger.LogInformation("Host fully stopped. All requests processed."));
+            var instance = HostingHelper.GetWebsiteInstanceId();
+            applicationLifetime.ApplicationStarted.Register(() => logger.LogInformation($"Host fully started: ({instance})"));
+            applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation($"Host shutting down...waiting to complete requests: ({instance})"));
+            applicationLifetime.ApplicationStopped.Register(() => logger.LogInformation($"Host fully stopped. All requests processed: ({instance})"));
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
             

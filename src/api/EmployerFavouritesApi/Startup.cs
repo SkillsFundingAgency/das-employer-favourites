@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using DfE.EmployerFavourites.Api.Helpers;
 using DfE.EmployerFavourites.Api.Security;
 using DfE.EmployerFavourites.ApplicationServices.Commands;
 using DfE.EmployerFavourites.ApplicationServices.Configuration;
@@ -26,11 +27,11 @@ namespace DfE.EmployerFavourites.Api
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            Environment = env;
+            HostingEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -40,7 +41,7 @@ namespace DfE.EmployerFavourites.Api
             services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
 
             services.AddMvc(options => {
-                if (!Environment.IsDevelopment())
+                if (!HostingEnvironment.IsDevelopment())
                 {
                     options.Filters.Add(new AuthorizeFilter("default"));
                 }
@@ -75,9 +76,11 @@ namespace DfE.EmployerFavourites.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime, ILogger<Startup> logger)
         {
-            applicationLifetime.ApplicationStarted.Register(() => logger.LogInformation("Host fully started"));
-            applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation("Host shutting down...waiting to complete requests."));
-            applicationLifetime.ApplicationStopped.Register(() => logger.LogInformation("Host fully stopped. All requests processed."));
+            var instance = HostingHelper.GetWebsiteInstanceId();
+
+            applicationLifetime.ApplicationStarted.Register(() => logger.LogInformation($"Host fully started: ({instance})"));
+            applicationLifetime.ApplicationStopping.Register(() => logger.LogInformation($"Host shutting down...waiting to complete requests: ({instance})"));
+            applicationLifetime.ApplicationStopped.Register(() => logger.LogInformation($"Host fully stopped. All requests processed: ({instance})"));
 
             if (env.IsDevelopment())
             {
