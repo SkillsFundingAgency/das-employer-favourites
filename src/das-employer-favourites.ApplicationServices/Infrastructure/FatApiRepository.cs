@@ -67,7 +67,7 @@ namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
             return int.TryParse(apprenticeshipId, out int _);
         }
 
-        private Polly.Retry.AsyncRetryPolicy GetRetryPolicy()
+        private AsyncRetryPolicy GetRetryPolicy()
         {
             return Policy
                     .Handle<HttpRequestException>()

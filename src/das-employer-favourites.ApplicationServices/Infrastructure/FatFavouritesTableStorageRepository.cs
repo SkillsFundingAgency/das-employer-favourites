@@ -13,16 +13,16 @@ using Polly.Retry;
 
 namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure
 {
-    public class AzureTableStorageAndFatFavouritesRepository : IFavouritesReadRepository, IFavouritesWriteRepository
+    public class FatFavouritesTableStorageRepository : IFavouritesReadRepository, IFavouritesWriteRepository
     {
         private const string TABLE_NAME = "EmployerFavourites";
-        private readonly ILogger<AzureTableStorageAndFatFavouritesRepository> _logger;
+        private readonly ILogger<FatFavouritesTableStorageRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
         private readonly IFatRepository _fatRepository;
         private readonly CloudStorageAccount _storageAccount;
 
-        public AzureTableStorageAndFatFavouritesRepository(
-            ILogger<AzureTableStorageAndFatFavouritesRepository> logger,
+        public FatFavouritesTableStorageRepository(
+            ILogger<FatFavouritesTableStorageRepository> logger,
             IOptions<ConnectionStrings> option,
             IFatRepository fatRepository)
         {

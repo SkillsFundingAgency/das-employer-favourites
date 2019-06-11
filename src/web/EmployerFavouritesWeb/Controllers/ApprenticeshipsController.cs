@@ -79,7 +79,6 @@ namespace DfE.EmployerFavourites.Web.Controllers
             return Redirect(redirectUrl);
         }
 
-        [AllowAnonymous]
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers/{ukprn}")]
         public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId, int ukprn)
         {
