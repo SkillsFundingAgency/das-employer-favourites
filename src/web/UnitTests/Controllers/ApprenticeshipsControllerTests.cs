@@ -285,16 +285,10 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
 
             return new List<AccountDetailViewModel>
             {
-                // Account API in TEST not currently values back correctly. Will rely on the order being deterministic from 
-                // the api with the first item being the oldest.
-                // new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
-                // new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
-                new AccountDetailViewModel { HashedAccountId = "XXX123", DateRegistered = new DateTime(2019, 3, 1) },
-                new AccountDetailViewModel { HashedAccountId = "ABC123", DateRegistered = new DateTime(2019, 4, 1) },
-                new AccountDetailViewModel { HashedAccountId = "XYZ123", DateRegistered = new DateTime(2019, 3, 1) },
-                new AccountDetailViewModel { HashedAccountId = "AAA123", DateRegistered = new DateTime(2019, 4, 1) }
+                 new AccountDetailViewModel { AccountId = 7, HashedAccountId = "ABC123" },
+                 new AccountDetailViewModel { AccountId = 2, HashedAccountId = "XYZ123" },
+                 new AccountDetailViewModel { AccountId = 1, HashedAccountId = "XXX123"},
+                 new AccountDetailViewModel { AccountId = 4, HashedAccountId = "AAA123" }
             };
         }
 

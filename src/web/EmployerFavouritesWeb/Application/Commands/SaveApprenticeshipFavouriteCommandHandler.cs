@@ -65,15 +65,9 @@ namespace DfE.EmployerFavourites.Application.Commands
             {
                 var accounts = await _accountApiClient.GetUserAccounts(userId);
                 
-                return accounts.First().HashedAccountId;
-
-                    // Currently the API isn't passing through the correct details
-                    // of the registered date
-                    // We may be able to rely on the order from the api. They do 
-                    // look like they're returned in the order they are created.
-                    // .OrderBy(x => x.DateRegistered)
-                    // .ThenBy(x => x.HashedAccountId)
-                    // .First().HashedAccountId;
+                return accounts
+                    .OrderBy(x => x.AccountId) // AccountId is ascendingly sequential
+                    .First().HashedAccountId;
             }
             catch (Exception ex)
             {
