@@ -11,15 +11,13 @@
     </div>
 }
 
-<div class="hero-container">
+<div class="app-hero-container">
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-l">
-                <span class="icon-basket"></span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0 app-hero-container__heading">
+                <div class="app-hero-container__icon-basket"></div>
                 Favourite apprenticeships
-                <span class="govuk-caption-xl app-bookmarked-numbers">
-                    <span class="app-number">@Model.Items.Count</span> Apprenticeships
-                </span>
+                <span class="govuk-caption-xl app-hero-container__caption"><span class="app-hero-container__number">@Model.Items.Count</span> Apprenticeships</span>
             </h1>
         </div>
     </div>
@@ -30,57 +28,70 @@
         <ol class="app-task-list">
             @for (int i = 0; i < Model.Items.Count; i++)
             {
-                <li>
-                    <h2 class="app-task-list__section">
-                        <span class="app-task-list__section-number">@(i + 1). </span> 
-                        @Model.Items[i].Title
-                        @*<a href="#" class="govuk-link">@Model.Items[i].Title</a>*@
-                        @*<a href="#" class="govuk-button">Choose training provider</a>
-                        
-                        <section class="postcode-search">
-                            <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
-                            <fieldset class="govuk-fieldset">
-                                <div class="govuk-form-group">
-                                    <!-- <label class="govuk-label" for="provider-list-postcode">
-                        Postcode
-                    </label> -->
-                                    <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
-                                    <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
-                                </div>
-                            </fieldset>
-                        </section>*@
-                    </h2>
+                <li class="app-task-list__item">
                     <div class="govuk-grid-row">
                         <div class="govuk-grid-column-two-thirds">
-                        @if (!Model.Items[i].IsFramework)
-                        {
-                            <div class="govuk-body govuk-!-margin-bottom-2 app-new ">new</div>
-                        }
-                        @*<dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
-                            <dt class="govuk-!-font-weight-bold">Level:</dt>
-                            <dd>3 (equivalent to A levels at grades A to E)</dd>
-                            <dt class="govuk-!-font-weight-bold">Typical length:</dt>
-                            <dd>18 months</dd>
-                        </dl>
-                        <div class="govuk-form-group">
-                            <fieldset class="govuk-fieldset">
-                                <div class="govuk-checkboxes">
-                                    <div class="govuk-checkboxes__item">
-                                        <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
-                                        <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
-                                            Compare
-                                        </label>
-                                    </div>
-                                    <a href="#" class="govuk-link govuk-delete-link">Remove</a>
-                                </div>
-                            </fieldset>
-                        </div>*@
-                        </div>
-                        @*<div class="govuk-grid-column-one-third training-provider-content">
-                            <h3 class="govuk-heading-s"><span class="text-numbers">saved training providers</span> <span class="provider-number app-number">5</span></h3>
-                            <a href="#" class="govuk-link">Reserve funding</a><br><a href="#" class="govuk-link">Recruit an apprentice</a>
-                        </div>*@
+                            <h2 class="govuk-heading-l app-task-list__heading">
+                                <span class="app-task-list__section-number">@(i + 1). </span>
+                                @Model.Items[i].Title
+                            </h2>
+                            @*<a href="#" class="govuk-link">@Model.Items[i].Title</a>*@
+                            @*<a href="#" class="govuk-button">Choose training provider</a>
+
+            <section class="postcode-search">
+                <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
+                <fieldset class="govuk-fieldset">
+                    <div class="govuk-form-group">
+                    <!-- <label class="govuk-label" for="provider-list-postcode">Postcode</label> -->
+                        <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
+                        <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
                     </div>
+                </fieldset>
+            </section>*@
+                            @if (!Model.Items[i].IsFramework)
+                            {
+                                <div class="govuk-body govuk-!-margin-bottom-2 app-tag-new">new</div>
+                            }
+                            @*<dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
+            <dt class="govuk-!-font-weight-bold">Level:</dt>
+            <dd>3 (equivalent to A levels at grades A to E)</dd>
+            <dt class="govuk-!-font-weight-bold">Typical length:</dt>
+            <dd>18 months</dd>
+        </dl>
+        <div class="govuk-form-group">
+            <fieldset class="govuk-fieldset">
+                <div class="govuk-checkboxes">
+                    <div class="govuk-checkboxes__item">
+                        <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
+                        <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
+                            Compare
+                        </label>
+                    </div>
+                    <a href="#" class="govuk-link govuk-delete-link">Remove</a>
+                </div>
+            </fieldset>
+        </div>*@
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            @if (Model.Items[i].HasTrainingProviders)
+                            {
+                                <a id="view-training-providers"
+                                   asp-controller="Apprenticeships"
+                                   asp-action="TrainingProvider"
+                                   asp-route-employerAccountId="@Model.EmployerAccountId"
+                                   asp-route-apprenticeshipId="@Model.Items[i].Id"
+                                   asp-route-ukprn="@Model.Items[i].Ukprn"
+                                   class="govuk-button govuk-button--search app-task-list__training-provider-content">
+                                    <span></span><span class="text">View Training Provider</span>
+                                </a>
+                            }
+
+                            @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
+                               <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>
+                               <div><a href="#" class="govuk-link app-task-list__training-provider-content">Recruit an apprentice</a></div> *@
+                        </div>
+                    </div>
+                               
                 </li>
             }
         </ol>

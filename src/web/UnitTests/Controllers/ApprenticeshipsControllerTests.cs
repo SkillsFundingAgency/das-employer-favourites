@@ -22,6 +22,8 @@ using SFA.DAS.EAS.Account.Api.Types;
 using Xunit;
 using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Web.Application.Exceptions;
 
 namespace DfE.EmployerFavourites.UnitTests.Controllers
 {
@@ -30,6 +32,9 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         public const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
         public const string EMPLOYER_ACCOUNT_ID = "XXX123";
         public const string USER_ID = "User123";
+        public const string APPRENTICESHIPID = "123";
+        public const int UKPRN = 10000020;
+
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         private Mock<IFavouritesReadRepository> _mockFavouritesReadRepository;
         private Mock<IFavouritesWriteRepository> _mockFavouritesWriteRepository;
@@ -54,7 +59,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             ServiceProvider provider = BuildDependencies();
             var mediator = provider.GetService<IMediator>();
 
-            _sut = new ApprenticeshipsController(_mockConfig.Object, mediator);
+            _sut = new ApprenticeshipsController(_mockConfig.Object, mediator, Mock.Of<ILogger<ApprenticeshipsController>>());
 
             SetupUserInContext();
         }
@@ -66,7 +71,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<ApprenticeshipFavouritesViewModel>(viewResult.ViewData.Model);
-            Assert.Equal(3, model.Items.Count());
+            Assert.Equal(4, model.Items.Count());
         }
 
         [Fact]
@@ -81,7 +86,18 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task Index_ReturnsModel_ItemsInditcateProgrammeType()
+        public async Task Index_ReturnsModel_WithEmployerAccountId()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal(EMPLOYER_ACCOUNT_ID, model.EmployerAccountId);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsIndicateProgrammeType()
         {
             var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
 
@@ -105,11 +121,150 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task Index_ReturnBadRequest_IfInvalidModel()
+        public async Task Index_ReturnsModel_ItemsIndicatesIfItHasProviders()
         {
-            _sut.ModelState.AddModelError("error", "some error");
-
             var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.False(model.Items.Single(x => x.Id == "420-2-1").HasTrainingProviders);
+            Assert.True(model.Items.Single(x => x.Id == "70").HasTrainingProviders);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsContainUkprnOfProvider()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Null(model.Items.Single(x => x.Id == "420-2-1").Ukprn);
+            Assert.Equal(12345678, model.Items.Single(x => x.Id == "70").Ukprn);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("1")]
+        [InlineData("22")]
+        [InlineData("AB12")]
+        [InlineData("1q3ef")]
+        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidEmployerAccountId(string id)
+        {
+            var result = await _sut.Index(id);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+                
+        [Fact]
+        public async Task TrainingProvider_ReturnsViewResult_WithProviderDetails()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            Assert.IsAssignableFrom<TrainingProviderViewModel>(viewResult.ViewData.Model);
+        }
+
+       [Fact]
+       public async Task TrainingProvider_ReturnsModel_WithNameOfTrainingProvider()
+       {
+           var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+           var viewResult = Assert.IsType<ViewResult>(result);
+           var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+           Assert.Equal("Test Provider Ltd", model.ProviderName);
+       }
+
+        // TODO: Uncomment when story delivered to include details.
+        //[Fact]
+        //public async Task TrainingProvider_ReturnsModel_WithTrainingOptions()
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+        //    Assert.Equal("day release, at your location", model.TrainingOptions);
+        //}
+
+        //[Theory]
+        //[InlineData(65, "65%")]
+        //[InlineData(null, "no data available")]
+        //public async Task TrainingProvider_ReturnsModel_WithEmployerSatisfaction(double? value, string expectedValue)
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+        //    Assert.Equal(expectedValue, model.EmployerSatisfaction);
+        //}
+
+        //[Theory]
+        //[InlineData(65, "65%")]
+        //[InlineData(null, "no data available")]
+        //public async Task TrainingProvider_ReturnsModel_WithLearnerSatisfaction(double? value, string expectedValue)
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+        //    Assert.Equal(expectedValue, model.LearnerSatisfaction);
+        //}
+
+        //[Theory]
+        //[InlineData(65, "65%")]
+        //[InlineData(null, "no data available")]
+        //public async Task TrainingProvider_ReturnsModel_WithAchievementRate(double? value, string expectedValue)
+        //{
+        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+
+        //    var viewResult = Assert.IsType<ViewResult>(result);
+        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+
+        //    Assert.Equal(expectedValue, model.AcheivementRate);
+        //}
+
+        [Fact]
+        public async Task TrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
+        {
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "66666", UKPRN));
+        }
+
+        [Fact]
+        public async Task TrainingProvider_ThrowsException_WhenTrainingProviderForApprenticeshipNotInFavourites()
+        {
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, 99999999));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("   ")]
+        [InlineData("-1")]
+        [InlineData("2-1-1")]
+        [InlineData("420-222-1")]
+        [InlineData("420-2-222")]
+        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidApprenticeshipId(string id)
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, id, UKPRN);
+
+            Assert.IsType<BadRequestResult>(result);
+        }
+
+        [Theory]
+        [InlineData(0)]
+        [InlineData(100000000)]
+        [InlineData(9999999)]
+        [InlineData(-10000023)]
+        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidUkprn(int ukprn)
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, ukprn);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -275,7 +430,8 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             var list = new ReadModel.ApprenticeshipFavourites();
             list.Add(new ReadModel.ApprenticeshipFavourite("30") { Title = "Standard-30" });
             list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1" });
-            list.Add(new ReadModel.ApprenticeshipFavourite("70", 12345678) { Title = "Standard-70" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("70", new Provider { Ukprn = 12345678 }) { Title = "Standard-70" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd" } ) { Title = "Standard -123" });
 
             return list;
         }
@@ -323,6 +479,7 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
+            services.AddTransient<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>(x => Mock.Of<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>());
             var provider = services.BuildServiceProvider();
             return provider;
         }

@@ -11,7 +11,7 @@ namespace DfE.EmployerFavourites.UnitTests.Domain.ReadModel
         {
             var sut = new ApprenticeshipFavourites
             {
-                new ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Ukprns = new List<int>{ 1, 2, 3 }},
+                new ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = GetListOfTestProviders() },
                 new ApprenticeshipFavourite { ApprenticeshipId = "XYZ123" }
             };
 
@@ -23,6 +23,17 @@ namespace DfE.EmployerFavourites.UnitTests.Domain.ReadModel
             Assert.Collection(result,
                 item => { Assert.Equal("ABC123", item.ApprenticeshipId); Assert.Equal(new List<int> { 1, 2, 3 }, item.Ukprns); },
                 item => { Assert.Equal("XYZ123", item.ApprenticeshipId); Assert.Equal(0, item.Ukprns.Count); });
+        }
+
+
+        private List<Provider> GetListOfTestProviders()
+        {
+            return new List<Provider>
+            {
+                new Provider { Ukprn = 1 },
+                new Provider { Ukprn = 2 },
+                new Provider { Ukprn = 3 }
+            };
         }
     }
 }

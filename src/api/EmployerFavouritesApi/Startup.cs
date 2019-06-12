@@ -8,6 +8,7 @@ using DfE.EmployerFavourites.ApplicationServices.Configuration;
 using DfE.EmployerFavourites.ApplicationServices.Domain;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure;
 using DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces;
+using DfE.EmployerFavourites.ApplicationServices.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -17,7 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Apprenticeships.Api.Client;
-using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.Providers.Api.Client;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace DfE.EmployerFavourites.Api
@@ -38,7 +39,7 @@ namespace DfE.EmployerFavourites.Api
         {
             services.AddApplicationInsightsTelemetry();
             services.AddADAuthentication(Configuration);
-            services.AddMediatR(typeof(SaveApprenticeshipFavouriteCommand).Assembly);
+            services.AddMediatR(typeof(GetApprenticeshipFavouritesRequest).Assembly);
 
             services.AddMvc(options => {
                 if (!HostingEnvironment.IsDevelopment())
@@ -52,8 +53,10 @@ namespace DfE.EmployerFavourites.Api
             services.AddTransient<IFatRepository, FatApiRepository>();
             services.AddTransient<IStandardApiClient, StandardApiClient>(service => new StandardApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
             services.AddTransient<IFrameworkApiClient, FrameworkApiClient>(service => new FrameworkApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
+            services.AddTransient<IProviderApiClient, ProviderApiClient>(service => new ProviderApiClient(Configuration.GetValue<string>("FatApiBaseUrl")));
 
-            services.AddScoped<IFavouritesRepository, AzureTableStorageFavouritesRepository>();
+            services.AddScoped<IFavouritesReadRepository, FatFavouritesTableStorageRepository>();
+            services.AddScoped<IFavouritesWriteRepository, FatFavouritesTableStorageRepository>();
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
 
             services.AddSwaggerGen(c =>

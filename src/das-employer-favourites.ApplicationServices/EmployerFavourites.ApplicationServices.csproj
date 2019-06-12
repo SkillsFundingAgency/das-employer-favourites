@@ -14,5 +14,10 @@
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.1" />
     <PackageReference Include="Polly" Version="7.1.0" />
+    <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.174" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Domain\ReadModel\" />
+    <Folder Include="Domain\WriteModel\" />
   </ItemGroup>
 </Project>

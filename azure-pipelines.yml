@@ -46,6 +46,13 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: dotnet test
+  inputs:
+    command: test
+    projects: '**/**/*IntegrationTests.csproj'
+    arguments: '--configuration $(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
   displayName: 'Publish Internal API'
   inputs:
     command: publish

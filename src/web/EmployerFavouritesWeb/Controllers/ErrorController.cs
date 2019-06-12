@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using DfE.EmployerFavourites.Web.Application.Exceptions;
 using DfE.EmployerFavourites.Web.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +27,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             LogException();
 
-            return View(GetViewNameForStatus(id), new ErrorViewModel { StatusCode = id, RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(GetViewNameForStatus(Response.StatusCode), new ErrorViewModel { StatusCode = id, RequestId = HttpContext.TraceIdentifier });
         }
 
         private void LogException()
@@ -38,12 +39,20 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 string routeWhereExceptionOccurred = exceptionFeature.Path;
                 var exception = exceptionFeature.Error;
 
-                if (exception is AggregateException aggregateException)
+                switch(exception)
                 {
-                    var flattenedExceptions = aggregateException.Flatten();
-                    _logger.LogError(flattenedExceptions, "Aggregate exception on path: {route}", routeWhereExceptionOccurred);
+                    case AggregateException ex:
+                        var flattenedExceptions = ex.Flatten();
+                        _logger.LogError(flattenedExceptions, "Aggregate exception on path: {route}", routeWhereExceptionOccurred);
 
-                    exception = flattenedExceptions.InnerExceptions.FirstOrDefault();
+                        exception = flattenedExceptions.InnerExceptions.FirstOrDefault();
+                        break;
+                    case EntityNotFoundException ex:
+                        Response.StatusCode = (int)HttpStatusCode.NotFound;
+                        _logger.LogDebug(ex, "Entity not found");
+                        return;
+                    default:
+                        break;
                 }
 
                 _logger.LogError(exception, "Unhandled exception on path: {route}", routeWhereExceptionOccurred);
@@ -59,6 +68,8 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 case (int)HttpStatusCode.Forbidden:
                 case (int)HttpStatusCode.Unauthorized:
                     return "AccessDenied";
+                case (int)HttpStatusCode.BadRequest:
+                    return "BadRequest";
                 default:
                     return "Error";
             }

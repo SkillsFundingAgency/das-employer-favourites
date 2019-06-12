@@ -1,7 +1,10 @@
+using System.Threading.Tasks;
+
 namespace DfE.EmployerFavourites.ApplicationServices.Infrastructure.Interfaces
 {
     public interface IFatRepository
     {
-        string GetApprenticeshipName(string apprenticeshipId);
+        Task<string> GetApprenticeshipNameAsync(string apprenticeshipId);
+        Task<string> GetProviderNameAsync(int ukprn);
     }
 }

@@ -1,0 +1,14 @@
+@model ErrorViewModel
+@using Microsoft.Extensions.Options
+@inject IOptions<ExternalLinks> options;
+
+@{
+    var accountsHomePage = options.Value.AccountsHomePage;
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Bad Request</h1>
+        <p><a href="@accountsHomePage" class="govuk-button">Go back to the service homepage</a></p>
+    </div>
+</div>

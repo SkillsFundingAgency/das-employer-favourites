@@ -107,6 +107,7 @@ Class | Method | HTTP request | Description
 
  - [Model.ApprenticeshipFavourite](docs/ApprenticeshipFavourite.md)
  - [Model.ProblemDetails](docs/ProblemDetails.md)
+ - [Model.Provider](docs/Provider.md)
 
 
 <a name="documentation-for-authorization"></a>
