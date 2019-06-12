@@ -1,11 +1,17 @@
 using System.IO;
+using System.Net;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api;
+using DfE.EmployerFavourites.Api.Domain;
+using DfE.EmployerFavourites.Api.IntegrationTests.Stubs;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace DfE.EmployerFavourites.IntegrationTests
@@ -28,7 +34,21 @@ namespace DfE.EmployerFavourites.IntegrationTests
             });
         }
 
-        private System.Net.Http.HttpClient BuildClient()
+        [Fact]
+        public async Task Get_ApprenticesshipsReturnSuccessAndCorrectContentType()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.GetAsync("api/apprenticeships/ABC123");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+        }
+
+        private HttpClient BuildClient()
         {
             return _factory.WithWebHostBuilder(builder =>
             {
@@ -38,6 +58,8 @@ namespace DfE.EmployerFavourites.IntegrationTests
                     {
                         options.Filters.Add(new AllowAnonymousFilter());
                     });
+                    services.AddScoped<IFavouritesReadRepository, StubFavouritesRepository>();
+                    services.AddScoped<IFavouritesWriteRepository, StubFavouritesRepository>();
                    
                 });
             })

@@ -27,7 +27,6 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
                 {
                     config.Sources.Clear();
 
-                    var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
                     config.AddJsonFile("sharedMenuSettings.json", optional: false, reloadOnChange: false);

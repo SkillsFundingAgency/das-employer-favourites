@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>DfE.EmployerFavourites.UnitTests</RootNamespace>
+    <RootNamespace>DfE.EmployerFavourites.Api.UnitTests</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.UnitTests</AssemblyName>
     <IsPackable>false</IsPackable>
     <LangVersion>7.1</LangVersion>

@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <IsPackable>false</IsPackable>
-    <RootNamespace>DfE.EmployerFavourites.IntegrationTests</RootNamespace>
+    <RootNamespace>DfE.EmployerFavourites.Api.IntegrationTests</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.IntegrationTests</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
@@ -21,5 +21,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\EmployerFavouritesApi\EmployerFavouritesApi.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stubs\" />
   </ItemGroup>
 </Project>
