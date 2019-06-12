@@ -7,7 +7,6 @@ using DfE.EmployerFavourites.Web.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
-namespace DfE.EmployerFavourites.UnitTests.Security
+namespace DfE.EmployerFavourites.Web.UnitTests.Security
 {
     public class EmployerAccountHandlerTests
     {

@@ -14,9 +14,11 @@
     <PackageReference Include="Moq" Version="4.10.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\Queries\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Domain\ReadModel\" />
+    <ProjectReference Include="..\EmployerFavouritesApi\EmployerFavouritesApi.csproj" />
   </ItemGroup>
 </Project>

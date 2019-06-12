@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Dom;
 using Xunit;
 
-namespace DfE.EmployerFavourites.Web.IntegrationTests.Helpers
+namespace DfE.EmployerFavourites.IntegrationTests.Helpers
 {
     public static class HttpClientExtensions
     {

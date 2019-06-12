@@ -21,15 +21,23 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0-beta4" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.38" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj" />
+    <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.2-preview" />
+    <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.946" />
+    <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.174" />
+    <PackageReference Include="SFA.DAS.Apprenticeships.Api.Client" Version="0.11.174" />
+    <PackageReference Include="Polly" Version="7.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Application\" />
+    <Folder Include="Application\Queries\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Infrastructure\Configuration\" />
   </ItemGroup>
 </Project>

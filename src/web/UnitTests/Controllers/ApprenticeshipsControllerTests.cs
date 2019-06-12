@@ -25,7 +25,7 @@ using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Web.Application.Exceptions;
 
-namespace DfE.EmployerFavourites.UnitTests.Controllers
+namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 {
     public class ApprenticeshipsControllerTests
     {

@@ -2,7 +2,7 @@
 using DfE.EmployerFavourites.Domain.ReadModel;
 using Xunit;
 
-namespace DfE.EmployerFavourites.UnitTests.Domain.ReadModel
+namespace DfE.EmployerFavourites.Web.UnitTests.Domain.ReadModel
 {
     public class ApprenticeshipFavouritesTests
     {

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 
-namespace DfE.EmployerFavourites.IntegrationTests.Stubs
+namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
 {
     internal class StubAccountApiClient : IAccountApiClient
     {

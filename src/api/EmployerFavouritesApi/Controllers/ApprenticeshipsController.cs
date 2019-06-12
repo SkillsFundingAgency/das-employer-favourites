@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.ApplicationServices;
-using DfE.EmployerFavourites.ApplicationServices.Queries;
+using DfE.EmployerFavourites.Api.Application.Queries;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -37,7 +36,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(401)]
         [HttpGet]
         [Route("{employerAccountId}")]
-        public async Task<ActionResult<ApplicationServices.Domain.ReadModel.ApprenticeshipFavourites>> Get(string employerAccountId)
+        public async Task<ActionResult<Domain.ReadModel.ApprenticeshipFavourites>> Get(string employerAccountId)
         {
             try
             {

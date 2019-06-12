@@ -6,7 +6,7 @@ using AngleSharp;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 
-namespace DfE.EmployerFavourites.Web.IntegrationTests.Helpers
+namespace DfE.EmployerFavourites.IntegrationTests.Helpers
 {
     public class HtmlHelpers
     {
