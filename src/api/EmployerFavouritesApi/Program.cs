@@ -43,13 +43,13 @@ namespace DfE.EmployerFavourites.Api
                     var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
-                    config.AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddAzureTableStorage(options => {
                         options.ConfigurationKeys = new[] { "SFA.DAS.EmployerFavouritesApi" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;
                     });
+                    config.AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
                     config.AddUserSecrets<Startup>();
