@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Application.Queries;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -61,6 +62,32 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 _logger.LogError(e, "Error in get apprenticeship favourites");
                 return StatusCode(500);
             }
+        }
+
+        // PUT api/Apprenticeships/ABC123
+        /// <summary>
+        /// Save apprenticeship favourite to the Employer Account provided
+        /// </summary>
+        /// <param name="employerAccountId">Hashed Employer Account Id</param>
+        /// <param name="apprenticeshipId">Standard code or Framework Id</param>
+        /// <param name="ukprn">Provider Ukprn</param>
+        /// <response code="201">Employer Favourites created for employer account</response>
+        /// <response code="204">Employer Favourite added to existing</response>
+        /// <response code="400">The Employer account id provided is invalid</response>  
+        /// <response code="401">The client is not authorized to access this endpoint</response>    
+        [ProducesResponseType(201)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [HttpPut]
+        [Route("{employerAccountId}")]
+        public IActionResult Put(string employerAccountId, string apprenticeshipId, int ukprn)
+        {
+            //TODO: LWA validate parameters
+
+            //var response = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = employerAccountId });
+
+            return CreatedAtAction("Get", new { employerAccountId }, "");
         }
     }
 }

@@ -17,6 +17,7 @@
     <Folder Include="Infrastructure\" />
     <Folder Include="Application\" />
     <Folder Include="Application\Queries\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EmployerFavouritesApi\EmployerFavouritesApi.csproj" />

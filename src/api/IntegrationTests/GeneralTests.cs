@@ -48,6 +48,20 @@ namespace DfE.EmployerFavourites.IntegrationTests
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
         }
 
+        [Fact]
+        public async Task Post_Apprenticeship()
+        {
+            var client = BuildClient();
+
+            var response = await client.PutAsync("api/apprenticeships/ABC123"
+                    , new StringContent(
+                    JsonConvert.SerializeObject(""),
+                Encoding.UTF8,
+                "application/json"));
+
+            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
         private HttpClient BuildClient()
         {
             return _factory.WithWebHostBuilder(builder =>
