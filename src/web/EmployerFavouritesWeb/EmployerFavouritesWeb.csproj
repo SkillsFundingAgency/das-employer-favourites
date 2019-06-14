@@ -29,8 +29,6 @@
     <ProjectReference Include="..\..\api-client\src\EmployerFavouritesApi.Client\EmployerFavouritesApi.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Update="nlog.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Remove="nlog.config" />
   </ItemGroup>
 </Project>

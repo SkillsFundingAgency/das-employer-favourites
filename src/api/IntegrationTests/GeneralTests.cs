@@ -41,7 +41,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.GetAsync("api/apprenticeships/ABC123");
+            var response = await client.GetAsync("api/apprenticeships/XYZ123");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -49,7 +49,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
         }
 
         [Fact]
-        public async Task Post_Apprenticeship()
+        public async Task Post_Apprenticeship_WithNoExistingRecord()
         {
             var client = BuildClient();
 
@@ -60,6 +60,20 @@ namespace DfE.EmployerFavourites.IntegrationTests
                 "application/json"));
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Post_Apprenticeship_WithExistingRecord()
+        {
+            var client = BuildClient();
+
+            var response = await client.PutAsync("api/apprenticeships/XYZ123"
+                    , new StringContent(
+                    JsonConvert.SerializeObject(""),
+                Encoding.UTF8,
+                "application/json"));
+
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
         private HttpClient BuildClient()

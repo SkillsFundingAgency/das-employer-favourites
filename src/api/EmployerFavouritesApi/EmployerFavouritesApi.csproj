@@ -39,5 +39,6 @@
     <Folder Include="Application\Queries\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Infrastructure\Configuration\" />
+    <Folder Include="Application\Commands\" />
   </ItemGroup>
 </Project>

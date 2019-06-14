@@ -7,6 +7,9 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests.Stubs
     {
         public Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
         {
+            if (employerAccountId == "ABC123")
+                return Task.FromResult(new Domain.ReadModel.ApprenticeshipFavourites());
+
             var result = new Domain.ReadModel.ApprenticeshipFavourites
             {
                 new Domain.ReadModel.ApprenticeshipFavourite()

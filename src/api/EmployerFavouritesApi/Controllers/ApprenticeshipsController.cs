@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Application.Queries;
 using Microsoft.AspNetCore.Mvc.Routing;
+using DfE.EmployerFavourites.Api.Application.Commands;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -81,13 +82,21 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(401)]
         [HttpPut]
         [Route("{employerAccountId}")]
-        public IActionResult Put(string employerAccountId, string apprenticeshipId, int ukprn)
+        public async Task<IActionResult> Put(string employerAccountId, string apprenticeshipId, int ukprn)
         {
             //TODO: LWA validate parameters
 
-            //var response = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = employerAccountId });
+            var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand() 
+            { 
+                EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId,
+                Ukprn = ukprn
+            });
 
-            return CreatedAtAction("Get", new { employerAccountId }, "");
+            if (response == SaveApprenticeshipFavouriteCommandResponse.Created)
+                return CreatedAtAction("Get", new { employerAccountId }, string.Empty);
+                
+            return NoContent();
         }
     }
 }

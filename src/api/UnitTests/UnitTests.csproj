@@ -18,6 +18,8 @@
     <Folder Include="Application\" />
     <Folder Include="Application\Queries\" />
     <Folder Include="Controllers\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\ReadModel\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EmployerFavouritesApi\EmployerFavouritesApi.csproj" />
