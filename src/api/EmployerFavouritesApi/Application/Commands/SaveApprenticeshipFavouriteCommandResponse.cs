@@ -1,9 +1,9 @@
-﻿namespace DfE.EmployerFavourites.Api.Application.Commands
+﻿using DfE.EmployerFavourites.Api.Domain.WriteModel;
+
+namespace DfE.EmployerFavourites.Api.Application.Commands
 {
-    public enum SaveApprenticeshipFavouriteCommandResponse
+    public class SaveApprenticeshipFavouriteCommandResponse
     {
-        Created,
-        Updated,
-        NoAction
+        public DomainUpdateStatus CommandResult { get; set; }
     }
 }

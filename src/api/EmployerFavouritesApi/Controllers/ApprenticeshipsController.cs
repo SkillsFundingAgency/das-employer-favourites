@@ -42,7 +42,6 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
-
                 var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = employerAccountId });
 
                 if (apprenticeships.Count > 0)
@@ -93,7 +92,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 Ukprn = ukprn
             });
 
-            if (response == SaveApprenticeshipFavouriteCommandResponse.Created)
+            if (response.CommandResult == Domain.WriteModel.DomainUpdateStatus.Created)
                 return CreatedAtAction("Get", new { employerAccountId }, string.Empty);
                 
             return NoContent();

@@ -53,11 +53,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
         {
             var client = BuildClient();
 
-            var response = await client.PutAsync("api/apprenticeships/ABC123"
-                    , new StringContent(
-                    JsonConvert.SerializeObject(""),
-                Encoding.UTF8,
-                "application/json"));
+            var response = await client.PutAsync("api/apprenticeships/ABC123?apprenticeshipId=55&ukprn=10000030", new StringContent(string.Empty));
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -67,12 +63,7 @@ namespace DfE.EmployerFavourites.IntegrationTests
         {
             var client = BuildClient();
 
-            var response = await client.PutAsync("api/apprenticeships/XYZ123"
-                    , new StringContent(
-                    JsonConvert.SerializeObject(""),
-                Encoding.UTF8,
-                "application/json"));
-
+            var response = await client.PutAsync("api/apprenticeships/XYZ123?apprenticeshipId=55&ukprn=10000030", new StringContent(string.Empty));
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 

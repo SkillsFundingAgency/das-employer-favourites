@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Domain;
+using DfE.EmployerFavourites.Api.Domain.WriteModel;
 using MediatR;
 
 namespace DfE.EmployerFavourites.Api.Application.Commands
@@ -22,45 +23,14 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
         {
             var existingFavourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
-            if (existingFavourites.Count == 0)
-            {
-                var favourites = new Domain.WriteModel.ApprenticeshipFavourites
-                {
-                    new Domain.WriteModel.ApprenticeshipFavourite
-                    {
-                        ApprenticeshipId = request.ApprenticeshipId,
-                        Ukprns = new List<int> { request.Ukprn }
-                    }
-                };
-
-                await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, favourites);
-
-                return SaveApprenticeshipFavouriteCommandResponse.Created;
-            }
-
             var writeModel = existingFavourites.MapToWriteModel();
 
-            var matchingApprenticeship = writeModel.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
+            writeModel.Add(request.ApprenticeshipId, request.Ukprn);
 
-            if (matchingApprenticeship != null)
-            {
-                if (matchingApprenticeship.Ukprns.Any(x => x == request.Ukprn))
-                    return SaveApprenticeshipFavouriteCommandResponse.NoAction; // No save required
+            if (writeModel.UpdateStatus != DomainUpdateStatus.NoAction)
+                await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, writeModel);
 
-                matchingApprenticeship.Ukprns.Add(request.Ukprn);
-            }
-            else
-            {
-                writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite
-                {
-                    ApprenticeshipId = request.ApprenticeshipId,
-                    Ukprns = new List<int> { request.Ukprn }
-                });
-            }
-
-            await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, writeModel);
-
-            return SaveApprenticeshipFavouriteCommandResponse.Updated;
+            return new SaveApprenticeshipFavouriteCommandResponse { CommandResult = writeModel.UpdateStatus };
         }
     }
 }
