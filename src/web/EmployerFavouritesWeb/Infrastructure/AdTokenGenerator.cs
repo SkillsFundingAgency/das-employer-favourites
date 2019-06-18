@@ -44,7 +44,7 @@ namespace DfE.EmployerFavourites.Infrastructure
             var context = new AuthenticationContext(authority, true);
             var result = await context.AcquireTokenAsync(identifierUri, clientCredential);
 
-            _tokenLookup.Add(key, new Token(result.AccessToken, result.ExpiresOn.DateTime));
+            _tokenLookup[key] = new Token(result.AccessToken, result.ExpiresOn.DateTime);
 
             return result.AccessToken;
         }

@@ -4,6 +4,6 @@ namespace DfE.EmployerFavourites.Domain
 {
     public interface IFavouritesWriteRepository
     {
-        Task SaveApprenticeshipFavourites(string employerAccountId, WriteModel.ApprenticeshipFavourites apprenticeshipFavourite);
+        Task SaveApprenticeshipFavourites(string employerAccountId, WriteModel.ApprenticeshipFavourites apprenticeshipFavourites);
     }
 }

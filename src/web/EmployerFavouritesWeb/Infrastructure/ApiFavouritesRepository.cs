@@ -6,6 +6,7 @@ using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Domain.WriteModel;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using EmployerFavouritesApi.Client.Api;
+using EmployerFavouritesApi.Client.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
@@ -33,18 +34,25 @@ namespace DfE.EmployerFavourites.Infrastructure
         }
 
 
-        public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
+        public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourites)
         {
             try
             {
+                var apiFavourites = MapToApiClientFavourites(apprenticeshipFavourites);
                 var client = await GetClient();
-                await _retryPolicy.ExecuteAsync(context => client.PutAsync(employerAccountId, null, null), new Context(nameof(GetApprenticeshipFavourites)));
+
+                await _retryPolicy.ExecuteAsync(context => client.PutAsync(employerAccountId, apiFavourites), new Context(nameof(GetApprenticeshipFavourites)));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Unable to Save Apprenticeship Favourites to Api for Account: {employerAccountId}", employerAccountId);
                 throw;
             }
+        }
+
+        private List<Favourite> MapToApiClientFavourites(ApprenticeshipFavourites apprenticeshipFavourites)
+        {
+            return apprenticeshipFavourites.Select(x => new Favourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns.ToList() }).ToList();
         }
 
         public virtual async Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)

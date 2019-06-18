@@ -78,7 +78,7 @@ namespace DfE.EmployerFavourites.Web
             services.AddScoped<AdTokenGenerator>();
 
             services.AddScoped<IFavouritesReadRepository, ApiFavouritesRepository>();
-            services.AddScoped<IFavouritesWriteRepository, AzureTableStorageFavouritesRepository>();
+            services.AddScoped<IFavouritesWriteRepository, ApiFavouritesRepository>();
         }
 
         private void AddConfiguration(IServiceCollection services)
