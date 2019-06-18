@@ -100,6 +100,7 @@ All URIs are relative to *http://localhost*
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
 *ApprenticeshipsApi* | [**Get**](docs/ApprenticeshipsApi.md#get) | **GET** /api/Apprenticeships/{employerAccountId} | Gets all apprenticeship favourites for the Employer account Id provided
+*ApprenticeshipsApi* | [**Put**](docs/ApprenticeshipsApi.md#put) | **PUT** /api/Apprenticeships/{employerAccountId} | Save apprenticeship favourite to the Employer Account provided
 
 
 <a name="documentation-for-models"></a>

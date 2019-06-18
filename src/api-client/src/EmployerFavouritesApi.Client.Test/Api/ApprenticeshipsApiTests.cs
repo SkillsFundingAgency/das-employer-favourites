@@ -67,6 +67,20 @@ namespace EmployerFavouritesApi.Client.Test
             //Assert.IsType<List<ApprenticeshipFavourite>> (response, "response is List<ApprenticeshipFavourite>");
         }
         
+        /// <summary>
+        /// Test Put
+        /// </summary>
+        [Fact]
+        public void PutTest()
+        {
+            // TODO uncomment below to test the method and replace null with proper value
+            //string employerAccountId = null;
+            //string apprenticeshipId = null;
+            //int? ukprn = null;
+            //instance.Put(employerAccountId, apprenticeshipId, ukprn);
+            
+        }
+        
     }
 
 }
