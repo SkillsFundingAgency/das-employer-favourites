@@ -3,7 +3,6 @@
     public enum DomainUpdateStatus
     {
         Created,
-        Updated,
-        NoAction
+        Updated
     }
 }

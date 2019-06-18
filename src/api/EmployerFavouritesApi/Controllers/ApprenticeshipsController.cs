@@ -1,11 +1,14 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DfE.EmployerFavourites.Api.Application.Commands;
+using DfE.EmployerFavourites.Api.Application.Queries;
+using DfE.EmployerFavourites.Api.Domain.WriteModel;
+using DfE.EmployerFavourites.Api.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
-using DfE.EmployerFavourites.Api.Application.Queries;
-using Microsoft.AspNetCore.Mvc.Routing;
-using DfE.EmployerFavourites.Api.Application.Commands;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -14,6 +17,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
     [ApiController]
     public class ApprenticeshipsController : ControllerBase
     {
+        private const string ServerErrorMessage = "Internal Server Error";
         private readonly ILogger<ApprenticeshipsController> _logger;
         private readonly IMediator _mediator;
 
@@ -60,7 +64,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, "Error in get apprenticeship favourites");
-                return StatusCode(500);
+                return StatusCode(500, ServerErrorMessage);
             }
         }
 
@@ -69,8 +73,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
         /// Save apprenticeship favourite to the Employer Account provided
         /// </summary>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id</param>
-        /// <param name="ukprn">Provider Ukprn</param>
+        /// <param name="favourites">Employer Favourites</param>
         /// <response code="201">Employer Favourites created for employer account</response>
         /// <response code="204">Employer Favourite added to existing</response>
         /// <response code="400">The Employer account id provided is invalid</response>  
@@ -81,21 +84,42 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(401)]
         [HttpPut]
         [Route("{employerAccountId}")]
-        public async Task<IActionResult> Put(string employerAccountId, string apprenticeshipId, int ukprn)
+        public async Task<IActionResult> Put(string employerAccountId, [FromBody]List<Favourite> favourites)
         {
-            //TODO: LWA validate parameters
+            try
+            {
+                //TODO: LWA validate parameters
+                var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand()
+                {
+                    EmployerAccountId = employerAccountId,
+                    Favourites = MapToWriteModel(favourites)
+                });
 
-            var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand() 
-            { 
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Ukprn = ukprn
-            });
+                if (response.CommandResult == Domain.WriteModel.DomainUpdateStatus.Created)
+                    return CreatedAtAction("Get", new { employerAccountId }, string.Empty);
 
-            if (response.CommandResult == Domain.WriteModel.DomainUpdateStatus.Created)
-                return CreatedAtAction("Get", new { employerAccountId }, string.Empty);
-                
-            return NoContent();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in get apprenticeship favourites");
+                return StatusCode(500, ServerErrorMessage);
+            }
+        }
+
+        private ApprenticeshipFavourites MapToWriteModel(List<Favourite> favourites)
+        {
+            var writeModel = new ApprenticeshipFavourites();
+
+            if (favourites == null)
+            {
+                return writeModel;
+            }
+
+            var items = favourites.Select(x => new ApprenticeshipFavourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns });
+            writeModel.AddRange(items);
+
+            return writeModel;
         }
     }
 }

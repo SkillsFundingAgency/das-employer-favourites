@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Domain.WriteModel;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using EmployerFavouritesApi.Client.Api;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ using RestSharp;
 
 namespace DfE.EmployerFavourites.Infrastructure
 {
-    public class ApiFavouritesRepository : IFavouritesReadRepository
+    public class ApiFavouritesRepository : IFavouritesReadRepository, IFavouritesWriteRepository
     {
         private readonly ILogger<ApiFavouritesRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
@@ -29,6 +30,21 @@ namespace DfE.EmployerFavourites.Infrastructure
             _retryPolicy = GetRetryPolicy();
             _apiConfig = options.Value;
             _tokenGenerator = tokenGenerator;
+        }
+
+
+        public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourite)
+        {
+            try
+            {
+                var client = await GetClient();
+                await _retryPolicy.ExecuteAsync(context => client.PutAsync(employerAccountId, null, null), new Context(nameof(GetApprenticeshipFavourites)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unable to Save Apprenticeship Favourites to Api for Account: {employerAccountId}", employerAccountId);
+                throw;
+            }
         }
 
         public virtual async Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
@@ -103,5 +119,4 @@ namespace DfE.EmployerFavourites.Infrastructure
             return new ApprenticeshipsApi(clientConfig);
         }
     }
-
 }

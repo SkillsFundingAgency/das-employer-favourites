@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -6,6 +7,7 @@ using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.IntegrationTests.Stubs;
+using DfE.EmployerFavourites.Api.Models;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -53,7 +55,10 @@ namespace DfE.EmployerFavourites.IntegrationTests
         {
             var client = BuildClient();
 
-            var response = await client.PutAsync("api/apprenticeships/ABC123?apprenticeshipId=55&ukprn=10000030", new StringContent(string.Empty));
+            var response = await client.PutAsync("api/apprenticeships/ABC123",
+                new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } } }),
+                Encoding.UTF8,
+                "application/json"));
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
         }
@@ -63,7 +68,10 @@ namespace DfE.EmployerFavourites.IntegrationTests
         {
             var client = BuildClient();
 
-            var response = await client.PutAsync("api/apprenticeships/XYZ123?apprenticeshipId=55&ukprn=10000030", new StringContent(string.Empty));
+            var response = await client.PutAsync("api/apprenticeships/XYZ123",
+                new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } } }),
+                Encoding.UTF8,
+                "application/json"));
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 

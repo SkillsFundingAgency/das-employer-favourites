@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Controllers;
 using DfE.EmployerFavourites.Api.Domain;
-using DfE.EmployerFavourites.Api.Domain.WriteModel;
+using DfE.EmployerFavourites.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,10 +46,12 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         [Fact]
         public async Task Put_ReturnsCreatedResult_WhenNewListCreatedForEmployerAccount()
         {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "50", Ukprns = new List<int> { 10000020 } }
+            };
 
-            var result = await _sut.Put(EmployerAccountIdNewList, "50", 10000020);
+            var result = await _sut.Put(EmployerAccountIdNewList, favourites);
             
             Assert.IsAssignableFrom<CreatedAtActionResult>(result);
         }
@@ -58,10 +59,12 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         [Fact]
         public async Task Put_ReturnsNoContentResult_WhenNewListCreatedEmployerAccountWithExistingList()
         {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "50", Ukprns = new List<int> { 10000020 } }
+            };
 
-            var result = await _sut.Put(EmployerAccountIdExistingList, "50", 10000020);
+            var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
 
             Assert.IsAssignableFrom<NoContentResult>(result);
         }
@@ -69,45 +72,27 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         [Fact]
         public async Task Put_ReturnsNoContentResult_WhenAddingNewProviderToExistingApprenticeship()
         {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } }
+            };
 
-            var result = await _sut.Put(EmployerAccountIdExistingList, "55", 10000030);
+            var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
 
             Assert.IsAssignableFrom<NoContentResult>(result);
         }
 
         [Fact]
-        public async Task Put_CreatesNewListInRepo_ForFirstSaveForEmployerAccountId()
+        public async Task Put_ReplacesExistingListInRepo_WithNewList()
         {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "60", Ukprns = new List<int> { 10000020 } }
+            };
 
-            var result = await _sut.Put(EmployerAccountIdNewList, "50", 10000020);
+            var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
 
-            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdNewList, Matchers.ContainsJustNewItem("50", 10000020)));
-        }
-
-        [Fact]
-        public async Task Put_AddsFavouriteToExistingListInRepo_WhenNewListAndNewApprenticeship()
-        {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
-
-            var result = await _sut.Put(EmployerAccountIdExistingList, "60", 10000020);
-
-            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.AddedToExistingList("60", 10000020)));
-        }
-
-        [Fact]
-        public async Task Put_AddsProviderToExistingListInRepo_WhenApprenticeshipAlreadyExists()
-        {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
-
-            var result = await _sut.Put(EmployerAccountIdExistingList, "55", 10000020);
-
-            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.AddedUkprnToExistingApprenticeship(10000020)));
+            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.ContainsOnly("60", 10000020)));
         }
 
         private ServiceProvider BuildDependencies()
@@ -123,7 +108,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
 
         private static class Matchers
         {
-            internal static WriteModel.ApprenticeshipFavourites ContainsJustNewItem(string apprenticeshipId, int ukprn)
+            internal static WriteModel.ApprenticeshipFavourites ContainsOnly(string apprenticeshipId, int ukprn)
             {
                 return Match.Create<WriteModel.ApprenticeshipFavourites>(s =>
                 {
@@ -133,36 +118,6 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
                     var item = s.First();
 
                     if (item.ApprenticeshipId != apprenticeshipId || item.Ukprns.First() != ukprn)
-                        return false;
-
-                    return true;
-                });
-            }
-
-            internal static ApprenticeshipFavourites AddedToExistingList(string apprenticeshipId, int ukprn)
-            {
-                return Match.Create<WriteModel.ApprenticeshipFavourites>(s =>
-                {
-                    if (s == null || s.Count == 1)
-                        return false;
-
-                    if (!s.Any(x => x.ApprenticeshipId == apprenticeshipId && x.Ukprns.First() == ukprn))
-                        return false;
-
-                    return true;
-                });
-            }
-
-            internal static ApprenticeshipFavourites AddedUkprnToExistingApprenticeship(int ukprn)
-            {
-                return Match.Create<WriteModel.ApprenticeshipFavourites>(s =>
-                {
-                    if (s == null || s.Count != 1)
-                        return false;
-
-                    var providers = s.First().Ukprns;
-
-                    if (providers.Count != 2 || !providers.Any(x => x == ukprn))
                         return false;
 
                     return true;

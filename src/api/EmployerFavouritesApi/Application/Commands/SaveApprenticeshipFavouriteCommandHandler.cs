@@ -20,15 +20,11 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
         public async Task<SaveApprenticeshipFavouriteCommandResponse> Handle(SaveApprenticeshipFavouriteCommand request, CancellationToken cancellationToken)
         {
             var existingFavourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
+            var hasExistingRecord = existingFavourites != null && existingFavourites.Count > 0;
 
-            var writeModel = existingFavourites.MapToWriteModel();
+            await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, request.Favourites);
 
-            writeModel.Add(request.ApprenticeshipId, request.Ukprn);
-
-            if (writeModel.UpdateStatus != DomainUpdateStatus.NoAction)
-                await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, writeModel);
-
-            return new SaveApprenticeshipFavouriteCommandResponse { CommandResult = writeModel.UpdateStatus };
+            return new SaveApprenticeshipFavouriteCommandResponse { CommandResult = hasExistingRecord ? DomainUpdateStatus.Updated : DomainUpdateStatus.Created };
         }
     }
 }
