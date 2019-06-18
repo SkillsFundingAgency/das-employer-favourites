@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.Domain.WriteModel;

@@ -68,7 +68,7 @@ namespace DfE.EmployerFavourites.Infrastructure
             return dest;
         }
 
-        private Polly.Retry.AsyncRetryPolicy GetRetryPolicy()
+        private AsyncRetryPolicy GetRetryPolicy()
         {
             return Policy
                     .Handle<Exception>()

@@ -34,11 +34,5 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Application\" />
-    <Folder Include="Application\Queries\" />
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Infrastructure\Configuration\" />
-    <Folder Include="Application\Commands\" />
-  </ItemGroup>
+
 </Project>
