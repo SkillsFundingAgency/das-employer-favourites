@@ -62,7 +62,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                     _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
-                var favouritesFromTableStorage = entity?.ToApprenticeshipFavouritesWriteModel();
+                var favouritesFromTableStorage = entity?.ToApprenticeshipFavouritesWriteModel() ?? new Domain.WriteModel.ApprenticeshipFavourites();
 
                 var favourites = await BuildReadModel(favouritesFromTableStorage);
 

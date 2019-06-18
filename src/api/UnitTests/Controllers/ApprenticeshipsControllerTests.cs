@@ -66,6 +66,60 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
             Assert.IsAssignableFrom<NoContentResult>(result);
         }
 
+        [Fact]
+        public async Task Put_ReturnsNoContentResult_WhenAddingNewProviderToExistingApprenticeship()
+        {
+            ServiceProvider provider = BuildDependencies();
+            var mediator = provider.GetService<IMediator>();
+
+            var result = await _sut.Put(EmployerAccountIdExistingList, "55", 10000030);
+
+            Assert.IsAssignableFrom<NoContentResult>(result);
+        }
+
+        [Fact]
+        public async Task Put_CreatesNewListInRepo_ForFirstSaveForEmployerAccountId()
+        {
+            ServiceProvider provider = BuildDependencies();
+            var mediator = provider.GetService<IMediator>();
+
+            var result = await _sut.Put(EmployerAccountIdNewList, "50", 10000020);
+
+            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdNewList, Matchers.ContainsJustNewItem("50", 10000020)));
+        }
+
+        [Fact]
+        public async Task Put_AddsFavouriteToExistingListInRepo_WhenNewListAndNewApprenticeship()
+        {
+            ServiceProvider provider = BuildDependencies();
+            var mediator = provider.GetService<IMediator>();
+
+            var result = await _sut.Put(EmployerAccountIdExistingList, "60", 10000020);
+
+            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.AddedToExistingList("60", 10000020)));
+        }
+
+        [Fact]
+        public async Task Put_AddsProviderToExistingListInRepo_WhenApprenticeshipAlreadyExists()
+        {
+            ServiceProvider provider = BuildDependencies();
+            var mediator = provider.GetService<IMediator>();
+
+            var result = await _sut.Put(EmployerAccountIdExistingList, "55", 10000020);
+
+            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.AddedUkprnToExistingApprenticeship(10000020)));
+        }
+
+        private ServiceProvider BuildDependencies()
+        {
+            var services = new ServiceCollection();
+            services.AddMediatR(typeof(Startup).Assembly);
+            services.AddScoped<IFavouritesWriteRepository>(x => _mockWriteRepository.Object);
+            services.AddScoped<IFavouritesReadRepository>(x => _mockReadRepository.Object);
+            var provider = services.BuildServiceProvider();
+
+            return provider;
+        }
 
         private static class Matchers
         {
@@ -114,50 +168,6 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
                     return true;
                 });
             }
-        }
-
-        [Fact]
-        public async Task Put_CreatesNewListInRepo_ForFirstSaveForEmployerAccountId()
-        {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
-
-            var result = await _sut.Put(EmployerAccountIdNewList, "50", 10000020);
-
-            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdNewList, Matchers.ContainsJustNewItem("50", 10000020)));
-        }
-
-        [Fact]
-        public async Task Put_AddsFavouriteToExistingListInRepo_WhenNewListAndNewApprenticeship()
-        {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
-
-            var result = await _sut.Put(EmployerAccountIdExistingList, "60", 10000020);
-
-            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.AddedToExistingList("60", 10000020)));
-        }
-
-        [Fact]
-        public async Task Put_AddsProviderToExistingListInRepo_WhenApprenticeshipAlreadyExists()
-        {
-            ServiceProvider provider = BuildDependencies();
-            var mediator = provider.GetService<IMediator>();
-
-            var result = await _sut.Put(EmployerAccountIdExistingList, "55", 10000020);
-
-            _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.AddedUkprnToExistingApprenticeship(10000020)));
-        }
-
-        private ServiceProvider BuildDependencies()
-        {
-            var services = new ServiceCollection();
-            services.AddMediatR(typeof(Startup).Assembly);
-            services.AddScoped<IFavouritesWriteRepository>(x => _mockWriteRepository.Object);
-            services.AddScoped<IFavouritesReadRepository>(x => _mockReadRepository.Object);
-            var provider = services.BuildServiceProvider();
-
-            return provider;
         }
     }
 }

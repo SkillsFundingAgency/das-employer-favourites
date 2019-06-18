@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using DfE.EmployerFavourites.Api.Application.Commands;
 
 namespace DfE.EmployerFavourites.Api.Domain.WriteModel
 {
@@ -32,17 +31,18 @@ namespace DfE.EmployerFavourites.Api.Domain.WriteModel
                     return;
                 }
 
+                UpdateStatus = DomainUpdateStatus.Updated;
                 matchingApprenticeship.Ukprns.Add(ukprn);
             }
             else
             {
+                UpdateStatus = DomainUpdateStatus.Updated;
+
                 Add(new ApprenticeshipFavourite
                 {
                     ApprenticeshipId = apprenticeshipId,
                     Ukprns = new List<int> { ukprn }
                 });
-
-                UpdateStatus = DomainUpdateStatus.Updated;
 
                 return;
             }
