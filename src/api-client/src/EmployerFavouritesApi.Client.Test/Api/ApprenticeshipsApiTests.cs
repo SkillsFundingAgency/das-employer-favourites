@@ -75,9 +75,8 @@ namespace EmployerFavouritesApi.Client.Test
         {
             // TODO uncomment below to test the method and replace null with proper value
             //string employerAccountId = null;
-            //string apprenticeshipId = null;
-            //int? ukprn = null;
-            //instance.Put(employerAccountId, apprenticeshipId, ukprn);
+            //List<Favourite> favourites = null;
+            //instance.Put(employerAccountId, favourites);
             
         }
         

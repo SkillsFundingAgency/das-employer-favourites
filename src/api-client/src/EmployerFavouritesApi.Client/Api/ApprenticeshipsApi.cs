@@ -56,10 +56,9 @@ namespace EmployerFavouritesApi.Client.Api
         /// </remarks>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns></returns>
-        void Put (string employerAccountId, string apprenticeshipId = null, int? ukprn = null);
+        void Put (string employerAccountId, List<Favourite> favourites = null);
 
         /// <summary>
         /// Save apprenticeship favourite to the Employer Account provided
@@ -69,10 +68,9 @@ namespace EmployerFavouritesApi.Client.Api
         /// </remarks>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> PutWithHttpInfo (string employerAccountId, string apprenticeshipId = null, int? ukprn = null);
+        ApiResponse<Object> PutWithHttpInfo (string employerAccountId, List<Favourite> favourites = null);
         #endregion Synchronous Operations
     }
 
@@ -111,10 +109,9 @@ namespace EmployerFavouritesApi.Client.Api
         /// </remarks>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task PutAsync (string employerAccountId, string apprenticeshipId = null, int? ukprn = null);
+        System.Threading.Tasks.Task PutAsync (string employerAccountId, List<Favourite> favourites = null);
 
         /// <summary>
         /// Save apprenticeship favourite to the Employer Account provided
@@ -124,10 +121,9 @@ namespace EmployerFavouritesApi.Client.Api
         /// </remarks>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> PutAsyncWithHttpInfo (string employerAccountId, string apprenticeshipId = null, int? ukprn = null);
+        System.Threading.Tasks.Task<ApiResponse<Object>> PutAsyncWithHttpInfo (string employerAccountId, List<Favourite> favourites = null);
         #endregion Asynchronous Operations
     }
 
@@ -369,12 +365,11 @@ namespace EmployerFavouritesApi.Client.Api
         /// </summary>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns></returns>
-        public void Put (string employerAccountId, string apprenticeshipId = null, int? ukprn = null)
+        public void Put (string employerAccountId, List<Favourite> favourites = null)
         {
-             PutWithHttpInfo(employerAccountId, apprenticeshipId, ukprn);
+             PutWithHttpInfo(employerAccountId, favourites);
         }
 
         /// <summary>
@@ -382,10 +377,9 @@ namespace EmployerFavouritesApi.Client.Api
         /// </summary>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public EmployerFavouritesApi.Client.Client.ApiResponse<Object> PutWithHttpInfo (string employerAccountId, string apprenticeshipId = null, int? ukprn = null)
+        public EmployerFavouritesApi.Client.Client.ApiResponse<Object> PutWithHttpInfo (string employerAccountId, List<Favourite> favourites = null)
         {
             // verify the required parameter 'employerAccountId' is set
             if (employerAccountId == null)
@@ -394,6 +388,10 @@ namespace EmployerFavouritesApi.Client.Api
             EmployerFavouritesApi.Client.Client.RequestOptions requestOptions = new EmployerFavouritesApi.Client.Client.RequestOptions();
 
             String[] @contentTypes = new String[] {
+                "application/json-patch+json", 
+                "application/json", 
+                "text/json", 
+                "application/_*+json"
             };
 
             // to determine the Accept header
@@ -409,26 +407,7 @@ namespace EmployerFavouritesApi.Client.Api
 
             if (employerAccountId != null)
                 requestOptions.PathParameters.Add("employerAccountId", EmployerFavouritesApi.Client.Client.ClientUtils.ParameterToString(employerAccountId)); // path parameter
-            if (apprenticeshipId != null)
-            {
-                foreach (var kvp in EmployerFavouritesApi.Client.Client.ClientUtils.ParameterToMultiMap("", "apprenticeshipId", apprenticeshipId))
-                {
-                    foreach (var value in kvp.Value)
-                    {
-                        requestOptions.QueryParameters.Add(kvp.Key, value);
-                    }
-                }
-            }
-            if (ukprn != null)
-            {
-                foreach (var kvp in EmployerFavouritesApi.Client.Client.ClientUtils.ParameterToMultiMap("", "ukprn", ukprn))
-                {
-                    foreach (var value in kvp.Value)
-                    {
-                        requestOptions.QueryParameters.Add(kvp.Key, value);
-                    }
-                }
-            }
+            requestOptions.Data = favourites;
 
 
             // make the HTTP request
@@ -449,12 +428,11 @@ namespace EmployerFavouritesApi.Client.Api
         /// </summary>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task PutAsync (string employerAccountId, string apprenticeshipId = null, int? ukprn = null)
+        public async System.Threading.Tasks.Task PutAsync (string employerAccountId, List<Favourite> favourites = null)
         {
-             await PutAsyncWithHttpInfo(employerAccountId, apprenticeshipId, ukprn);
+             await PutAsyncWithHttpInfo(employerAccountId, favourites);
 
         }
 
@@ -463,10 +441,9 @@ namespace EmployerFavouritesApi.Client.Api
         /// </summary>
         /// <exception cref="EmployerFavouritesApi.Client.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
-        /// <param name="apprenticeshipId">Standard code or Framework Id (optional)</param>
-        /// <param name="ukprn">Provider Ukprn (optional)</param>
+        /// <param name="favourites">Employer Favourites (optional)</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<EmployerFavouritesApi.Client.Client.ApiResponse<Object>> PutAsyncWithHttpInfo (string employerAccountId, string apprenticeshipId = null, int? ukprn = null)
+        public async System.Threading.Tasks.Task<EmployerFavouritesApi.Client.Client.ApiResponse<Object>> PutAsyncWithHttpInfo (string employerAccountId, List<Favourite> favourites = null)
         {
             // verify the required parameter 'employerAccountId' is set
             if (employerAccountId == null)
@@ -476,6 +453,10 @@ namespace EmployerFavouritesApi.Client.Api
             EmployerFavouritesApi.Client.Client.RequestOptions requestOptions = new EmployerFavouritesApi.Client.Client.RequestOptions();
 
             String[] @contentTypes = new String[] {
+                "application/json-patch+json", 
+                "application/json", 
+                "text/json", 
+                "application/_*+json"
             };
 
             // to determine the Accept header
@@ -491,26 +472,7 @@ namespace EmployerFavouritesApi.Client.Api
             
             if (employerAccountId != null)
                 requestOptions.PathParameters.Add("employerAccountId", EmployerFavouritesApi.Client.Client.ClientUtils.ParameterToString(employerAccountId)); // path parameter
-            if (apprenticeshipId != null)
-            {
-                foreach (var kvp in EmployerFavouritesApi.Client.Client.ClientUtils.ParameterToMultiMap("", "apprenticeshipId", apprenticeshipId))
-                {
-                    foreach (var value in kvp.Value)
-                    {
-                        requestOptions.QueryParameters.Add(kvp.Key, value);
-                    }
-                }
-            }
-            if (ukprn != null)
-            {
-                foreach (var kvp in EmployerFavouritesApi.Client.Client.ClientUtils.ParameterToMultiMap("", "ukprn", ukprn))
-                {
-                    foreach (var value in kvp.Value)
-                    {
-                        requestOptions.QueryParameters.Add(kvp.Key, value);
-                    }
-                }
-            }
+            requestOptions.Data = favourites;
 
 
             // make the HTTP request

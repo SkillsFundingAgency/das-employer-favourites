@@ -107,6 +107,7 @@ Class | Method | HTTP request | Description
 ## Documentation for Models
 
  - [Model.ApprenticeshipFavourite](docs/ApprenticeshipFavourite.md)
+ - [Model.Favourite](docs/Favourite.md)
  - [Model.ProblemDetails](docs/ProblemDetails.md)
  - [Model.Provider](docs/Provider.md)
 

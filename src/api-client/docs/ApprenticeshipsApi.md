@@ -69,7 +69,7 @@ No authorization required
 
 <a name="put"></a>
 # **Put**
-> void Put (string employerAccountId, string apprenticeshipId = null, int? ukprn = null)
+> void Put (string employerAccountId, List<Favourite> favourites = null)
 
 Save apprenticeship favourite to the Employer Account provided
 
@@ -89,13 +89,12 @@ namespace Example
         {
             var apiInstance = new ApprenticeshipsApi();
             var employerAccountId = employerAccountId_example;  // string | Hashed Employer Account Id
-            var apprenticeshipId = apprenticeshipId_example;  // string | Standard code or Framework Id (optional) 
-            var ukprn = 56;  // int? | Provider Ukprn (optional) 
+            var favourites = new List<Favourite>(); // List<Favourite> | Employer Favourites (optional) 
 
             try
             {
                 // Save apprenticeship favourite to the Employer Account provided
-                apiInstance.Put(employerAccountId, apprenticeshipId, ukprn);
+                apiInstance.Put(employerAccountId, favourites);
             }
             catch (Exception e)
             {
@@ -111,8 +110,7 @@ namespace Example
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **employerAccountId** | **string**| Hashed Employer Account Id | 
- **apprenticeshipId** | **string**| Standard code or Framework Id | [optional] 
- **ukprn** | **int?**| Provider Ukprn | [optional] 
+ **favourites** | [**List&lt;Favourite&gt;**](Favourite.md)| Employer Favourites | [optional] 
 
 ### Return type
 
@@ -124,7 +122,7 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: application/json-patch+json, application/json, text/json, application/_*+json
  - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
