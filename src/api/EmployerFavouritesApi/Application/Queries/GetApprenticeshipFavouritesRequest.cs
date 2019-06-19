@@ -5,6 +5,6 @@ namespace DfE.EmployerFavourites.Api.Application.Queries
 {
     public class GetApprenticeshipFavouritesRequest : IRequest<ApprenticeshipFavourites>
     {
-        public string EmployerAccountID { get; set; }
+        public string EmployerAccountId { get; set; }
     }
 }

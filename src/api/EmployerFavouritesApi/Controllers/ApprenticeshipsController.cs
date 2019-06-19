@@ -46,7 +46,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
-                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = employerAccountId });
+                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountId = employerAccountId });
 
                 if (apprenticeships.Count > 0)
                 {
@@ -58,7 +58,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
             catch (ArgumentException e)
             {
-                _logger.LogError(e,"Invalid arguments were provided for get apprenticeship favourites");
+                _logger.LogError(e, "Invalid arguments were provided for get apprenticeship favourites");
                 return BadRequest();
             }
             catch (Exception e)
