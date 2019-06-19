@@ -8,13 +8,11 @@ namespace DfE.EmployerFavourites.Infrastructure
 {
     public class AdTokenGenerator
     {
-        private readonly Dictionary<string, Token> _tokenLookup;
-        private readonly IHostingEnvironment _environment;
+        private readonly Dictionary<string, Token> _tokenLookup = new Dictionary<string, Token>();
         private const string KeyPattern = "{0}-{1}-{2}-{3}";
 
-        public AdTokenGenerator(IHostingEnvironment environment)
+        public AdTokenGenerator()
         {
-            _environment = environment;
             _tokenLookup = new Dictionary<string, Token>();
         }
 

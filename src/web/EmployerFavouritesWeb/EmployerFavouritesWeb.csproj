@@ -24,6 +24,8 @@
     <PackageReference Include="SFA.DAS.Employer.Shared.UI" Version="1.0.4" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.7.0-beta4" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.4" />
+    <PackageReference Include="Refit" Version="4.7.9" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="4.7.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\api-client\src\EmployerFavouritesApi.Client\EmployerFavouritesApi.Client.csproj" />

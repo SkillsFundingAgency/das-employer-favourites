@@ -121,8 +121,6 @@ namespace DfE.EmployerFavourites.Web
         {
             var destinations = new List<string>();
 
-            var lee = new Uri(linksConfig.AccountsDashboardPage).GetLeftPart(UriPartial.Authority);
-            
             if (!string.IsNullOrWhiteSpace(authConfig?.Authority))
                 destinations.Add(new Uri(authConfig.Authority).GetLeftPart(UriPartial.Authority));
             

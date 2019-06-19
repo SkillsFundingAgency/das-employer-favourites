@@ -16,6 +16,9 @@ using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using DfE.EmployerFavourites.Infrastructure;
 using DfE.EmployerFavourites.Web.Helpers;
+using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
+using System;
+using Refit;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -79,6 +82,14 @@ namespace DfE.EmployerFavourites.Web
 
             services.AddScoped<IFavouritesReadRepository, ApiFavouritesRepository>();
             services.AddScoped<IFavouritesWriteRepository, ApiFavouritesRepository>();
+
+            services.AddTransient<AdAuthMessageHandler>();
+
+            var builder = services.AddRefitClient<IFavouritesApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("EmployerFavouritesApi:ApiBaseUrl")));
+
+            if (!Configuration.GetSection("EmployerFavouritesApi").Get<EmployerFavouritesApiConfig>().HasEmptyProperties())
+                builder.AddHttpMessageHandler<AdAuthMessageHandler>();
         }
 
         private void AddConfiguration(IServiceCollection services)

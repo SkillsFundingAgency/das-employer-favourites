@@ -44,7 +44,7 @@ namespace DfE.EmployerFavourites.Web
 
                     var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
-                    config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
+                    config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
                     config.AddAzureTableStorage(options => {
                         options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Shared.UI" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
@@ -56,7 +56,7 @@ namespace DfE.EmployerFavourites.Web
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;
                     });
-                    config.AddJsonFile($"appSettings.{environmentName}.json", optional: true, reloadOnChange: false);
+                    config.AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
                     config.AddUserSecrets<Startup>();
