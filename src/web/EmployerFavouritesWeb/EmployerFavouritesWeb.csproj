@@ -28,9 +28,6 @@
     <PackageReference Include="Refit.HttpClientFactory" Version="4.7.9" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\api-client\src\EmployerFavouritesApi.Client\EmployerFavouritesApi.Client.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

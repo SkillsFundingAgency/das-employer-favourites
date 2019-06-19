@@ -1,18 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Domain.WriteModel;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
 using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
-using EmployerFavouritesApi.Client.Api;
-using EmployerFavouritesApi.Client.Model;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
-using RestSharp;
 
 namespace DfE.EmployerFavourites.Infrastructure
 {
