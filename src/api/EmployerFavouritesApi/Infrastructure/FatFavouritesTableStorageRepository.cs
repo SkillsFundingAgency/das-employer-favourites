@@ -77,7 +77,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
 
         private async Task<Domain.ReadModel.ApprenticeshipFavourites> BuildReadModel(Domain.WriteModel.ApprenticeshipFavourites favouritesFromTableStorage)
         {
-            var buildFavouritesTasks = favouritesFromTableStorage.Select(x => BuildReadModelItem(x)).ToList();
+            var buildFavouritesTasks = favouritesFromTableStorage.Select(BuildReadModelItem).ToList();
 
             await Task.WhenAll(buildFavouritesTasks);
 

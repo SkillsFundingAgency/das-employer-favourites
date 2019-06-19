@@ -22,7 +22,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.ApplicationServices.Commands
             _mockLogger = new Mock<ILogger<GetApprenticeshipFavouriteRequestHandler>>();
             _mockFavouritesRepository = new Mock<IFavouritesReadRepository>();
 
-            _apprenticeFavourites = new ReadModel.ApprenticeshipFavourites() { new ReadModel.ApprenticeshipFavourite("123", "apprenticeship1"), new ReadModel.ApprenticeshipFavourite("234", "apprenticeship2") };
+            _apprenticeFavourites = new ReadModel.ApprenticeshipFavourites { new ReadModel.ApprenticeshipFavourite("123", "apprenticeship1"), new ReadModel.ApprenticeshipFavourite("234", "apprenticeship2") };
 
 
             _mockFavouritesRepository.Setup(s => s.GetApprenticeshipFavourites(_employerAccountId))
@@ -37,13 +37,13 @@ namespace DfE.EmployerFavourites.Api.UnitTests.ApplicationServices.Commands
         [InlineData("   ")]
         public async Task Handle_WhenInvalidEmployerAccountId_ThenArgumentException(string employerAccountId)
         {
-            await Assert.ThrowsAsync<ArgumentException>(() => _sut.Handle(new GetApprenticeshipFavouritesRequest(){EmployerAccountId = employerAccountId},default ));
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.Handle(new GetApprenticeshipFavouritesRequest { EmployerAccountId = employerAccountId }, default));
         }
 
         [Fact]
         public async Task Handle_WhenValidEmployerAccountId_ThenGetFavourites()
         {
-            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest() { EmployerAccountId = _employerAccountId }, default);
+            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest { EmployerAccountId = _employerAccountId }, default);
 
            _mockFavouritesRepository.Verify(x => x.GetApprenticeshipFavourites(_employerAccountId),Times.Once);
         }
@@ -51,7 +51,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.ApplicationServices.Commands
         [Fact]
         public async Task Handle_WhenValidEmployerAccountId_ThenReturnsApprenticeFavourites()
         {
-            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest() { EmployerAccountId = _employerAccountId }, default);
+            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest { EmployerAccountId = _employerAccountId }, default);
 
             Assert.IsType<ReadModel.ApprenticeshipFavourites>(result);
         }
@@ -59,7 +59,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.ApplicationServices.Commands
         [Fact]
         public async Task Handle_WhenValidEmployerAccountId_ThenApprenticeshipNamesPopulated()
         {
-            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest() { EmployerAccountId = _employerAccountId }, default);
+            var result = await _sut.Handle(new GetApprenticeshipFavouritesRequest { EmployerAccountId = _employerAccountId }, default);
 
             Assert.Equal("apprenticeship1",result[0].Title);
             Assert.Equal("apprenticeship2", result[1].Title);

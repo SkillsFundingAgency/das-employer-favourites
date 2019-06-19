@@ -46,7 +46,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
-                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountId = employerAccountId });
+                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest { EmployerAccountId = employerAccountId });
 
                 if (apprenticeships.Count > 0)
                 {
@@ -89,7 +89,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             try
             {
                 //TODO: LWA validate parameters
-                var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand()
+                var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand
                 {
                     EmployerAccountId = employerAccountId,
                     Favourites = MapToWriteModel(favourites)

@@ -13,7 +13,7 @@ namespace DfE.EmployerFavourites.Api
     {
         public static void Main(string[] args)
         {
-            var instance = HostingHelper.GetWebsiteInstanceId(); ;
+            var instance = HostingHelper.GetWebsiteInstanceId();
             var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
             try
             {

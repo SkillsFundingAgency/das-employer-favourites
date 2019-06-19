@@ -22,8 +22,8 @@ namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
             _mockStandardApiClient = new Mock<IStandardApiClient>();
             _mockProviderApiClient = new Mock<IProviderApiClient>();
 
-            _mockFrameworkApiClient.Setup(s => s.GetAsync("420-1-2")).ReturnsAsync(new Framework() {Title = "Apprenticeship1"});
-            _mockStandardApiClient.Setup(s => s.GetAsync("123")).ReturnsAsync(new Standard() {Title = "Apprenticeship2"});
+            _mockFrameworkApiClient.Setup(s => s.GetAsync("420-1-2")).ReturnsAsync(new Framework { Title = "Apprenticeship1" });
+            _mockStandardApiClient.Setup(s => s.GetAsync("123")).ReturnsAsync(new Standard { Title = "Apprenticeship2" });
 
             _sut = new FatApiRepository(_mockStandardApiClient.Object,_mockFrameworkApiClient.Object, _mockProviderApiClient.Object, Mock.Of<ILogger<FatApiRepository>>());
         }
