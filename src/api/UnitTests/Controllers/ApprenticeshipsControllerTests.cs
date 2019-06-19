@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DfE.EmployerFavourites.Api.Application.Commands;
 using DfE.EmployerFavourites.Api.Controllers;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
@@ -101,6 +103,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
             services.AddMediatR(typeof(Startup).Assembly);
             services.AddScoped<IFavouritesWriteRepository>(x => _mockWriteRepository.Object);
             services.AddScoped<IFavouritesReadRepository>(x => _mockReadRepository.Object);
+            services.AddScoped<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => new NullLogger<SaveApprenticeshipFavouriteCommandHandler>());
             var provider = services.BuildServiceProvider();
 
             return provider;
