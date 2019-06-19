@@ -16,19 +16,15 @@ namespace DfE.EmployerFavourites.Infrastructure
         private readonly ILogger<ApiFavouritesRepository> _logger;
         private readonly IFavouritesApi _favouritesApi;
         private readonly AsyncRetryPolicy _retryPolicy;
-        private readonly EmployerFavouritesApiConfig _apiConfig;
 
         public ApiFavouritesRepository(
             ILogger<ApiFavouritesRepository> logger, 
-            IOptions<EmployerFavouritesApiConfig> options,
             IFavouritesApi favouritesApi)
         {
             _logger = logger;
             _favouritesApi = favouritesApi;
             _retryPolicy = GetRetryPolicy();
-            _apiConfig = options.Value;
         }
-
 
         public async Task SaveApprenticeshipFavourites(string employerAccountId, ApprenticeshipFavourites apprenticeshipFavourites)
         {

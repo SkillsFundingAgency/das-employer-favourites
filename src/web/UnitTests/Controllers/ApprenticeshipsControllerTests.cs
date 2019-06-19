@@ -461,12 +461,12 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                         {
-                new Claim("http://das/employer/identity/claims/id", USER_ID),
+                            new Claim("http://das/employer/identity/claims/id", USER_ID)
                         }));
 
-            _sut.ControllerContext = new ControllerContext()
+            _sut.ControllerContext = new ControllerContext
             {
-                HttpContext = new DefaultHttpContext() { User = user }
+                HttpContext = new DefaultHttpContext { User = user }
             };
         }
 

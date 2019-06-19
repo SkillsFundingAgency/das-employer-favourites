@@ -6,10 +6,6 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.ReadModel
 {
     public class ApprenticeshipFavouriteTests
     {
-        public ApprenticeshipFavouriteTests()
-        {
-        }
-
         [Fact]
         public void IsFramework_ReturnException_WhenApprenticeshipIdNotSet()
         {

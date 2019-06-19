@@ -10,12 +10,10 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient
 {
     public class AdAuthMessageHandler : DelegatingHandler
     {
-        private readonly IHostingEnvironment _env;
         private readonly EmployerFavouritesApiConfig _config;
 
-        public AdAuthMessageHandler(IHostingEnvironment env, IOptions<EmployerFavouritesApiConfig> options)
+        public AdAuthMessageHandler(IOptions<EmployerFavouritesApiConfig> options)
         {
-            _env = env;
             _config = options.Value;
         }
 
