@@ -7,7 +7,6 @@ using DfE.EmployerFavourites.Web.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -16,7 +15,7 @@ using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
-namespace DfE.EmployerFavourites.UnitTests.Security
+namespace DfE.EmployerFavourites.Web.UnitTests.Security
 {
     public class EmployerAccountHandlerTests
     {
@@ -26,8 +25,10 @@ namespace DfE.EmployerFavourites.UnitTests.Security
         public EmployerAccountHandlerTests()
         {
             _mockExternalLinks = new Mock<IOptions<ExternalLinks>>();
-            _mockExternalLinks.Setup(s => s.Value).Returns(new ExternalLinks()
-                {AccountsRegistrationPage = _testRegistrationLink});
+            _mockExternalLinks.Setup(s => s.Value).Returns(new ExternalLinks
+                {
+                    AccountsRegistrationPage = _testRegistrationLink
+                });
         }
 
         [Fact]
@@ -52,9 +53,9 @@ namespace DfE.EmployerFavourites.UnitTests.Security
                             "Basic")
                         );
                         
-            var routeData = new RouteData(new RouteValueDictionary(new Dictionary<string, string> { {"employerAccountId", "ABC123"} }));
+            var routeData = new RouteData(new RouteValueDictionary(new Dictionary<string, string> { { "employerAccountId", "ABC123" } }));
             var actionContext = new ActionContext(new DefaultHttpContext(), routeData, new ControllerActionDescriptor());
-            var resource = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>()) { HttpContext = new DefaultHttpContext() { RequestServices = serviceProviderMock.Object } };
+            var resource = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>()) { HttpContext = new DefaultHttpContext { RequestServices = serviceProviderMock.Object } };
             var context = new AuthorizationHandlerContext(requirements, user, resource);
             var subject = new EmployerAccountHandler(_mockExternalLinks.Object);
 
@@ -87,7 +88,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
 
             var routeData = new RouteData(new RouteValueDictionary(new Dictionary<string, string> { { "employerAccountId", "ABC123" } }));
             var actionContext = new ActionContext(new DefaultHttpContext(), routeData, new ControllerActionDescriptor());
-            var resource = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>()){HttpContext = new DefaultHttpContext(){RequestServices = serviceProviderMock .Object} };
+            var resource = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>()){HttpContext = new DefaultHttpContext { RequestServices = serviceProviderMock .Object } };
             var context = new AuthorizationHandlerContext(requirements, user, resource);
             var subject = new EmployerAccountHandler(_mockExternalLinks.Object);
 
@@ -126,7 +127,7 @@ namespace DfE.EmployerFavourites.UnitTests.Security
 
             var routeData = new RouteData(new RouteValueDictionary(new Dictionary<string, string> { { "employerAccountId", "ABC123" } }));
             var actionContext = new ActionContext(new DefaultHttpContext(), routeData, new ControllerActionDescriptor());
-            var resource = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>()) { HttpContext = new DefaultHttpContext() { RequestServices = serviceProviderMock.Object} };
+            var resource = new AuthorizationFilterContext(actionContext, new List<IFilterMetadata>()) { HttpContext = new DefaultHttpContext { RequestServices = serviceProviderMock.Object} };
             var context = new AuthorizationHandlerContext(requirements, user, resource);
             var subject = new EmployerAccountHandler(_mockExternalLinks.Object);
 

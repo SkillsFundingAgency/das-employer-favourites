@@ -1,10 +1,14 @@
-﻿using MediatR;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DfE.EmployerFavourites.Api.Application.Commands;
+using DfE.EmployerFavourites.Api.Application.Queries;
+using DfE.EmployerFavourites.Api.Domain.WriteModel;
+using DfE.EmployerFavourites.Api.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
-using DfE.EmployerFavourites.ApplicationServices;
-using DfE.EmployerFavourites.ApplicationServices.Queries;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -13,6 +17,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
     [ApiController]
     public class ApprenticeshipsController : ControllerBase
     {
+        private const string ServerErrorMessage = "Internal Server Error";
         private readonly ILogger<ApprenticeshipsController> _logger;
         private readonly IMediator _mediator;
 
@@ -37,12 +42,11 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(401)]
         [HttpGet]
         [Route("{employerAccountId}")]
-        public async Task<ActionResult<ApplicationServices.Domain.ReadModel.ApprenticeshipFavourites>> Get(string employerAccountId)
+        public async Task<ActionResult<Domain.ReadModel.ApprenticeshipFavourites>> Get(string employerAccountId)
         {
             try
             {
-
-                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest() { EmployerAccountID = employerAccountId });
+                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest { EmployerAccountId = employerAccountId });
 
                 if (apprenticeships.Count > 0)
                 {
@@ -54,14 +58,68 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
             catch (ArgumentException e)
             {
-                _logger.LogError(e,"Invalid arguments were provided for get apprenticeship favourites");
+                _logger.LogError(e, "Invalid arguments were provided for get apprenticeship favourites");
                 return BadRequest();
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "Error in get apprenticeship favourites");
-                return StatusCode(500);
+                return StatusCode(500, ServerErrorMessage);
             }
+        }
+
+        // PUT api/Apprenticeships/ABC123
+        /// <summary>
+        /// Save apprenticeship favourite to the Employer Account provided
+        /// </summary>
+        /// <param name="employerAccountId">Hashed Employer Account Id</param>
+        /// <param name="favourites">Employer Favourites</param>
+        /// <response code="201">Employer Favourites created for employer account</response>
+        /// <response code="204">Employer Favourite added to existing</response>
+        /// <response code="400">The Employer account id provided is invalid</response>  
+        /// <response code="401">The client is not authorized to access this endpoint</response>    
+        [ProducesResponseType(201)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [HttpPut]
+        [Route("{employerAccountId}")]
+        public async Task<IActionResult> Put(string employerAccountId, [FromBody]List<Favourite> favourites)
+        {
+            try
+            {
+                //TODO: LWA validate parameters
+                var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand
+                {
+                    EmployerAccountId = employerAccountId,
+                    Favourites = MapToWriteModel(favourites)
+                });
+
+                if (response.CommandResult == Domain.WriteModel.DomainUpdateStatus.Created)
+                    return CreatedAtAction("Get", new { employerAccountId }, string.Empty);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in get apprenticeship favourites");
+                return StatusCode(500, ServerErrorMessage);
+            }
+        }
+
+        private ApprenticeshipFavourites MapToWriteModel(List<Favourite> favourites)
+        {
+            var writeModel = new ApprenticeshipFavourites();
+
+            if (favourites == null)
+            {
+                return writeModel;
+            }
+
+            var items = favourites.Select(x => new ApprenticeshipFavourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns });
+            writeModel.AddRange(items);
+
+            return writeModel;
         }
     }
 }

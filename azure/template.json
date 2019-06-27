@@ -213,11 +213,6 @@
                                 "name": "Redis",
                                 "connectionString": "[parameters('loggingRedisConnectionString')]",
                                 "type": "Custom"
-                            },
-                            {
-                                "name": "AzureStorage",
-                                "connectionString":  "[reference('storage-account').outputs.storageConnectionString.value]",
-                                "type": "Custom"
                             }
 
                         ]

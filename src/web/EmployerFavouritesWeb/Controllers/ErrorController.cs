@@ -39,7 +39,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 string routeWhereExceptionOccurred = exceptionFeature.Path;
                 var exception = exceptionFeature.Error;
 
-                switch(exception)
+                switch (exception)
                 {
                     case AggregateException ex:
                         var flattenedExceptions = ex.Flatten();

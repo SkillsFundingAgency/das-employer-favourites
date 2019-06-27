@@ -6,9 +6,9 @@ using AngleSharp;
 using AngleSharp.Html.Dom;
 using AngleSharp.Io;
 
-namespace DfE.EmployerFavourites.IntegrationTests.Helpers
+namespace DfE.EmployerFavourites.Web.IntegrationTests.Helpers
 {
-    public class HtmlHelpers
+    public static class HtmlHelpers
     {
         public static async Task<IHtmlDocument> GetDocumentAsync(HttpResponseMessage response)
         {

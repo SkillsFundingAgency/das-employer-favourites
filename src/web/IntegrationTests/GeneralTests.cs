@@ -3,9 +3,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
-using DfE.EmployerFavourites.IntegrationTests.Helpers;
-using DfE.EmployerFavourites.IntegrationTests.Stubs;
-using DfE.EmployerFavourites.Web;
+using DfE.EmployerFavourites.Web.IntegrationTests.Helpers;
+using DfE.EmployerFavourites.Web.IntegrationTests.Stubs;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -14,7 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EAS.Account.Api.Client;
 using Xunit;
 
-namespace DfE.EmployerFavourites.IntegrationTests
+namespace DfE.EmployerFavourites.Web.IntegrationTests
 {
     public class GeneralTests : IClassFixture<WebApplicationFactory<Startup>>
     {
@@ -28,7 +27,6 @@ namespace DfE.EmployerFavourites.IntegrationTests
                 {
                     config.Sources.Clear();
 
-                    var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
                     config.AddJsonFile("sharedMenuSettings.json", optional: false, reloadOnChange: false);

@@ -25,7 +25,7 @@ using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Web.Application.Exceptions;
 
-namespace DfE.EmployerFavourites.UnitTests.Controllers
+namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 {
     public class ApprenticeshipsControllerTests
     {
@@ -461,12 +461,12 @@ namespace DfE.EmployerFavourites.UnitTests.Controllers
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                         {
-                new Claim("http://das/employer/identity/claims/id", USER_ID),
+                            new Claim("http://das/employer/identity/claims/id", USER_ID)
                         }));
 
-            _sut.ControllerContext = new ControllerContext()
+            _sut.ControllerContext = new ControllerContext
             {
-                HttpContext = new DefaultHttpContext() { User = user }
+                HttpContext = new DefaultHttpContext { User = user }
             };
         }
 

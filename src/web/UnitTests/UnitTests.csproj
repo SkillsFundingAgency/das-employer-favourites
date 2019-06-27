@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <RootNamespace>DfE.EmployerFavourites.UnitTests</RootNamespace>
+    <RootNamespace>DfE.EmployerFavourites.Web.UnitTests</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.UnitTests</AssemblyName>
     <IsPackable>false</IsPackable>
     <LangVersion>7.1</LangVersion>
@@ -14,7 +14,6 @@
     <PackageReference Include="Moq" Version="4.10.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\das-employer-favourites.ApplicationServices\EmployerFavourites.ApplicationServices.csproj" />
     <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj" />
   </ItemGroup>
   <ItemGroup>

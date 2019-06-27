@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>DfE.EmployerFavourites.Api.UnitTests</RootNamespace>
+    <AssemblyName>DfE.EmployerFavourites.UnitTests</AssemblyName>
+    <IsPackable>false</IsPackable>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Application\" />
+    <Folder Include="Application\Queries\" />
+    <Folder Include="Controllers\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Domain\ReadModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmployerFavouritesApi\EmployerFavouritesApi.csproj" />
+  </ItemGroup>
+</Project>

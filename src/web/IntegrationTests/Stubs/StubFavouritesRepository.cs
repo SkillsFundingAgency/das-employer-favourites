@@ -4,7 +4,7 @@ using DfE.EmployerFavourites.Domain;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 
-namespace DfE.EmployerFavourites.IntegrationTests.Stubs
+namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
 {
     internal class StubFavouritesRepository : IFavouritesReadRepository, IFavouritesWriteRepository
     {
