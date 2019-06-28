@@ -1,13 +1,20 @@
 ﻿@model ApprenticeshipFavouritesViewModel
-
 @{
     var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Apprenticeships" : "(1) Apprenticeship";
 }
-
 @section BodyHeader{
+    
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-xl govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+            <div class="govuk-breadcrumbs">
+                <ol class="govuk-breadcrumbs__list">
+                    <li class="govuk-breadcrumbs__list-item">
+                        <a class="govuk-breadcrumbs__link" href="#">Home</a>
+                    </li>
+                    <li class="govuk-breadcrumbs__list-item" aria-current="page">Apprentices</li>
+                </ol>
+            </div>
+            <h1 class="govuk-heading-xl govuk-!-margin-top-3 govuk-!-margin-bottom-6">
                 <span class="govuk-caption-xl">Your saved favourites</span>
                 <span class="app-icon-basket"></span>
                 <span class="fav-count-text">@countText</span>
@@ -15,8 +22,6 @@
         </div>
     </div>
 }
-
-
 
 @if (Model.Items.Count == 0)
 {
@@ -60,13 +65,13 @@ else
                                         </strong>
                                     </div>
                                 }
-                                    <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-                                        <dt class="app-training-provider__details-title">Level:</dt>
-                                        <dd class="app-training-provider__details-definition fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
-                                        <dt class="app-training-provider__details-title">Typical length:</dt>
-                                        <dd class="app-training-provider__details-definition fav-app-length">18 months</dd>
-                                    </dl>
-                                    @*<div class="govuk-form-group">
+                                <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                                    <dt class="app-training-provider__details-title">Level:</dt>
+                                    <dd class="app-training-provider__details-definition fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
+                                    <dt class="app-training-provider__details-title">Typical length:</dt>
+                                    <dd class="app-training-provider__details-definition fav-app-length">18 months</dd>
+                                </dl>
+                                @*<div class="govuk-form-group">
                                         <fieldset class="govuk-fieldset">
                                             <div class="govuk-checkboxes">
                                                 <div class="govuk-checkboxes__item">
@@ -99,7 +104,6 @@ else
                                     <div><a href="#" class="govuk-link app-task-list__training-provider-content">Recruit an apprentice</a></div> *@
                             </div>
                         </div>
-
                     </li>
                 }
             </ol>
