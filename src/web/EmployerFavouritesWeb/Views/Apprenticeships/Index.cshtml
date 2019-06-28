@@ -9,6 +9,7 @@
         <div class="govuk-grid-column-full">
             <h1 class="govuk-heading-xl govuk-!-margin-top-6 govuk-!-margin-bottom-6">
                 <span class="govuk-caption-xl">Your saved favourites</span>
+                <span class="app-icon-basket"></span>
                 <span class="fav-count-text">@countText</span>
             </h1>
         </div>
@@ -33,7 +34,7 @@ else
                     <li class="app-task-list__item">
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-two-thirds">
-                                <h2 class="govuk-heading-l app-task-list__heading">
+                                <h2 class="govuk-heading-l app-task-list__heading  govuk-!-margin-bottom-2">
                                     <span class="app-task-list__section-number">@(i + 1). </span>
                                     <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link">@Model.Items[i].Title</a>
                                 </h2>
@@ -51,7 +52,7 @@ else
                                     </section>*@
                                 @if (Model.Items[i].IsFramework)
                                 {
-                                    <div class="fav-framework-expiry govuk-warning-text">
+                                    <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
                                         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                                         <strong class="govuk-warning-text__text">
                                             <span class="govuk-warning-text__assistive">Warning</span>
@@ -59,11 +60,11 @@ else
                                         </strong>
                                     </div>
                                 }
-                                    <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0  app-apprenticeship-details">
-                                        <dt class="govuk-!-font-weight-bold">Level:</dt>
-                                        <dd class="fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
-                                        <dt class="govuk-!-font-weight-bold">Typical length:</dt>
-                                        <dd class="fav-app-length">18 months</dd>
+                                    <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                                        <dt class="app-training-provider__details-title">Level:</dt>
+                                        <dd class="app-training-provider__details-definition fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
+                                        <dt class="app-training-provider__details-title">Typical length:</dt>
+                                        <dd class="app-training-provider__details-definition fav-app-length">18 months</dd>
                                     </dl>
                                     @*<div class="govuk-form-group">
                                         <fieldset class="govuk-fieldset">
