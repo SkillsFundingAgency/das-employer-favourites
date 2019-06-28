@@ -19,6 +19,7 @@ using DfE.EmployerFavourites.Web.Helpers;
 using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
 using System;
 using Refit;
+using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -80,8 +81,8 @@ namespace DfE.EmployerFavourites.Web
             services.AddTransient<IAccountApiClient, AccountApiClient>();
             services.AddScoped<AdTokenGenerator>();
 
-            services.AddScoped<IFavouritesReadRepository, ApiFavouritesRepository>();
-            services.AddScoped<IFavouritesWriteRepository, ApiFavouritesRepository>();
+            services.AddScoped<IFavouritesReadRepository, FavouritesRepository>();
+            services.AddScoped<IFavouritesWriteRepository, FavouritesRepository>();
 
             services.AddTransient<AdAuthMessageHandler>();
 
@@ -90,6 +91,9 @@ namespace DfE.EmployerFavourites.Web
 
             if (!Configuration.GetSection("EmployerFavouritesApi").Get<EmployerFavouritesApiConfig>().HasEmptyProperties())
                 builder.AddHttpMessageHandler<AdAuthMessageHandler>();
+
+            services.AddRefitClient<IFatApi>()
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("FatApi:ApiBaseUrl")));
         }
 
         private void AddConfiguration(IServiceCollection services)
@@ -98,6 +102,7 @@ namespace DfE.EmployerFavourites.Web
             services.Configure<ConnectionStrings>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<CdnConfig>(Configuration.GetSection("cdn"));
             services.Configure<EmployerFavouritesApiConfig>(Configuration.GetSection("EmployerFavouritesApi"));
+            services.Configure<FatWebsite>(Configuration.GetSection("FatWebsite"));
         }
     }
 }

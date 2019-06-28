@@ -32,4 +32,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Infrastructure\FatApiClient\" />
+  </ItemGroup>
 </Project>

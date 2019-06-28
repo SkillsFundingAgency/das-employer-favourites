@@ -19,16 +19,19 @@ namespace DfE.EmployerFavourites.Web.Controllers
     public class ApprenticeshipsController : Controller
     {
         private readonly ExternalLinks _externalLinks;
+        private readonly FatWebsite _fatConfig;
         private readonly IMediator _mediator;
         private readonly ApprenticeshipsParameterValidator _paramValidator;
         private readonly ILogger<ApprenticeshipsController> _logger;
 
         public ApprenticeshipsController(
-            IOptions<ExternalLinks> externalLinks, 
+            IOptions<ExternalLinks> externalLinks,
+            IOptions<FatWebsite> fatConfig,
             IMediator mediator,
             ILogger<ApprenticeshipsController> logger)
         {
             _externalLinks = externalLinks.Value;
+            _fatConfig = fatConfig.Value;
             _mediator = mediator;
             _paramValidator = new ApprenticeshipsParameterValidator();
             _logger = logger;
@@ -49,12 +52,11 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 EmployerAccountId = employerAccountId
             });
 
-            var mapper = new ApprenticeshipFavouriteMapper();
+            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
             var model = new ApprenticeshipFavouritesViewModel
             {
                 EmployerAccountId = employerAccountId,
-                EmployerName = response.EmployerAccount.Name,
                 Items = response.EmployerFavourites.Select(mapper.Map).ToList()
             };
 

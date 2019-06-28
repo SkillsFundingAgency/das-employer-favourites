@@ -24,6 +24,9 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
         public IList<Provider> Providers { get; set; }
         public string Title { get; set; }
         public bool IsFramework => TestForFramework();
+        public byte Level { get; set; }
+        public byte TypicalLength { get; set; }
+        public DateTime? ExpiryDate { get; set; }
 
         private bool TestForFramework()
         {

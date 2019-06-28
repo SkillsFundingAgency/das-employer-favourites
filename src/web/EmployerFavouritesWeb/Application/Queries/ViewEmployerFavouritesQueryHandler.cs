@@ -26,23 +26,17 @@ namespace DfE.EmployerFavourites.Application.Queries
         {
             _logger.LogInformation($"Handling ViewEmployerFavouritesQuery for {request.EmployerAccountId}");
 
-            // Get Account
-            var accountTask = _accountApi.GetAccount(request.EmployerAccountId);
-
             // Get favourites for account
-            var favouritesTask = _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
-
-            await Task.WhenAll(accountTask, favouritesTask);
+            var favourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
             // Build view model
             return new ViewEmployerFavouritesResponse
             {
                 EmployerAccount = new Domain.ReadModel.EmployerAccount
                 {
-                    EmployerAccountId = request.EmployerAccountId,
-                    Name = accountTask.Result.DasAccountName
+                    EmployerAccountId = request.EmployerAccountId
                 },
-                EmployerFavourites = favouritesTask.Result ?? new Domain.ReadModel.ApprenticeshipFavourites()
+                EmployerFavourites = favourites ?? new Domain.ReadModel.ApprenticeshipFavourites()
             };
         }
     }

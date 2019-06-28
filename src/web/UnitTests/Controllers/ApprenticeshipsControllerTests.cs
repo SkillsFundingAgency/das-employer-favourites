@@ -30,12 +30,13 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
     public class ApprenticeshipsControllerTests
     {
         public const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
+        private const string TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE = "https://fat-website/Apprenticeship/Apprenticeship/{0}/{1}";
         public const string EMPLOYER_ACCOUNT_ID = "XXX123";
         public const string USER_ID = "User123";
         public const string APPRENTICESHIPID = "123";
         public const int UKPRN = 10000020;
-
         private readonly Mock<IOptions<ExternalLinks>> _mockConfig;
+        private readonly Mock<IOptions<FatWebsite>> _mockFatConfig;
         private Mock<IFavouritesReadRepository> _mockFavouritesReadRepository;
         private Mock<IFavouritesWriteRepository> _mockFavouritesWriteRepository;
         private readonly Mock<IAccountApiClient> _mockAccountApiClient;
@@ -56,10 +57,13 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
 
+            _mockFatConfig = new Mock<IOptions<FatWebsite>>();
+            _mockFatConfig.Setup(x => x.Value).Returns(new FatWebsite { ApprenticeshipPageTemplate = TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE });
+
             ServiceProvider provider = BuildDependencies();
             var mediator = provider.GetService<IMediator>();
 
-            _sut = new ApprenticeshipsController(_mockConfig.Object, mediator, Mock.Of<ILogger<ApprenticeshipsController>>());
+            _sut = new ApprenticeshipsController(_mockConfig.Object, _mockFatConfig.Object, mediator, Mock.Of<ILogger<ApprenticeshipsController>>());
 
             SetupUserInContext();
         }
@@ -72,17 +76,6 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<ApprenticeshipFavouritesViewModel>(viewResult.ViewData.Model);
             Assert.Equal(4, model.Items.Count());
-        }
-
-        [Fact]
-        public async Task Index_ReturnsModel_WithNameOfEmployer()
-        {
-            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
-
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
-            
-            Assert.Equal("Test Company Ltd", model.EmployerName);
         }
 
         [Fact]
@@ -118,6 +111,54 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
             Assert.Equal("Framework-420-2-1", model.Items.Single(x => x.Id == "420-2-1").Title);
             Assert.Equal("Standard-30", model.Items.Single(x => x.Id == "30").Title);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsContainLevel()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal("3 (equivalent to A levels at grades A to E)", model.Items.Single(x => x.Id == "420-2-1").Level);
+            Assert.Equal("4 (equivalent to certificate of higher education)", model.Items.Single(x => x.Id == "30").Level);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_ItemsContainTypicalLength()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal("18 months", model.Items.Single(x => x.Id == "420-2-1").TypicalLength);
+            Assert.Equal("24 months", model.Items.Single(x => x.Id == "30").TypicalLength);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_FrameworkItemsContainExpiryDateValue()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal("2 January 2020", model.Items.Single(x => x.Id == "420-2-1").ExpiryDate); // Should show the date when no new start can be made i.e. expiry + 1 day
+            Assert.Null(model.Items.Single(x => x.Id == "30").ExpiryDate);
+        }
+
+        [Fact]
+        public async Task Index_ReturnsModel_WithUrlToApprenticehipOnFATWebsite()
+        {
+            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
+
+            Assert.Equal("https://fat-website/Apprenticeship/Apprenticeship/Framework/420-2-1", model.Items.Single(x => x.Id == "420-2-1").FatUrl.ToString()); 
+            Assert.Equal("https://fat-website/Apprenticeship/Apprenticeship/Standard/30", model.Items.Single(x => x.Id == "30").FatUrl.ToString()); 
         }
 
         [Fact]
@@ -428,10 +469,10 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         private static ReadModel.ApprenticeshipFavourites GetTestRepositoryFavourites()
         {
             var list = new ReadModel.ApprenticeshipFavourites();
-            list.Add(new ReadModel.ApprenticeshipFavourite("30") { Title = "Standard-30" });
-            list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1" });
-            list.Add(new ReadModel.ApprenticeshipFavourite("70", new Provider { Ukprn = 12345678 }) { Title = "Standard-70" });
-            list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd" } ) { Title = "Standard -123" });
+            list.Add(new ReadModel.ApprenticeshipFavourite("30") { Title = "Standard-30", Level = 4, TypicalLength = 24 });
+            list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1", Level = 3, TypicalLength = 18, ExpiryDate = new DateTime(2020, 1, 1) });
+            list.Add(new ReadModel.ApprenticeshipFavourite("70", new Provider { Ukprn = 12345678 }) { Title = "Standard-70", Level = 5, TypicalLength = 12 });
+            list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd" } ) { Title = "Standard-123", Level = 2, TypicalLength = 24 });
 
             return list;
         }

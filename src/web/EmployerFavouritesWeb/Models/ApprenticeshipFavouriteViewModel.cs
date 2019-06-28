@@ -1,3 +1,5 @@
+using System;
+
 namespace DfE.EmployerFavourites.Web.Models
 {
     public class ApprenticeshipFavouriteViewModel
@@ -7,5 +9,9 @@ namespace DfE.EmployerFavourites.Web.Models
         public bool IsFramework { get; set; }
         public bool HasTrainingProviders { get; set; }
         public int? Ukprn { get; set; } // Note: Will be removed when we introduce multiple training providers
+        public string Level { get; set; }
+        public string TypicalLength { get; set; }
+        public string ExpiryDate { get; set; }
+        public Uri FatUrl { get; set; }
     }
 }
