@@ -16,7 +16,7 @@
             </div>
             <h1 class="govuk-heading-xl govuk-!-margin-top-3 govuk-!-margin-bottom-6">
                 <span class="govuk-caption-xl">Your saved favourites</span>
-                <span class="app-icon-basket"></span>
+                <span class="app-icon-basket govuk-!-margin-right-2"></span>
                 <span class="fav-count-text">@countText</span>
             </h1>
         </div>
@@ -65,7 +65,7 @@ else
                                         </strong>
                                     </div>
                                 }
-                                <dl class="govuk-list govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+                                <dl class="govuk-list govuk-!-margin-top-0">
                                     <dt class="app-training-provider__details-title">Level:</dt>
                                     <dd class="app-training-provider__details-definition fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
                                     <dt class="app-training-provider__details-title">Typical length:</dt>
@@ -94,7 +94,7 @@ else
                                        asp-route-employerAccountId="@Model.EmployerAccountId"
                                        asp-route-apprenticeshipId="@Model.Items[i].Id"
                                        asp-route-ukprn="@Model.Items[i].Ukprn"
-                                       class="govuk-button govuk-button--search app-task-list__training-provider-content">
+                                       class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content">
                                         <span></span><span class="text">View Training Provider</span>
                                     </a>
                                 }
