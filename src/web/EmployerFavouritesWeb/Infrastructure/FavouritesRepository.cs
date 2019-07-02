@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
@@ -64,8 +65,37 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             if (favourites != null)
             {
-                var tasks = favourites.Select(UpdateApprenticeship).ToList();
-                await Task.WhenAll(tasks);
+                var apprenticeshipUpdateTasks = favourites.Select(UpdateApprenticeship).ToList();
+
+                var providers = favourites.SelectMany(x => x.Providers)?.Select(y => y.Ukprn).Distinct();
+
+                List<Task<FatTrainingProvider>> fatProviderTasks = null;
+
+                if (providers != null)
+                {
+                    fatProviderTasks = providers.Select(x => _fatApi.GetProviderAsync(x.ToString())).ToList();
+                }
+
+                await Task.WhenAll(apprenticeshipUpdateTasks.Concat(fatProviderTasks));
+
+                UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result));
+            }
+        }
+
+        private void UpdateTrainingProviders(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatTrainingProvider> providerData)
+        {
+            foreach(var item in providerData)
+            {
+                var matchingProviders = favourites.SelectMany(x => x.Providers).Where(y => y.Ukprn == item.Ukprn);
+
+                foreach(var provider in matchingProviders)
+                {
+                    provider.Phone = item.Phone;
+                    provider.Email = item.Email;
+                    provider.Website = item.Website;
+                    provider.EmployerSatisfaction = item.EmployerSatisfaction;
+                    provider.LearnerSatisfaction = item.LearnerSatisfaction;
+                }
             }
         }
 
@@ -86,6 +116,8 @@ namespace DfE.EmployerFavourites.Infrastructure
                 favourite.ExpiryDate = null;
             }
         }
+
+        
 
         private AsyncRetryPolicy GetRetryPolicy()
         {

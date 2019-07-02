@@ -10,6 +10,9 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
 
         [Get("/frameworks/{id}")]
         Task<FatFramework> GetFrameworkAsync(string id);
+
+        [Get("/providers/{ukprn}")]
+        Task<FatTrainingProvider> GetProviderAsync(string ukprn);
     }
 }
 
