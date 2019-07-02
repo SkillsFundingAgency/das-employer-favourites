@@ -4,6 +4,6 @@ namespace DfE.EmployerFavourites.Application.Queries
 {
     public class ViewTrainingProviderForApprenticeshipFavouriteResponse
     {
-        public Provider Provider { get; internal set; }
+        public ApprenticeshipFavourite Favourite { get; internal set; }
     }
 }

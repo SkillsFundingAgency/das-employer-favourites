@@ -12,7 +12,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
 
         [Theory]
         [InlineData("accounts/ABC123/apprenticeships")]
-        [InlineData("accounts/ABC123/apprenticeships/123/providers/10000020")]
+        [InlineData("accounts/ABC123/apprenticeships/123/providers")]
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
         {
             // Arrange

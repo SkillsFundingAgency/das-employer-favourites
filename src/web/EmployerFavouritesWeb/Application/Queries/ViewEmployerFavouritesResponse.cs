@@ -1,4 +1,3 @@
-using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Domain.ReadModel;
 
 namespace DfE.EmployerFavourites.Application.Queries

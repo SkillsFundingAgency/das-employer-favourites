@@ -1,11 +1,14 @@
-﻿@model TrainingProviderViewModel
+﻿@model TrainingProvidersViewModel
+@{
+    var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Training Providers" : "(1) Training Provider";
+}
 @section BodyHeader{
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <h1 class="govuk-heading-xl govuk-!-margin-top-6 govuk-!-margin-bottom-6">
+            <h1 class="govuk-heading-xl govuk-!-margin-top-3 govuk-!-margin-bottom-6">
                 <span class="govuk-caption-xl">Your saved favourites</span>
-                <span class="app-icon-basket"></span>
-                Training provider
+                <span class="app-icon-basket govuk-!-margin-right-2"></span>
+                <span class="fav-count-text">@countText</span>
             </h1>
         </div>
     </div>
@@ -14,40 +17,47 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <ol class="app-task-list">
-            <li class="app-task-list__item">
-                <div class="govuk-grid-row">
-                    <div class="govuk-grid-column-two-thirds">
-                        <h2 class="govuk-heading-l app-task-list__heading">@Model.ProviderName</h2>
-                        <dl class="govuk-list govuk-!-margin-top-0">
-                            <dt class="app-training-provider__details-title">Level:</dt>
-                            <dd class="app-training-provider__details-definition fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
-                            <dt class="app-training-provider__details-title">Typical length:</dt>
-                            <dd class="app-training-provider__details-definition fav-app-length">18 months</dd>
-                        </dl>
-                        <details class="govuk-details">
-                            <summary class="govuk-details__summary">
-                                <span class="govuk-details__summary-text">
-                                    Training provider details
-                                </span>
-                            </summary>
-                            <div class="govuk-details__text">
-                                <dl class="govuk-list">
-                                    <dt class="app-training-provider__details-title">Website:</dt>
-                                    <dd class="app-training-provider__details-definition">https://test.com</dd>
-                                    <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
-                                    <dd class="app-training-provider__details-definition">86%</dd>
-                                    <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
-                                    <dd class="app-training-provider__details-definition">91%</dd>
-                                </dl>
-                            </div>
-                        </details>
-                    </div>
-                    @*<div class="govuk-grid-column-one-third">
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <li class="app-task-list__item">
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <h2 class="govuk-heading-l app-task-list__heading">
+                                <span class="app-task-list__section-number">@(i + 1). </span>
+                                <a href="#" class="fav-tp-name govuk-link">@Model.Items[i].ProviderName</a>
+                            </h2>
+
+                            <dl class="govuk-list govuk-!-margin-top-0">
+                                <dt class="app-training-provider__details-title">Phone:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].Phone</dd>
+                                <dt class="app-training-provider__details-title">Email:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-email">@Model.Items[i].Email</dd>
+                            </dl>
+                            <details class="govuk-details">
+                                <summary class="govuk-details__summary">
+                                    <span class="govuk-details__summary-text">
+                                        Training provider details
+                                    </span>
+                                </summary>
+                                <div class="govuk-details__text">
+                                    <dl class="govuk-list">
+                                        <dt class="app-training-provider__details-title">Website:</dt>
+                                        <dd class="app-training-provider__details-definition fav-tp-website">@Model.Items[i].Website</dd>
+                                        <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
+                                        <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
+                                        <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
+                                        <dd class="app-training-provider__details-definition fav-tp-learner-satisfaction">@Model.Items[i].LearnerSatisfaction</dd>
+                                    </dl>
+                                </div>
+                            </details>
+                        </div>
+                        @*<div class="govuk-grid-column-one-third">
                         <a href="#" class="govuk-button app-task-list__training-provider-content">Recruit an apprentice</a>
                         <a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>
                     </div>*@
-                </div>
-            </li>
+                    </div>
+                </li>
+            }
         </ol>
     </div>
 </div>

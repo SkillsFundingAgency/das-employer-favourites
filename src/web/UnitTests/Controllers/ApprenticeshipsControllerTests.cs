@@ -42,6 +42,9 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         private readonly Mock<IAccountApiClient> _mockAccountApiClient;
         private readonly ApprenticeshipsController _sut;
 
+        public static int EmployerSatisfaction { get; private set; }
+        public static int LearnerSatisfaction { get; private set; }
+
         public ApprenticeshipsControllerTests()
         {
 
@@ -173,18 +176,6 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             Assert.True(model.Items.Single(x => x.Id == "70").HasTrainingProviders);
         }
 
-        [Fact]
-        public async Task Index_ReturnsModel_ItemsContainUkprnOfProvider()
-        {
-            var result = await _sut.Index(EMPLOYER_ACCOUNT_ID);
-
-            var viewResult = Assert.IsType<ViewResult>(result);
-            var model = viewResult.ViewData.Model as ApprenticeshipFavouritesViewModel;
-
-            Assert.Null(model.Items.Single(x => x.Id == "420-2-1").Ukprn);
-            Assert.Equal(12345678, model.Items.Single(x => x.Id == "70").Ukprn);
-        }
-
         [Theory]
         [InlineData(null)]
         [InlineData("")]
@@ -203,34 +194,55 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task TrainingProvider_ReturnsViewResult_WithProviderDetails()
         {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
 
             var viewResult = Assert.IsType<ViewResult>(result);
-            Assert.IsAssignableFrom<TrainingProviderViewModel>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<TrainingProvidersViewModel>(viewResult.ViewData.Model);
         }
 
        [Fact]
        public async Task TrainingProvider_ReturnsModel_WithNameOfTrainingProvider()
        {
-           var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+           var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
 
            var viewResult = Assert.IsType<ViewResult>(result);
-           var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+           var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
 
-           Assert.Equal("Test Provider Ltd", model.ProviderName);
+           Assert.Equal("Test Provider Ltd", model.Items[0].ProviderName);
        }
 
-        // TODO: Uncomment when story delivered to include details.
-        //[Fact]
-        //public async Task TrainingProvider_ReturnsModel_WithTrainingOptions()
-        //{
-        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
+        [Fact]
+        public async Task TrainingProvider_ReturnsModel_WithPhoneNumber()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
 
-        //    var viewResult = Assert.IsType<ViewResult>(result);
-        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
 
-        //    Assert.Equal("day release, at your location", model.TrainingOptions);
-        //}
+            Assert.Equal("020 123 1234", model.Items[0].Phone);
+        }
+
+        [Fact]
+        public async Task TrainingProvider_ReturnsModel_WithEmail()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
+
+            Assert.Equal("test@test.com", model.Items[0].Email);
+        }
+
+        [Fact]
+        public async Task TrainingProvider_ReturnsModel_WithWebsite()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
+
+            Assert.Equal("https://www.testprovider.com/", model.Items[0].Website);
+        }
 
         //[Theory]
         //[InlineData(65, "65%")]
@@ -240,9 +252,9 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
         //    var viewResult = Assert.IsType<ViewResult>(result);
-        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+        //    var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
 
-        //    Assert.Equal(expectedValue, model.EmployerSatisfaction);
+        //    Assert.Equal(expectedValue, model.Items[0].EmployerSatisfaction);
         //}
 
         //[Theory]
@@ -253,34 +265,15 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
 
         //    var viewResult = Assert.IsType<ViewResult>(result);
-        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
+        //    var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
 
-        //    Assert.Equal(expectedValue, model.LearnerSatisfaction);
-        //}
-
-        //[Theory]
-        //[InlineData(65, "65%")]
-        //[InlineData(null, "no data available")]
-        //public async Task TrainingProvider_ReturnsModel_WithAchievementRate(double? value, string expectedValue)
-        //{
-        //    var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN);
-
-        //    var viewResult = Assert.IsType<ViewResult>(result);
-        //    var model = viewResult.ViewData.Model as TrainingProviderViewModel;
-
-        //    Assert.Equal(expectedValue, model.AcheivementRate);
+        //    Assert.Equal(expectedValue, model.Items[0].LearnerSatisfaction);
         //}
 
         [Fact]
         public async Task TrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
         {
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "66666", UKPRN));
-        }
-
-        [Fact]
-        public async Task TrainingProvider_ThrowsException_WhenTrainingProviderForApprenticeshipNotInFavourites()
-        {
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, 99999999));
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "66666"));
         }
 
         [Theory]
@@ -293,19 +286,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [InlineData("420-2-222")]
         public async Task TrainingProvider_ReturnsBadRequest_ForInvalidApprenticeshipId(string id)
         {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, id, UKPRN);
-
-            Assert.IsType<BadRequestResult>(result);
-        }
-
-        [Theory]
-        [InlineData(0)]
-        [InlineData(100000000)]
-        [InlineData(9999999)]
-        [InlineData(-10000023)]
-        public async Task TrainingProvider_ReturnsBadRequest_ForInvalidUkprn(int ukprn)
-        {
-            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, ukprn);
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, id);
 
             Assert.IsType<BadRequestResult>(result);
         }
@@ -472,7 +453,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             list.Add(new ReadModel.ApprenticeshipFavourite("30") { Title = "Standard-30", Level = 4, TypicalLength = 24 });
             list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1", Level = 3, TypicalLength = 18, ExpiryDate = new DateTime(2020, 1, 1) });
             list.Add(new ReadModel.ApprenticeshipFavourite("70", new Provider { Ukprn = 12345678 }) { Title = "Standard-70", Level = 5, TypicalLength = 12 });
-            list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd" } ) { Title = "Standard-123", Level = 2, TypicalLength = 24 });
+            list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd", Phone = "020 123 1234", Email = "test@test.com", Website = new Uri("https://www.testprovider.com"), EmployerSatisfaction = 66, LearnerSatisfaction = 99 }) { Title = "Standard-123", Level = 2, TypicalLength = 24 });
 
             return list;
         }

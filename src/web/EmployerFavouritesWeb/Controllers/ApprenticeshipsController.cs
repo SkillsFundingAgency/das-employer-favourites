@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
@@ -81,27 +82,27 @@ namespace DfE.EmployerFavourites.Web.Controllers
             return Redirect(redirectUrl);
         }
 
-        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers/{ukprn}")]
-        public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId, int ukprn)
+        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers")]
+        public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId)
         {
             if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
-                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId) ||
-                !_paramValidator.IsValidProviderUkprn(ukprn))
+                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
             {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId}), {nameof(ukprn)}({ukprn})");
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
                 return BadRequest();
             }
 
             var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
             {
                 EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Ukprn = ukprn
+                ApprenticeshipId = apprenticeshipId
             });
 
-            var model = new TrainingProviderViewModel
+            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
+
+            var model = new TrainingProvidersViewModel
             {
-                ProviderName = response.Provider.Name
+                Items = response.Favourite.Providers.Select(mapper.Map).ToList()
             };
 
             return await Task.FromResult(View(model));

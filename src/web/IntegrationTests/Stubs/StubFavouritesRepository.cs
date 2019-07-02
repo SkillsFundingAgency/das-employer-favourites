@@ -69,7 +69,8 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     TypicalLength = 18,
                     Providers = new List<ReadModel.Provider>
                     {
-                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020 }
+                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020, Phone = "020 1234 5678", Email = "test@test.com", Website = new Uri("https://www.testprovider.com"), EmployerSatisfaction = 86, LearnerSatisfaction = 98 },
+                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028 }
                     }
                 },
                 new ReadModel.ApprenticeshipFavourite

@@ -81,7 +81,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var secondProviderButton = secondAppItemElement.QuerySelector("#view-training-providers");
             Assert.NotNull(firstProviderButton);
             Assert.Null(secondProviderButton);
-            Assert.Equal("/accounts/ABC123/apprenticeships/123/providers/10000020", firstProviderButton.Attributes["href"].Value);
+            Assert.Equal("/accounts/ABC123/apprenticeships/123/providers", firstProviderButton.Attributes["href"].Value);
         }
     }
 }

@@ -23,11 +23,23 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Title = src.Title,
                 IsFramework = src.IsFramework,
                 HasTrainingProviders = src.Providers.Any(),
-                Ukprn = src.Providers.FirstOrDefault()?.Ukprn,
                 Level = GetLevelText(src.Level),
                 TypicalLength = $"{src.TypicalLength} months",
                 ExpiryDate = src.ExpiryDate?.AddDays(1).ToString("d MMMM yyyy"),
                 FatUrl = _linkGenerator.GetApprenticeshipPageUrl(src)
+            };
+        }
+
+        public TrainingProviderViewModel Map(Domain.ReadModel.Provider src)
+        {
+            return new TrainingProviderViewModel
+            {
+                ProviderName = src.Name,
+                Phone = src.Phone,
+                Email = src.Email,
+                Website = src.Website?.ToString(),
+                EmployerSatisfaction = $"{src.EmployerSatisfaction}%",
+                LearnerSatisfaction = $"{src.LearnerSatisfaction}%"
             };
         }
 
