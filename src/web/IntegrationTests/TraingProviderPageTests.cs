@@ -49,15 +49,17 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             // Provider Properties
             var providerNameElement = content.QuerySelector(".fav-tp-name");
             var providerPhoneElement = content.QuerySelector(".fav-tp-phone");
-            var providerEmailElement = content.QuerySelector(".fav-tp-email");
-            var providerWebsiteElement = content.QuerySelector(".fav-tp-website");
+            var providerEmailElement = content.QuerySelector(".fav-tp-email>a");
+            var providerWebsiteElement = content.QuerySelector(".fav-tp-website>a");
             var providerEmployerSatisfactionElement = content.QuerySelector(".fav-tp-employer-satisfaction");
             var providerLearnerSatisfactionElement = content.QuerySelector(".fav-tp-learner-satisfaction");
 
             Assert.Equal("Test Provider", providerNameElement.TextContent); // Name
             Assert.Equal("020 1234 5678", providerPhoneElement.TextContent); // Phone
             Assert.Equal("test@test.com", providerEmailElement.TextContent); // Email
+            Assert.Equal("mailto:test@test.com", providerEmailElement.Attributes["href"].Value); // Website href
             Assert.Equal("https://www.testprovider.com/", providerWebsiteElement.TextContent); // Website
+            Assert.Equal("https://www.testprovider.com/", providerWebsiteElement.Attributes["href"].Value); // Website href
             Assert.Equal("86%", providerEmployerSatisfactionElement.TextContent); // Employer Satisfaction
             Assert.Equal("98%", providerLearnerSatisfactionElement.TextContent); // Learner Satisfaction
         }

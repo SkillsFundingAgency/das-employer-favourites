@@ -31,7 +31,9 @@
                                 <dt class="app-training-provider__details-title">Phone:</dt>
                                 <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].Phone</dd>
                                 <dt class="app-training-provider__details-title">Email:</dt>
-                                <dd class="app-training-provider__details-definition fav-tp-email">@Model.Items[i].Email</dd>
+                                <dd class="app-training-provider__details-definition fav-tp-email">
+                                    <a href="mailto:@Model.Items[i].Email">@Model.Items[i].Email</a>
+                                </dd>
                             </dl>
                             <details class="govuk-details">
                                 <summary class="govuk-details__summary">
@@ -42,7 +44,9 @@
                                 <div class="govuk-details__text">
                                     <dl class="govuk-list">
                                         <dt class="app-training-provider__details-title">Website:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-website">@Model.Items[i].Website</dd>
+                                        <dd class="app-training-provider__details-definition fav-tp-website">
+                                            <a href="@Model.Items[i].Website">@Model.Items[i].Website</a>
+                                        </dd>
                                         <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
                                         <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
                                         <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
