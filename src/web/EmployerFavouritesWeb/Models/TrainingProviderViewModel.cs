@@ -1,14 +1,16 @@
-using System.Collections.Generic;
+using System;
 
 namespace DfE.EmployerFavourites.Web.Models
 {
     public class TrainingProviderViewModel
     {
         public string ProviderName { get; set; }
-        public IEnumerable<char> Phone { get; set; }
-        public IEnumerable<char> Email { get; set; }
-        public IEnumerable<char> Website { get; set; }
-        public IEnumerable<char> EmployerSatisfaction { get; set; }
-        public IEnumerable<char> LearnerSatisfaction { get; set; }
+        public string Phone { get; set; }
+        public string Email { get; set; }
+        public string Website { get; set; }
+        public string EmployerSatisfaction { get; set; }
+        public string LearnerSatisfaction { get; set; }
+        public int Ukprn { get; set; }
+        public Uri FatUrl { get; set; }
     }
 }

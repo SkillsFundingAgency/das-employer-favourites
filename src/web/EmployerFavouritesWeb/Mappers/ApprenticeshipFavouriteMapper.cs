@@ -34,12 +34,14 @@ namespace DfE.EmployerFavourites.Web.Mappers
         {
             return new TrainingProviderViewModel
             {
+                Ukprn = src.Ukprn,
                 ProviderName = src.Name,
                 Phone = src.Phone,
                 Email = src.Email,
                 Website = src.Website?.ToString(),
                 EmployerSatisfaction = $"{src.EmployerSatisfaction}%",
-                LearnerSatisfaction = $"{src.LearnerSatisfaction}%"
+                LearnerSatisfaction = $"{src.LearnerSatisfaction}%",
+                FatUrl = _linkGenerator.GetProviderPageUrl(src)
             };
         }
 

@@ -19,5 +19,10 @@ namespace DfE.EmployerFavourites.Web.Helpers
 
             return new Uri(string.Format(_config.ApprenticeshipPageTemplate, type, src.ApprenticeshipId));
         }
+
+        public Uri GetProviderPageUrl(Provider src)
+        {
+            return new Uri(string.Format(_config.ProviderPageTemplate, src.Ukprn));
+        }
     }
 }

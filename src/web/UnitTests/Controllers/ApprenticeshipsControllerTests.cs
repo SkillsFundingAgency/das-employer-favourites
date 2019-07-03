@@ -31,6 +31,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
     {
         public const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
         private const string TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE = "https://fat-website/Apprenticeship/Apprenticeship/{0}/{1}";
+        private const string TEST_FAT_WEBSITE_PROVIDER_PAGE_TEMPLATE = "https://fat-website/Providers/{0}";
         public const string EMPLOYER_ACCOUNT_ID = "XXX123";
         public const string USER_ID = "User123";
         public const string APPRENTICESHIPID = "123";
@@ -61,8 +62,13 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
 
             _mockFatConfig = new Mock<IOptions<FatWebsite>>();
-            _mockFatConfig.Setup(x => x.Value).Returns(new FatWebsite { ApprenticeshipPageTemplate = TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE });
+            _mockFatConfig.Setup(x => x.Value).Returns(new FatWebsite
+            {
+                ApprenticeshipPageTemplate = TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE,
+                ProviderPageTemplate = TEST_FAT_WEBSITE_PROVIDER_PAGE_TEMPLATE
+            });
 
+            
             ServiceProvider provider = BuildDependencies();
             var mediator = provider.GetService<IMediator>();
 
@@ -269,6 +275,17 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
         //    Assert.Equal(expectedValue, model.Items[0].LearnerSatisfaction);
         //}
+
+        [Fact]
+        public async Task TrainingProvider_ReturnsModel_WithUrlToProviderPageOnFATWebsite()
+        {
+            var result = await _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
+
+            Assert.Equal("https://fat-website/Providers/10000020", model.Items.Single(x => x.Ukprn == 10000020).FatUrl?.ToString());
+        }
 
         [Fact]
         public async Task TrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
