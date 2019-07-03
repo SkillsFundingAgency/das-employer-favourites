@@ -26,6 +26,7 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.4" />
     <PackageReference Include="Refit" Version="4.7.9" />
     <PackageReference Include="Refit.HttpClientFactory" Version="4.7.9" />
+    <PackageReference Include="SFA.DAS.EmployerUrlHelper" Version="0.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="nlog.config">

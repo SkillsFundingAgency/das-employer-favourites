@@ -26,6 +26,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appSettings.json", optional: false, reloadOnChange: false);
                     config.AddJsonFile("sharedMenuSettings.json", optional: false, reloadOnChange: false);
+                    config.AddJsonFile("linkGeneratorSettings.json", optional: false, reloadOnChange: false);
                 });
             });
         }

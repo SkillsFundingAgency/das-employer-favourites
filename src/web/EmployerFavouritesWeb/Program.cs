@@ -56,6 +56,7 @@ namespace DfE.EmployerFavourites.Web
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;
                     });
+                    config.AddAzureTableStorage("SFA.DAS.EmployerUrlHelper");
                     config.AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);

@@ -1,15 +1,16 @@
-﻿@model ApprenticeshipFavouritesViewModel
+﻿@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
+@model ApprenticeshipFavouritesViewModel
 @{
     var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Apprenticeships" : "(1) Apprenticeship";
 }
 @section BodyHeader{
-    
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <div class="govuk-breadcrumbs">
                 <ol class="govuk-breadcrumbs__list">
                     <li class="govuk-breadcrumbs__list-item">
-                        <a class="govuk-breadcrumbs__link" href="#">Home</a>
+                        <a class="govuk-breadcrumbs__link" href="@linkGenerator.Homepage()">Home</a>
                     </li>
                     <li class="govuk-breadcrumbs__list-item" aria-current="page">Apprenticeships</li>
                 </ol>

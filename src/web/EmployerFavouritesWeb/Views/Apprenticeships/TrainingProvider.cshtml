@@ -1,10 +1,23 @@
 ﻿@model TrainingProvidersViewModel
+@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
+
 @{
     var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Training Providers" : "(1) Training Provider";
 }
 @section BodyHeader{
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
+            <div class="govuk-breadcrumbs">
+                <ol class="govuk-breadcrumbs__list">
+                    <li class="govuk-breadcrumbs__list-item">
+                        <a class="govuk-breadcrumbs__link" href="@linkGenerator.Homepage()">Home</a>
+                    </li>
+                    <li class="govuk-breadcrumbs__list-item" aria-current="page">
+                        <a class="govuk-breadcrumbs__link" asp-action="Index" asp-route-employerAccountId="@Model.EmployerAccountId">Apprenticeships</a>
+                    </li>
+                    <li class="govuk-breadcrumbs__list-item" aria-current="page">Training Providers</li>
+                </ol>
+            </div>
             <h1 class="govuk-heading-xl govuk-!-margin-top-3 govuk-!-margin-bottom-6">
                 <span class="govuk-caption-xl">Your saved favourites</span>
                 <span class="app-icon-basket govuk-!-margin-right-2"></span>
@@ -71,9 +84,9 @@
                             </details>
                         </div>
                         @*<div class="govuk-grid-column-one-third">
-                        <a href="#" class="govuk-button app-task-list__training-provider-content">Recruit an apprentice</a>
-                        <a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>
-                    </div>*@
+                                <a href="#" class="govuk-button app-task-list__training-provider-content">Recruit an apprentice</a>
+                                <a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>
+                            </div>*@
                     </div>
                 </li>
             }

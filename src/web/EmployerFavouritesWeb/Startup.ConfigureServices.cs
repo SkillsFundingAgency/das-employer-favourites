@@ -20,6 +20,7 @@ using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
 using System;
 using Refit;
 using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
+using SFA.DAS.EmployerUrlHelper;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -42,6 +43,8 @@ namespace DfE.EmployerFavourites.Web
             services.AddApplicationInsightsTelemetry();
 
             services.AddMediatR(typeof(Startup).Assembly);
+
+            services.AddEmployerUrlHelper(Configuration);
 
             services.Configure<CookiePolicyOptions>(options =>
             {

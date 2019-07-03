@@ -102,6 +102,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var model = new TrainingProvidersViewModel
             {
+                EmployerAccountId = employerAccountId,
                 Items = response.Favourite.Providers.Select(mapper.Map).ToList()
             };
 
