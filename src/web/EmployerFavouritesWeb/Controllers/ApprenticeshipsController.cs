@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
 using DfE.EmployerFavourites.Application.Queries;
+using DfE.EmployerFavourites.Web.Application.Exceptions;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Mappers;
 using DfE.EmployerFavourites.Web.Models;
@@ -97,6 +98,9 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 EmployerAccountId = employerAccountId,
                 ApprenticeshipId = apprenticeshipId
             });
+
+            if (response.Favourite.Providers.Count == 0)
+                throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 

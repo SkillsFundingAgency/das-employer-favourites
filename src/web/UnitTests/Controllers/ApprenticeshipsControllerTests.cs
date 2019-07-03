@@ -283,6 +283,12 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "66666"));
         }
 
+        [Fact]
+        public async Task TrainingProvider_ThrowsException_WhenNoProvidersForApprenticeship()
+        {
+            await Assert.ThrowsAsync<EntityNotFoundException>(() => _sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "420-2-1"));
+        }
+
         [Theory]
         [InlineData(null)]
         [InlineData("")]
