@@ -55,7 +55,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var providerLearnerSatisfactionElement = content.QuerySelector(".fav-tp-learner-satisfaction");
 
             Assert.Equal("Test Provider", providerNameElement.TextContent); // Name
-            Assert.Equal("https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Providers/10000020", providerNameElement.Attributes["href"].Value);
+            Assert.Equal("https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Provider/10000020", providerNameElement.Attributes["href"].Value);
             Assert.Equal("020 1234 5678", providerPhoneElement.TextContent); // Phone
             Assert.Equal("test@test.com", providerEmailElement.TextContent); // Email
             Assert.Equal("mailto:test@test.com", providerEmailElement.Attributes["href"].Value); // Website href

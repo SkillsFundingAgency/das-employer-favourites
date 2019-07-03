@@ -32,15 +32,21 @@ namespace DfE.EmployerFavourites.Web.Mappers
 
         public TrainingProviderViewModel Map(Domain.ReadModel.Provider src)
         {
+            const string NO_DATA_AVAILABLE_MSG = "no data available";
+
             return new TrainingProviderViewModel
             {
                 Ukprn = src.Ukprn,
                 ProviderName = src.Name,
-                Phone = src.Phone,
-                Email = src.Email,
-                Website = src.Website?.ToString(),
-                EmployerSatisfaction = $"{src.EmployerSatisfaction}%",
-                LearnerSatisfaction = $"{src.LearnerSatisfaction}%",
+                Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
+                Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
+                Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
+
+                // This below logic for Satisfaction values is copied from FAT website for Provider Details
+                // This however calls the FAT API which always returns 0 even if the data doesn't actually exist
+                // This is not how the API call for provider location works where is doesn't return the property if no data exists.
+                EmployerSatisfaction = src.EmployerSatisfaction > 0 ? $"{src.EmployerSatisfaction}%" : NO_DATA_AVAILABLE_MSG, 
+                LearnerSatisfaction = src.LearnerSatisfaction > 0 ? $"{src.LearnerSatisfaction}%" : NO_DATA_AVAILABLE_MSG,
                 FatUrl = _linkGenerator.GetProviderPageUrl(src)
             };
         }

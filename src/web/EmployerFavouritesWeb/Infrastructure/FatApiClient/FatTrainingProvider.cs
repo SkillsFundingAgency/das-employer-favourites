@@ -21,9 +21,9 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
         public Uri Website { get; set; }
 
         [JsonProperty("EmployerSatisfaction")]
-        public double? EmployerSatisfaction { get; set; }
+        public double EmployerSatisfaction { get; set; }
 
         [JsonProperty("LearnerSatisfaction")]
-        public double? LearnerSatisfaction { get; set; }
+        public double LearnerSatisfaction { get; set; }
     }
 }
