@@ -5,9 +5,9 @@ using Xunit;
 
 namespace DfE.EmployerFavourites.Web.IntegrationTests
 {
-    public class TraingProviderPageTests : TestBase
+    public class TrainingProviderPageTests : TestBase
     {
-        public TraingProviderPageTests(WebApplicationFactory<Startup> factory) : base(factory)
+        public TrainingProviderPageTests(WebApplicationFactory<Startup> factory) : base(factory)
         {
         }
 
