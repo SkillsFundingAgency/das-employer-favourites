@@ -23,10 +23,12 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var content = await HtmlHelpers.GetDocumentAsync(response);
             var noFavouritesText = content.QuerySelector(".fav-no-favourites-text");
             var countTextElement = content.QuerySelector(".fav-count-text");
+            var viewCampaignsLink = content.QuerySelector("a.fav-view-camp");
 
             // Assert
             Assert.Equal("No saved apprenticeships", countTextElement.TextContent); 
             Assert.NotNull(noFavouritesText);
+            Assert.Equal("https://das-test2-cpg-as.azurewebsites.net/employer/find-apprenticeship-training", viewCampaignsLink.Attributes["href"].Value);
         }
 
         [Fact]

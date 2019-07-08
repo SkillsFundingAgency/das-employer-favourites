@@ -106,6 +106,7 @@ namespace DfE.EmployerFavourites.Web
             services.Configure<CdnConfig>(Configuration.GetSection("cdn"));
             services.Configure<EmployerFavouritesApiConfig>(Configuration.GetSection("EmployerFavouritesApi"));
             services.Configure<FatWebsite>(Configuration.GetSection("FatWebsite"));
+            services.Configure<CampaignsWebsite>(Configuration.GetSection("CampaignsWebsite"));
         }
     }
 }

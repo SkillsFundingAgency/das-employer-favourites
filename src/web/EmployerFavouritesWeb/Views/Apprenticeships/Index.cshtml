@@ -1,4 +1,6 @@
-﻿@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
+﻿@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator employerSiteLinkGenerator
+@inject Microsoft.Extensions.Options.IOptions<CampaignsWebsite> campaignWebsiteOptions
+
 @model ApprenticeshipFavouritesViewModel
 @{
     string countText;
@@ -23,7 +25,7 @@
             <div class="govuk-breadcrumbs">
                 <ol class="govuk-breadcrumbs__list">
                     <li class="govuk-breadcrumbs__list-item">
-                        <a class="govuk-breadcrumbs__link" href="@linkGenerator.Homepage()">Home</a>
+                        <a class="govuk-breadcrumbs__link" href="@employerSiteLinkGenerator.Homepage()">Home</a>
                     </li>
                     <li class="govuk-breadcrumbs__list-item" aria-current="page">Apprenticeships</li>
                 </ol>
@@ -39,9 +41,10 @@
 
 @if (Model.Items.Count == 0)
 {
-    <div class="fav-no-favourites-text">
-        You’ve not saved any favourites yet. Select View apprenticeships to search for available apprenticeships and start saving your favourites to your account.
-    </div>
+    <h2 class="fav-no-favourites-text govuk-heading-m">
+        You’ve not saved any favourites yet. Select <strong>View apprenticeships</strong> to continue to the Apprenticeships website, where you can search for apprenticeships and start adding favourites to your account.
+    </h2>
+    <a href="@campaignWebsiteOptions.Value.FatSearchPage" class="govuk-button fav-view-camp">View apprenticeships</a>
 }
 else
 {
