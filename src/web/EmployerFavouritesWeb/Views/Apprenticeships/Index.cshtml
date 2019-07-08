@@ -1,8 +1,21 @@
 ﻿@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
 @model ApprenticeshipFavouritesViewModel
 @{
-    var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Apprenticeships" : "(1) Apprenticeship";
+    string countText;
+    switch (Model.Items.Count)
+    {
+        case 0:
+            countText = "No saved apprenticeships";
+            break;
+        case 1:
+            countText = "(1) Apprenticeship";
+            break;
+        default:
+            countText = $"({Model.Items.Count}) Apprenticeships";
+            break;
+    }
 }
+
 @section BodyHeader{
 
     <div class="govuk-grid-row">
@@ -27,7 +40,7 @@
 @if (Model.Items.Count == 0)
 {
     <div class="fav-no-favourites-text">
-        TODO: This needs some text
+        You’ve not saved any favourites yet. Select View apprenticeships to search for available apprenticeships and start saving your favourites to your account.
     </div>
 }
 else

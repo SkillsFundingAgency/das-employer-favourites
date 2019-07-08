@@ -13,7 +13,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
         }
 
         [Fact]
-        public async Task Index_DisplaysMessageIfHaveNoFavourites()
+        public async Task Index_DisplaysHeadingAndMessageIfHaveNoFavourites()
         {
             // Arrange
             var client = BuildClient();
@@ -22,8 +22,10 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var response = await client.GetAsync("accounts/NORESULTS/apprenticeships");
             var content = await HtmlHelpers.GetDocumentAsync(response);
             var noFavouritesText = content.QuerySelector(".fav-no-favourites-text");
+            var countTextElement = content.QuerySelector(".fav-count-text");
 
             // Assert
+            Assert.Equal("No saved apprenticeships", countTextElement.TextContent); 
             Assert.NotNull(noFavouritesText);
         }
 
@@ -39,7 +41,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var countTextElement = content.QuerySelector(".fav-count-text");
 
             // Assert
-            Assert.Equal("(1) Apprenticeship", countTextElement.TextContent); // Number of items in the list
+            Assert.Equal("(1) Apprenticeship", countTextElement.TextContent);
         }
 
         [Fact]
