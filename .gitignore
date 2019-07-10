@@ -299,3 +299,6 @@ internal-nlog.txt
 
 # NuGet config
 /src/nuget.config
+
+# Coverlet coverage
+lcov.info

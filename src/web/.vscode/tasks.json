@@ -34,7 +34,10 @@
             "args": [
                 "test",
                 "${workspaceFolder}/UnitTests/UnitTests.csproj",
-                "/p:GenerateFullPaths=true"
+                "/p:GenerateFullPaths=true",
+                "/p:CollectCoverage=true",
+                "/p:CoverletOutputFormat=lcov",
+                "/p:CoverletOutput=./lcov.info"
             ],
             "problemMatcher": "$msCompile",
             "group": {
@@ -42,6 +45,25 @@
                 "isDefault": true
             }
         },
+
+        {
+            "label": "run-int-tests",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "test",
+                "${workspaceFolder}/IntegrationTests/IntegrationTests.csproj",
+                "/p:GenerateFullPaths=true",
+                "/p:CollectCoverage=true",
+                "/p:CoverletOutputFormat=lcov",
+                "/p:CoverletOutput=./lcov.info"
+            ],
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
         {
             "label": "publish",
             "command": "dotnet",
