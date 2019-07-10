@@ -38,6 +38,12 @@
         },
         "azureStorageConnectionString": {
             "type": "string"
+        },
+        "sharedKeyVaultName": {
+            "type": "string"
+        },
+        "sharedKeyVaultResourceGroupName": {
+            "type": "string"
         }
     },
     "variables": {
@@ -108,6 +114,33 @@
             "dependsOn": []
         },
         {
+            "apiVersion": "2017-05-10",
+            "name": "internal-api-app-service-certificate",
+            "resourceGroup": "[parameters('sharedAppServicePlanResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('internalApiCertificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('sharedKeyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('sharedKeyVaultResourceGroupName')]"
+                    },
+                    "serverFarmId": {
+                        "value": "[resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedAppServicePlanName'))]"
+                    }
+                }
+            }
+        },
+        {
             "apiVersion": "2017-08-01",
             "name": "internal-api-app-service",
             "type": "Microsoft.Resources/deployments",
@@ -152,24 +185,51 @@
                             },
                             {
                                 "name": "AzureStorage",
-                                "connectionString":  "[reference('storage-account').outputs.storageConnectionString.value]",
+                                "connectionString": "[reference('storage-account').outputs.storageConnectionString.value]",
                                 "type": "Custom"
                             }
-
                         ]
                     },
                     "customHostName": {
                         "value": "[parameters('internalApiCustomHostname')]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('internalApiCertificateName')), '2016-03-01').Thumbprint]"
+                        "value": "[if(greater(length(parameters('internalApiCustomHostname')), 0), reference('internal-api-app-service-certificate').outputs.certificateThumbprint.value, '')]"
                     }
                 }
             },
             "dependsOn": [
                 "internal-api-app-insights",
-                "storage-account"
+                "storage-account",
+                "internal-api-app-service-certificate"
             ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "app-service-certificate",
+            "resourceGroup": "[parameters('sharedAppServicePlanResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('appServiceCertificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('sharedKeyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('sharedKeyVaultResourceGroupName')]"
+                    },
+                    "serverFarmId": {
+                        "value": "[resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedAppServicePlanName'))]"
+                    }
+                }
+            }
         },
         {
             "apiVersion": "2017-08-01",
@@ -219,19 +279,19 @@
                                 "connectionString":  "[reference('storage-account').outputs.storageConnectionString.value]",
                                 "type": "Custom"
                             }
-
                         ]
                     },
                     "customHostName": {
                         "value": "[parameters('appServiceCustomeHostname')]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('appServiceCertificateName')), '2016-03-01').Thumbprint]"
+                        "value": "[if(greater(length(parameters('appServiceCustomeHostname')), 0), reference('app-service-certificate').outputs.certificateThumbprint.value, '')]"
                     }
                 }
             },
             "dependsOn": [
-                "app-service-app-insights"
+                "app-service-app-insights",
+                "app-service-certificate"
             ]
         }
     ],
