@@ -7,7 +7,7 @@ using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.Providers.Api.Client;
 using Xunit;
 
-namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
+namespace DfE.EmployerFavourites.Api.UnitTests.Infrastructure
 {
     public class FatApiRepositoryTests
     {

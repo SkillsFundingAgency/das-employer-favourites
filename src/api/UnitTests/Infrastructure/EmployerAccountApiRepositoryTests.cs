@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using Xunit;
 
-namespace DfE.EmployerFavourites.UnitTests.ApplicationServices.Infrastructure
+namespace DfE.EmployerFavourites.Api.UnitTests.Infrastructure
 {
     public class EmployerAccountApiRepositoryTests
     {
