@@ -61,9 +61,16 @@
 }
 
 .app-task-list__heading {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     font-weight: 700;
     line-height: 1.11111;
+}
+
+@media (min-width: 40.0625em) {
+    
+    .app-task-list__heading {
+        font-size: 1.75rem;
+    }
 }
   
 @media (min-width: 40.0625em) {

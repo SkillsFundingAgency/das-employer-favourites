@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
 using DfE.EmployerFavourites.Application.Queries;
+using DfE.EmployerFavourites.Web.Application.Exceptions;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Mappers;
 using DfE.EmployerFavourites.Web.Models;
@@ -19,16 +19,19 @@ namespace DfE.EmployerFavourites.Web.Controllers
     public class ApprenticeshipsController : Controller
     {
         private readonly ExternalLinks _externalLinks;
+        private readonly FatWebsite _fatConfig;
         private readonly IMediator _mediator;
         private readonly ApprenticeshipsParameterValidator _paramValidator;
         private readonly ILogger<ApprenticeshipsController> _logger;
 
         public ApprenticeshipsController(
-            IOptions<ExternalLinks> externalLinks, 
+            IOptions<ExternalLinks> externalLinks,
+            IOptions<FatWebsite> fatConfig,
             IMediator mediator,
             ILogger<ApprenticeshipsController> logger)
         {
             _externalLinks = externalLinks.Value;
+            _fatConfig = fatConfig.Value;
             _mediator = mediator;
             _paramValidator = new ApprenticeshipsParameterValidator();
             _logger = logger;
@@ -49,12 +52,11 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 EmployerAccountId = employerAccountId
             });
 
-            var mapper = new ApprenticeshipFavouriteMapper();
+            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
             var model = new ApprenticeshipFavouritesViewModel
             {
                 EmployerAccountId = employerAccountId,
-                EmployerName = response.EmployerAccount.Name,
                 Items = response.EmployerFavourites.Select(mapper.Map).ToList()
             };
 
@@ -79,27 +81,31 @@ namespace DfE.EmployerFavourites.Web.Controllers
             return Redirect(redirectUrl);
         }
 
-        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers/{ukprn}")]
-        public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId, int ukprn)
+        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers")]
+        public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId)
         {
             if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
-                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId) ||
-                !_paramValidator.IsValidProviderUkprn(ukprn))
+                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
             {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId}), {nameof(ukprn)}({ukprn})");
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
                 return BadRequest();
             }
 
             var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
             {
                 EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Ukprn = ukprn
+                ApprenticeshipId = apprenticeshipId
             });
 
-            var model = new TrainingProviderViewModel
+            if (response.Favourite.Providers.Count == 0)
+                throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
+
+            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
+
+            var model = new TrainingProvidersViewModel
             {
-                ProviderName = response.Provider.Name
+                EmployerAccountId = employerAccountId,
+                Items = response.Favourite.Providers.Select(mapper.Map).ToList()
             };
 
             return await Task.FromResult(View(model));

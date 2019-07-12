@@ -6,6 +6,5 @@ namespace DfE.EmployerFavourites.Application.Queries
     {
         public string EmployerAccountId { get; set; }
         public string ApprenticeshipId { get; set; }
-        public int Ukprn { get; set; }
     }
 }
