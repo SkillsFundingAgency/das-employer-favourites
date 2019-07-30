@@ -84,9 +84,9 @@ else
                                 }
                                 <dl class="govuk-list govuk-!-margin-top-0">
                                     <dt class="app-training-provider__details-title">Level:</dt>
-                                    <dd class="app-training-provider__details-definition fav-app-level">3 (equivalent to A levels at grades A to E)</dd>
+                                    <dd class="app-training-provider__details-definition fav-app-level">@Model.Items[i].Level</dd>
                                     <dt class="app-training-provider__details-title">Typical length:</dt>
-                                    <dd class="app-training-provider__details-definition fav-app-length">18 months</dd>
+                                    <dd class="app-training-provider__details-definition fav-app-length">@Model.Items[i].TypicalLength</dd>
                                 </dl>
                                 @*<div class="govuk-form-group">
                                         <fieldset class="govuk-fieldset">
