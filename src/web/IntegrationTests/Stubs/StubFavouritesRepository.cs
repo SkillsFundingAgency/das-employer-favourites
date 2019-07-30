@@ -47,8 +47,8 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                 {
                     ApprenticeshipId = "123",
                     Title = "Test Standard1",
-                    Level = 2,
-                    TypicalLength = 18,
+                    Level = 3,
+                    TypicalLength = 24,
                     Providers = new List<ReadModel.Provider>
                     {
                         new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020 }
@@ -65,7 +65,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                 {
                     ApprenticeshipId = "123",
                     Title = "Test Standard1",
-                    Level = 2,
+                    Level = 3,
                     TypicalLength = 18,
                     Providers = new List<ReadModel.Provider>
                     {
@@ -77,14 +77,14 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                 {
                     ApprenticeshipId = "456",
                     Title = "Test Standard2",
-                    Level = 2,
+                    Level = 3,
                     TypicalLength = 18,
                 },
                 new ReadModel.ApprenticeshipFavourite
                 {
                     ApprenticeshipId = "123-1-2",
                     Title = "Test Framework1",
-                    Level = 2,
+                    Level = 3,
                     TypicalLength = 18,
                     ExpiryDate = new DateTime(2020, 1, 1),
                     Providers = new List<ReadModel.Provider>

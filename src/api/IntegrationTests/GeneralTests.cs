@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace DfE.EmployerFavourites.IntegrationTests
+namespace DfE.EmployerFavourites.Api.IntegrationTests
 {
     public class GeneralTests : IClassFixture<WebApplicationFactory<Startup>>
     {

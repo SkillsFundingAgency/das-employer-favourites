@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/favourites-web.sln",
+                "${workspaceFolder}/favourites-api.sln",
                 "/p:GenerateFullPaths=true"
             ],
             "problemMatcher": "$msCompile",
@@ -22,7 +22,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/EmployerFavouritesWeb/EmployerFavouritesWeb.csproj",
+                "${workspaceFolder}/EmployerFavouritesApi/EmployerFavouritesApi.csproj",
                 "/p:GenerateFullPaths=true"
             ],
             "problemMatcher": "$msCompile"
@@ -70,7 +70,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/EmployerFavouritesWeb/EmployerFavouritesWeb.csproj",
+                "${workspaceFolder}/EmployerFavouritesApi/EmployerFavouritesApi.csproj",
                 "/p:GenerateFullPaths=true"
             ],
             "problemMatcher": "$msCompile"
