@@ -45,7 +45,6 @@
                 "isDefault": true
             }
         },
-
         {
             "label": "run-int-tests",
             "command": "dotnet",
@@ -63,7 +62,7 @@
                 "kind": "test",
                 "isDefault": true
             }
-        }
+        },
         {
             "label": "publish",
             "command": "dotnet",
