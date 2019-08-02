@@ -21,6 +21,7 @@ using System;
 using Refit;
 using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
 using SFA.DAS.EmployerUrlHelper;
+using SFA.DAS.EmployerUrlHelper.DependencyResolution;
 
 namespace DfE.EmployerFavourites.Web
 {
