@@ -18,7 +18,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.GetAsync("save-apprenticeship-favourites?apprenticeshipId=345");
+            var response = await client.GetAsync("save-apprenticeship-favourites?basketId=f848036e39b240329b3ec20b7743392f");
 
             Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
             Assert.Equal("https://test-accounts-dashboard/accounts/ABC123/teams", response.Headers.Location.OriginalString);
