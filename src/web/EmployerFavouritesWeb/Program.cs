@@ -46,7 +46,7 @@ namespace DfE.EmployerFavourites.Web
                     config.SetBasePath(Directory.GetCurrentDirectory());
                     config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
                     config.AddAzureTableStorage(options => {
-                        options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Shared.UI" };
+                        options.ConfigurationKeys = new [] { "SFA.DAS.Employer.Shared.UI", "SFA.DAS.EmployerUrlHelper" };
                         options.EnvironmentNameEnvironmentVariableName = "APPSETTING_EnvironmentName";
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                     });
@@ -56,7 +56,6 @@ namespace DfE.EmployerFavourites.Web
                         options.StorageConnectionStringEnvironmentVariableName = "APPSETTING_ConfigurationStorageConnectionString";
                         options.PreFixConfigurationKeys = false;
                     });
-                    config.AddAzureTableStorage("SFA.DAS.EmployerUrlHelper");
                     config.AddJsonFile($"appsettings.{environmentName}.json", optional: true, reloadOnChange: false);
                     config.AddEnvironmentVariables();
                     config.AddCommandLine(args);
