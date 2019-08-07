@@ -12,7 +12,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
             return Task.FromResult(new ApprenticeshipFavouritesBasket());
         }
 
-        public Task UpdateAsync(Guid basketId, ApprenticeshipFavouritesBasket basket)
+        public Task UpdateAsync(ApprenticeshipFavouritesBasket basket)
         {
             return Task.CompletedTask;
         }

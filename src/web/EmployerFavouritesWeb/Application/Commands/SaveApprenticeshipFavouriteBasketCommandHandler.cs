@@ -37,53 +37,27 @@ namespace DfE.EmployerFavourites.Application.Commands
             _logger.LogInformation($"Handling SaveApprenticeshipFavouriteCommand for {request.ApprenticeshipId}");
 
             var employerAccountId = await GetEmployerAccountId(request.UserId);
-            var favourites = (await _readRepository.GetApprenticeshipFavourites(employerAccountId)) ?? new Domain.ReadModel.ApprenticeshipFavourites();
+            var favouritesTask = _readRepository.GetApprenticeshipFavourites(employerAccountId);
+            var basketContentTask = _basketStore.GetAsync(request.BasketId);
+
+            await Task.WhenAll(favouritesTask, basketContentTask);
+
+            var favourites = favouritesTask.Result ?? new Domain.ReadModel.ApprenticeshipFavourites();
+            var basketContent = basketContentTask.Result;
+
             var writeModel = favourites.MapToWriteModel();
 
-
-            // TODO: LWA don't await the individual tasks
-            var basketContent = await _basketStore.GetAsync(request.BasketId);
-
-            bool contentHaveChanged = false;
-
-            if (basketContent == null || basketContent.Count == 0)
+            if (basketContent == null || basketContent.Count() == 0)
                 return employerAccountId;
+
+            bool changesMade = false;
 
             foreach(var item in basketContent)
             {
-                var existing = writeModel.SingleOrDefault(x => x.ApprenticeshipId == item.ApprenticeshipId);
-
-                if (existing == null)
-                {
-                    if (item.Ukprns == null || item.Ukprns.Count == 0)
-                    {
-                        writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(item.ApprenticeshipId));
-                        contentHaveChanged = true;
-                    }
-                    else
-                    {
-                        writeModel.Add(new Domain.WriteModel.ApprenticeshipFavourite(item.ApprenticeshipId, item.Ukprns));
-                        contentHaveChanged = true;
-                    }
-                }
-                else
-                {
-                    if (item.Ukprns != null || item.Ukprns.Count > 0)
-                    {
-                        foreach(var ukprn in item.Ukprns)
-                        {
-                            if (!existing.Ukprns.Contains(ukprn))
-                            {
-                                existing.Ukprns.Add(ukprn);
-
-                                contentHaveChanged = true;
-                            }
-                        }
-                    }
-                }
+                changesMade |= writeModel.Update(item.ApprenticeshipId, item.Ukprns);
             }
 
-            if (contentHaveChanged)
+            if (changesMade)
                 await _writeRepository.SaveApprenticeshipFavourites(employerAccountId, writeModel);
 
             return employerAccountId;

@@ -51,7 +51,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_UpdatesFavourites_ForGivenEmployerAccount()
         {
-            _basket.Add(new ApprenticeshipFavourite("40"));
+            _basket.Add("40");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -63,7 +63,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AddsSingleApprenticeshipToList_WhenNoFavouritesExist()
         {
-            _basket.Add(new ApprenticeshipFavourite("40"));
+            _basket.Add("40");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -77,7 +77,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AddsApprenticeshipAndUkprn_WhenNoFavouritesExist()
         {
-            _basket.Add(new ApprenticeshipFavourite("60", 12345678));
+            _basket.Add("60", 12345678);
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -91,7 +91,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_IgnoresApprenticeship_IfItAlreadyExists()
         {
-            _basket.Add(new ApprenticeshipFavourite("420-2-1"));
+            _basket.Add("420-2-1");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -105,7 +105,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_IgnoresDuplicateUkprn_IfItAlreadyExistsForApprenticeship()
         {
-            _basket.Add(new ApprenticeshipFavourite("70", 12345678));
+            _basket.Add("70", 12345678);
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -119,7 +119,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AppendsUkprnToList_WhenTheApprenticeshipAlreadyExistsAndAlreadyHasUkprns()
         {
-            _basket.Add(new ApprenticeshipFavourite("30", 12345678));
+            _basket.Add("30", 12345678);
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -133,7 +133,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AddsUkprnToList_WhenTheApprenticeshipAlreadyExistsAndHasNoUkprns()
         {
-            _basket.Add(new ApprenticeshipFavourite("30", 12345678));
+            _basket.Add("30", 12345678);
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -141,6 +141,30 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
                 x.SaveApprenticeshipFavourites(
                     It.IsAny<string>(),
                     It.Is<WriteModel.ApprenticeshipFavourites>(a => ContainsNewUkprnForExistingApprenticeship(a, "30", 12345678))),
+                Times.Once);
+        }
+
+        [Fact]
+        public async Task SaveBasket_AddsMultipleFavourites()
+        {
+            var items = new List<Tuple<string, List<int>>>
+            {
+                { new Tuple<string, List<int>>("66", new List<int> { 12345678 }) },
+                { new Tuple<string, List<int>>("67", new List<int> { 98765432 }) },
+                { new Tuple<string, List<int>>("68", new List<int> { 98765432 }) }
+            };
+
+            foreach(var item in items)
+            {
+                _basket.Add(item.Item1, item.Item2.First());
+            }
+
+            var result = await Sut.SaveBasket(Guid.NewGuid());
+
+            _mockFavouritesWriteRepository.Verify(x =>
+                x.SaveApprenticeshipFavourites(
+                    It.IsAny<string>(),
+                    It.Is<WriteModel.ApprenticeshipFavourites>(a => ContainsAllNewApprenticeships(a, items))),
                 Times.Once);
         }
 
@@ -159,6 +183,24 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         private static bool ContainsExistingPlusNewApprenticeship(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId)
         {
             return a.Count == (GetTestRepositoryFavourites().Count + 1) && a.Any(b => b.ApprenticeshipId == apprenticeshipId);
+        }
+
+        private static bool ContainsAllNewApprenticeships(WriteModel.ApprenticeshipFavourites a, List<Tuple<string, List<int>>> newFavourites)
+        {
+            foreach(var item in newFavourites)
+            {
+                var matchingItem = a.SingleOrDefault(x => x.ApprenticeshipId == item.Item1);
+
+                if (matchingItem == null || matchingItem.Ukprns == null || matchingItem.Ukprns.Count != item.Item2.Count)
+                    return false;
+
+                for (int i = 0; i < item.Item2.Count; i++)
+                {
+                    if (item.Item2[i] != matchingItem.Ukprns[i])
+                        return false;
+                }
+            }
+            return true;
         }
     }
 }
