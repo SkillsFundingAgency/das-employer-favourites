@@ -34,20 +34,20 @@ namespace DfE.EmployerFavourites.Application.Commands
 
         public async Task<string> Handle(SaveApprenticeshipFavouriteBasketCommand request, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Handling SaveApprenticeshipFavouriteCommand for {request.ApprenticeshipId}");
+            _logger.LogInformation("Handling SaveApprenticeshipFavouriteCommand for basket: {basketId}", request.BasketId);
 
+            var basketContentTask = _basketStore.GetAsync(request.BasketId);
             var employerAccountId = await GetEmployerAccountId(request.UserId);
             var favouritesTask = _readRepository.GetApprenticeshipFavourites(employerAccountId);
-            var basketContentTask = _basketStore.GetAsync(request.BasketId);
 
-            await Task.WhenAll(favouritesTask, basketContentTask);
+            await Task.WhenAll(basketContentTask, favouritesTask);
 
             var favourites = favouritesTask.Result ?? new Domain.ReadModel.ApprenticeshipFavourites();
             var basketContent = basketContentTask.Result;
 
             var writeModel = favourites.MapToWriteModel();
 
-            if (basketContent == null || basketContent.Count() == 0)
+            if (basketContent == null || !basketContent.Any())
                 return employerAccountId;
 
             bool changesMade = false;
@@ -58,7 +58,14 @@ namespace DfE.EmployerFavourites.Application.Commands
             }
 
             if (changesMade)
+            {
                 await _writeRepository.SaveApprenticeshipFavourites(employerAccountId, writeModel);
+                _logger.LogDebug("Updated basket: {basketId}", request.BasketId);
+            }
+            else
+            {
+                _logger.LogDebug("No changes required for basket: {basketId}", request.BasketId);
+            }
 
             return employerAccountId;
         }
