@@ -64,7 +64,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
             return View(model);
         }
 
-        [HttpPost("save-apprenticeship-favourites")]
+        [HttpGet("save-apprenticeship-favourites")]
         public async Task<IActionResult> SaveBasket(Guid basketId)
         {
             if (!_paramValidator.IsValidBasketId(basketId))
