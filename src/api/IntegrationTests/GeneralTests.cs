@@ -75,6 +75,31 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Delete_ApprenticeshipReturnSuccessAndCorrectContentType()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.DeleteAsync("api/apprenticeships/XYZ123/123-1-2");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+           
+        }
+        [Fact]
+        public async Task Delete_ProviderReturnSuccessAndCorrectContentType()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.GetAsync("api/apprenticeships/XYZ123/123-1-2/123456");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
         private HttpClient BuildClient()
         {
             return _factory.WithWebHostBuilder(builder =>
