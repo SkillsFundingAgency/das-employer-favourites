@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
 using DfE.EmployerFavourites.Application.Queries;
@@ -64,17 +65,17 @@ namespace DfE.EmployerFavourites.Web.Controllers
         }
 
         [HttpGet("save-apprenticeship-favourites")]
-        public async Task<IActionResult> Add(string apprenticeshipId, int? ukprn = null)
+        public async Task<IActionResult> SaveBasket(Guid basketId)
         {
-            if (!_paramValidator.IsValidApprenticeshipId(apprenticeshipId) || !_paramValidator.IsValidProviderUkprn(ukprn))
+            if (!_paramValidator.IsValidBasketId(basketId))
             {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(apprenticeshipId)}({apprenticeshipId}), {nameof(ukprn)}({ukprn})");
+                _logger.LogDebug($"Invalid BasketId: {basketId}");
 
                 return BadRequest();
             }
 
             var userId = User.GetUserId();
-            var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteCommand { UserId = userId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
+            var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteBasketCommand { UserId = userId, BasketId = basketId });
 
             var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
 

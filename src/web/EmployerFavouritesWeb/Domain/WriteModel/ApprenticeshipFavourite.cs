@@ -15,6 +15,12 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
             ApprenticeshipId = apprenticeshipId;
         }
 
+        public ApprenticeshipFavourite(string apprenticeshipId, IList<int> ukprns) : this(apprenticeshipId)
+        {
+            if (ukprns != null)
+                Ukprns = ukprns;
+        }
+
         public ApprenticeshipFavourite(string apprenticeshipId, int ukprn) : this(apprenticeshipId)
         {
             Ukprns.Add(ukprn);

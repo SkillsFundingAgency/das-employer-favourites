@@ -20,8 +20,8 @@ using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
 using System;
 using Refit;
 using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
-using SFA.DAS.EmployerUrlHelper;
 using SFA.DAS.EmployerUrlHelper.DependencyResolution;
+using Sfa.Das.Sas.Shared.Basket;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -46,6 +46,9 @@ namespace DfE.EmployerFavourites.Web
             services.AddMediatR(typeof(Startup).Assembly);
 
             services.AddEmployerUrlHelper(Configuration);
+
+            var basketConfig = Configuration.GetSection("BasketConfig").Get<BasketConfig>();
+            services.AddFavouritesBasket(basketConfig.BasketRedisConnectionString, basketConfig.SlidingExpiryDays);
 
             services.Configure<CookiePolicyOptions>(options =>
             {

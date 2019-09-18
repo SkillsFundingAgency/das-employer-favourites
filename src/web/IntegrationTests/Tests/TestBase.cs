@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sfa.Das.Sas.Shared.Basket.Interfaces;
 using SFA.DAS.EAS.Account.Api.Client;
 using Xunit;
 
@@ -43,6 +44,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
                     });
                     services.AddScoped<IFavouritesReadRepository, StubFavouritesRepository>();
                     services.AddScoped<IFavouritesWriteRepository, StubFavouritesRepository>();
+                    services.AddScoped<IApprenticeshipFavouritesBasketStore, StubFavouritesBasketStore>();
                     services.AddScoped<IAccountApiClient, StubAccountApiClient>();
                 });
             })
