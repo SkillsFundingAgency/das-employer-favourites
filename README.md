@@ -23,12 +23,10 @@ You are able to run the website by doing the following:
 - Clone repository
 - Create table in Azure Storage called Configuration using https://github.com/SkillsFundingAgency/das-employer-config-updater
 - By default the configuration of the website is setup to use the Api hosted in the AT environment. Update the table storage config for the website to change this if required.
-- Run the website project.
-- Navigate to https://localhost:5040/account/HASHED-ACCOUNT-ID/apprenticeships where HASHED-ACCOUNT-ID is substited for the one you see when on the Dashboard of the AT Employer site.
+- Run the website project (Start EmployerFavouritesWeb(Kestral) project as opposed to IISExpress).
+- Navigate to https://localhost:5040/account/HASHED-ACCOUNT-ID/apprenticeships where HASHED-ACCOUNT-ID is substited for the one you see when on the Dashboard of the AT Employer site. (Note credentials will be for the AT version of Employer Idams)
 
-## Authorization
-
-The website use Employer Idams for Authentication. The default setup uses the AT Employer Idams.
+## API Authorization
 
 The API uses AzureAD for authentication. When running in Development mode, the authentication filteris not added so no auth is required. If you do enable authentication you will need to add the ```Authorization Bearer [TOKEN]``` header attribute to all requests. 
 
