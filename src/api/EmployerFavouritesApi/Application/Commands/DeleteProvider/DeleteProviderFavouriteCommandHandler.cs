@@ -54,13 +54,21 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
                 return new DeleteProviderFavouriteCommandResponse {CommandResult = DomainUpdateStatus.Failed};
             }
 
+            if (!existingFavourites.Exists(request.ApprenticeshipId, request.Ukprn))
+            { 
+                _logger.LogWarning($"requested Apprenticeship Id ({request.ApprenticeshipId}) or ukprn ({request.Ukprn} )doesnt exist for account {request.EmployerAccountId}");
+                return new DeleteProviderFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Failed };
+            }
+
             var updatedFavourites = existingFavourites.MapToWriteModel();
 
-            updatedFavourites.Remove(request.ApprenticeshipId,request.Ukprn);
 
-            await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId,updatedFavourites);
+            updatedFavourites.Remove(request.ApprenticeshipId, request.Ukprn);
 
+            await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, updatedFavourites);
             return new DeleteProviderFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Deleted };
+
+
         }
     }
 }

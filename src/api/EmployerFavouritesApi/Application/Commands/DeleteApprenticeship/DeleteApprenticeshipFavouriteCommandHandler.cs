@@ -46,14 +46,20 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
             if (hasExistingRecord == false)
             {
                 _logger.LogWarning($"No favourites exist for account {request.EmployerAccountId}");
-                return new DeleteApprenticeshipFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Failed};
+                return new DeleteApprenticeshipFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Failed };
+            }
+
+            if (!existingFavourites.Exists(request.ApprenticeshipId))
+            {
+                _logger.LogWarning($"requested Apprenticeship Id ({request.ApprenticeshipId}) doesnt exist for account {request.EmployerAccountId}");
+                return new DeleteApprenticeshipFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Failed };
             }
 
             var updatedFavourites = existingFavourites.MapToWriteModel();
 
             updatedFavourites.Remove(request.ApprenticeshipId);
 
-            await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId,updatedFavourites);
+            await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, updatedFavourites);
 
             return new DeleteApprenticeshipFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Deleted };
         }

@@ -13,16 +13,13 @@ namespace DfE.EmployerFavourites.Application.Queries
     {
         private readonly ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler> _logger;
         private readonly IFavouritesReadRepository _readRepository;
-        private readonly IAccountApiClient _accountApi;
 
         public ViewTrainingProviderForApprenticeshipFavouriteQueryHandler(
             ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler> logger,
-            IFavouritesReadRepository readRepository,
-            IAccountApiClient accountApiClient)
+            IFavouritesReadRepository readRepository)
         {
             _logger = logger;
             _readRepository = readRepository;
-            _accountApi = accountApiClient;
         }
 
         public async Task<ViewTrainingProviderForApprenticeshipFavouriteResponse> Handle(ViewTrainingProviderForApprenticeshipFavouriteQuery request, CancellationToken cancellationToken)
@@ -32,15 +29,22 @@ namespace DfE.EmployerFavourites.Application.Queries
             // Get favourites for account
             var favourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
-            var favourite = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
 
-            if (favourite == null)
-                throw new EntityNotFoundException($"Cannot find apprenticeship favourite for employer account: {{request.EmployerAccountId}} and apprenticeshipId: {request.ApprenticeshipId}");
+            var apprenticeship = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
+
+            if (apprenticeship == null)
+                throw new EntityNotFoundException($"Cannot find apprenticeship favourite for employer account: {{request.EmployerAccountId}} and apprenticeshipId: {{request.ApprenticeshipId}}");
+
+
+            var provider = apprenticeship.Providers.SingleOrDefault(w => w.Ukprn == request.Ukprn);
+
+            if (provider == null)
+                throw new EntityNotFoundException($"Cannot find Training Provider for employer account: {{request.EmployerAccountId}}, apprenticeshipId: {{request.ApprenticeshipId}} and UKPRN: {{request.Ukprn}}");
 
             // Build view model
             return new ViewTrainingProviderForApprenticeshipFavouriteResponse
             {
-                Favourite = favourite
+                Provider = provider
             };
         }
     }

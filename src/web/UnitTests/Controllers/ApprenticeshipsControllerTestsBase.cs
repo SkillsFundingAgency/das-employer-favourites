@@ -51,6 +51,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
             _mockAccountApiClient.Setup(x => x.GetAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetAccount());
+    
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
@@ -127,6 +128,10 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteBasketCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteBasketCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
             services.AddTransient<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>(x => Mock.Of<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>());
+            services.AddTransient<ILogger<DeleteApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<DeleteApprenticeshipFavouriteCommandHandler>>());
+            services.AddTransient<ILogger<DeleteApprenticeshipProviderFavouriteCommandHandler>>(x => Mock.Of<ILogger<DeleteApprenticeshipProviderFavouriteCommandHandler>>());
+            services.AddTransient<ILogger<ViewApprenticeshipFavouriteQuery>>(x => Mock.Of<ILogger<ViewApprenticeshipFavouriteQuery>>());
+
             var provider = services.BuildServiceProvider();
             return provider;
         }

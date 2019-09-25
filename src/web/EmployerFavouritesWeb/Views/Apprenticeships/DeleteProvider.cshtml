@@ -1,0 +1,56 @@
+﻿@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator employerSiteLinkGenerator
+@inject Microsoft.Extensions.Options.IOptions<CampaignsWebsite> campaignWebsiteOptions
+@model DfE.EmployerFavourites.Web.Controllers.DeleteTrainingProviderViewModel
+@{
+    Layout = "_Layout-Confirmation";
+}
+@section BodyHeader{
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <h1 class="govuk-heading-xl govuk-!-margin-top-3 govuk-!-margin-bottom-6">
+                Confirm removal of training provider
+            </h1>
+        </div>
+    </div>
+}
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Confirm removal of training provider</h1>
+        <h2 class="govuk-heading-l govuk-!-margin-bottom-2">@Model.Provider.ProviderName</h2>
+       
+        <form method="post">
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        <h1 class="govuk-fieldset__heading">
+                            Are you sure you wish to delete this training provider?
+                        </h1>
+                    </legend>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="changed-name" name="confirmDelete" type="radio" value="True">
+                            <label class="govuk-label govuk-radios__label" for="changed-name">
+                                Yes, remove @Model.Provider.ProviderName
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="changed-name-2" name="confirmDelete" type="radio" value="False">
+                            <label class="govuk-label govuk-radios__label" for="changed-name-2">
+                                No, keep the apprenticeship
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <input asp-for="ApprenticeshipId" type="hidden" />
+            <input asp-for="EmployerAccountId" type="hidden" />
+            <input asp-for="Ukprn" type="hidden" />
+
+            <button class="govuk-button">Save and continue</button>
+        </form>
+    </div>
+</div>

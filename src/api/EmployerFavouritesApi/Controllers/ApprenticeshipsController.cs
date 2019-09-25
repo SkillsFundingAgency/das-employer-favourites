@@ -139,7 +139,6 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [HttpGet]
         [Route("{employerAccountId}/{apprenticeshipId}")]
         public async Task<IActionResult> Delete(string employerAccountId, string apprenticeshipId)
         {
@@ -150,8 +149,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
              if (response.CommandResult == DomainUpdateStatus.Failed)
              {
-                 return NotFound();
-             }
+                 return StatusCode(500, ServerErrorMessage);
+                }
 
              return NoContent();
             }
@@ -162,7 +161,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error in get apprenticeship favourites");
+                _logger.LogError(e, "Error in delete apprenticeship favourites");
                 return StatusCode(500, ServerErrorMessage);
             }
         }
@@ -183,7 +182,6 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [HttpGet]
         [Route("{employerAccountId}/{apprenticeshipId}/{ukprn}")]
         public async Task<IActionResult> Delete(string employerAccountId, string apprenticeshipId, int ukprn)
         {
@@ -194,7 +192,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
                 if (response.CommandResult == DomainUpdateStatus.Failed)
                 {
-                    return NotFound();
+                    return StatusCode(500, ServerErrorMessage);
                 }
 
                 return NoContent();
@@ -206,7 +204,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Error in get apprenticeship favourites");
+                _logger.LogError(e, "Error in delete apprenticeship provider favourites");
                 return StatusCode(500, ServerErrorMessage);
             }
         }

@@ -92,7 +92,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 return BadRequest();
             }
 
-            var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
+            var response = await _mediator.Send(new ViewApprenticeshipFavouriteQuery
             {
                 EmployerAccountId = employerAccountId,
                 ApprenticeshipId = apprenticeshipId
@@ -106,10 +106,122 @@ namespace DfE.EmployerFavourites.Web.Controllers
             var model = new TrainingProvidersViewModel
             {
                 EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId,
                 Items = response.Favourite.Providers.Select(mapper.Map).ToList()
             };
 
             return await Task.FromResult(View(model));
+        }
+
+        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/delete")]
+        public async Task<IActionResult> Delete(string employerAccountId, string apprenticeshipId)
+        {
+            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
+                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
+            {
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
+                return BadRequest();
+            }
+
+            var response = await _mediator.Send(new ViewApprenticeshipFavouriteQuery
+            {
+                EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId
+            });
+
+
+            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
+
+            var model = new TrainingProvidersViewModel
+            {
+                EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId,
+                Apprenticeship = mapper.Map(response.Favourite),
+                Items = response.Favourite.Providers.Select(mapper.Map).ToList()
+            };
+
+            return View("Delete", model);
+        }
+
+        [HttpPost("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeletePost(string employerAccountId, string apprenticeshipId, bool confirmDelete)
+        {
+            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
+                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
+            {
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
+                return BadRequest();
+            }
+
+            if (confirmDelete)
+            {
+                await _mediator.Send(new DeleteApprenticeshipProviderFavouriteCommand()
+                    { ApprenticeshipId = apprenticeshipId, EmployerAccountId = employerAccountId });
+            }
+
+            return RedirectToAction("Index", new { employerAccountId });
+        }
+
+        [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/Provider/{ukprn}/delete")]
+        public async Task<IActionResult> DeleteProvider(string employerAccountId, string apprenticeshipId, int ukprn)
+        {
+            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
+                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId) || !_paramValidator.IsValidProviderUkprn(ukprn))
+            {
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
+                return BadRequest();
+            }
+
+            var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
+            {
+                EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId,
+                Ukprn = ukprn
+                
+            });
+
+            if (response.Provider == null)
+                throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
+
+            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
+
+            var model = new DeleteTrainingProviderViewModel
+            {
+                EmployerAccountId = employerAccountId,
+                ApprenticeshipId = apprenticeshipId,
+                Provider = mapper.Map(response.Provider),
+                Ukprn = ukprn
+            };
+
+
+            return View("DeleteProvider", model);
+        }
+
+        [HttpPost("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/Provider/{ukprn}/delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProviderPost(string employerAccountId, string apprenticeshipId, int ukprn, bool confirmDelete)
+        {
+            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
+                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId) ||
+                !_paramValidator.IsValidProviderUkprn(ukprn))
+            {
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId}), {nameof(ukprn)}({ukprn})");
+                return BadRequest();
+            }
+
+            if (confirmDelete)
+            {
+
+                await _mediator.Send(new DeleteApprenticeshipProviderFavouriteCommand()
+                {
+                    ApprenticeshipId = apprenticeshipId,
+                    EmployerAccountId = employerAccountId,
+                    Ukprn = ukprn
+                });
+            }
+
+            return RedirectToAction("TrainingProvider", new {apprenticeshipId, employerAccountId});
         }
     }
 }
