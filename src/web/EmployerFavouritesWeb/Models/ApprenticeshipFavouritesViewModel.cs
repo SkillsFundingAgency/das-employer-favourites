@@ -6,5 +6,7 @@ namespace DfE.EmployerFavourites.Web.Models
     {
         public IReadOnlyList<ApprenticeshipFavouriteViewModel> Items { get; set; }
         public IEnumerable<char> EmployerAccountId { get; set; }
+        public string ProgrammeUrl { get; set; }
+        public bool HasLegalEntity { get; set; }
     }
 }

@@ -48,6 +48,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
             _mockAccountApiClient.Setup(x => x.GetAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetAccount());
+            _mockAccountApiClient.Setup(x => x.GetLegalEntitiesConnectedToAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetLegalEntitiesConnectedToAccount());
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
             _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
@@ -100,6 +101,24 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             };
         }
 
+        private List<ResourceViewModel> GetLegalEntitiesConnectedToAccount()
+        {
+            return  new List<ResourceViewModel>()
+            {
+
+                new ResourceViewModel
+                {
+                    Id = "123456",
+                    Href = "/api/accounts/XXX123/legalentities/123456"
+                },
+                new ResourceViewModel
+                {
+                    Id = "123456",
+                    Href = "/api/accounts/XXX123/legalentities/123456"
+                }
+            };
+        }
+
         private void SetupUserInContext()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -123,6 +142,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
             services.AddTransient<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>(x => Mock.Of<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>());
+            services.AddTransient<ILogger<EmployerHasLegalEntityQueryHandler>>(x => Mock.Of<ILogger<EmployerHasLegalEntityQueryHandler>>());
             var provider = services.BuildServiceProvider();
             return provider;
         }

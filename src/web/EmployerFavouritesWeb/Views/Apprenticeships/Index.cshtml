@@ -114,10 +114,18 @@ else
                                         <span></span><span class="text">View Training Provider</span>
                                     </a>
                                 }
+                                @if (!Model.Items[i].HasTrainingProviders)
+                                {
+                                    <a id="recruit-without-provider"
+                                       href="@string.Format(Model.ProgrammeUrl,Model.EmployerAccountId,Model.Items[i].Id)"
+                                       class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content">
+                                        <span></span><span class="text">Recruit Apprentice</span>
+                                    </a>
+                                }
 
                                 @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
-                                    <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>
-                                    <div><a href="#" class="govuk-link app-task-list__training-provider-content">Recruit an apprentice</a></div> *@
+                                    <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
+                               
                             </div>
                         </div>
                     </li>

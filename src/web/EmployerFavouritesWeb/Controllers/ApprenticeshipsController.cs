@@ -23,12 +23,12 @@ namespace DfE.EmployerFavourites.Web.Controllers
         private readonly IMediator _mediator;
         private readonly ApprenticeshipsParameterValidator _paramValidator;
         private readonly ILogger<ApprenticeshipsController> _logger;
-
+  
         public ApprenticeshipsController(
             IOptions<ExternalLinks> externalLinks,
             IOptions<FatWebsite> fatConfig,
             IMediator mediator,
-            ILogger<ApprenticeshipsController> logger)
+            ILogger<ApprenticeshipsController> logger) 
         {
             _externalLinks = externalLinks.Value;
             _fatConfig = fatConfig.Value;
@@ -52,14 +52,21 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 EmployerAccountId = employerAccountId
             });
 
+            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
+            {
+                EmployerAccountId = employerAccountId
+            });
+
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
             var model = new ApprenticeshipFavouritesViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = response.EmployerFavourites.Select(mapper.Map).ToList()
+                Items = response.EmployerFavourites.Select(mapper.Map).ToList(),
+                ProgrammeUrl = _externalLinks.RecruitFromProgramme,
+                HasLegalEntity = employerHasLegalEntityResponse
             };
-
+            
             return View(model);
         }
 
@@ -97,6 +104,11 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 ApprenticeshipId = apprenticeshipId
             });
 
+            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
+            {
+                EmployerAccountId = employerAccountId
+            });
+
             if (response.Favourite.Providers.Count == 0)
                 throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
 
@@ -105,7 +117,10 @@ namespace DfE.EmployerFavourites.Web.Controllers
             var model = new TrainingProvidersViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = response.Favourite.Providers.Select(mapper.Map).ToList()
+                Items = response.Favourite.Providers.Select(mapper.Map).ToList(),
+                ProgrammeAndProviderUrl = _externalLinks.RecruitFromProgrammeAndProvider,
+                ApprenticeshipId = apprenticeshipId,
+                HasLegalEntity =  employerHasLegalEntityResponse
             };
 
             return await Task.FromResult(View(model));
