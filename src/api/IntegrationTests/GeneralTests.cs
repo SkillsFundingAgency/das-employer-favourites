@@ -87,6 +87,7 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
            
         }
+
         [Fact]
         public async Task Delete_ProviderReturnSuccessAndCorrectContentType()
         {
@@ -99,6 +100,7 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
+
         private HttpClient BuildClient()
         {
             return _factory.WithWebHostBuilder(builder =>

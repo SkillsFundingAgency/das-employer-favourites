@@ -41,7 +41,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Application.Commands
         [InlineData("   ")]
         public async Task Handle_WhenInvalidEmployerAccountId_ThenArgumentException(string employerAccountId)
         {
-            await Assert.ThrowsAsync<ArgumentException>(() => _sut.Handle(new DeleteApprenticeshipFavouriteCommand() { EmployerAccountId = employerAccountId }, default));
+            await Assert.ThrowsAsync<ArgumentException>(() => _sut.Handle(new DeleteApprenticeshipFavouriteCommand() { EmployerAccountId = employerAccountId , ApprenticeshipId = _apprenticeshipId}, default));
         }
 
         [Theory]
