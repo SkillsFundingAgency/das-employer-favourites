@@ -38,7 +38,7 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
                 throw new ArgumentException($"EmployerAccountId must be provided for {nameof(DeleteProviderFavouriteCommand)}");
             }
 
-            if (request.Ukprn <= 0)
+            if (request.Ukprn >= 999999999 || request.Ukprn <= 1000000  )
             {
                 throw new ArgumentException($"Valid Ukprn must be provided for {nameof(DeleteProviderFavouriteCommand)}");
             }

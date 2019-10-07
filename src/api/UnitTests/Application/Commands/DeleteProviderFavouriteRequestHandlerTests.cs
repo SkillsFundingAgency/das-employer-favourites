@@ -92,6 +92,8 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Application.Commands
         [Theory]
         [InlineData(0)]
         [InlineData(-1)]
+        [InlineData(999999)]
+        [InlineData(1000000000)]
         public async Task Handle_WhenInvalidUkprn_ThenArgumentException(int ukprn)
         {
             await Assert.ThrowsAsync<ArgumentException>(() => _sut.Handle(new DeleteProviderFavouriteCommand() { EmployerAccountId = _employerAccountId, ApprenticeshipId = _apprenticeshipId,Ukprn = ukprn}, default));
