@@ -131,8 +131,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
         /// <param name="employerAccountId">Hashed Employer Account Id</param>
         /// <param name="apprenticeshipId">Apprenticeship Id</param>
         /// <response code="204">Apprenticeship deleted from Employer Favourite </response>
-        /// <response code="404">No Employer favourites found for Employer account Id</response>
-        /// <response code="400">The Employer account id provided is invalid</response>  
+        /// <response code="404">No Employer favourites found for Employer account Id or apprenticeship does not exist in favourites</response>
+        /// <response code="400">The Employer account id or apprenticeship Id provided is invalid</response>  
         /// <response code="401">The client is not authorized to access this endpoint</response>   
         [HttpDelete]
         [ProducesResponseType(204)]
@@ -149,14 +149,14 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
                 if (response.CommandResult == DomainUpdateStatus.Failed)
                 {
-                    return StatusCode(500, ServerErrorMessage);
+                    return NotFound();
                 }
 
                 return NoContent();
             }
             catch (ArgumentException e)
             {
-                _logger.LogError(e, "Invalid arguments were provided for get apprenticeship favourites");
+                _logger.LogError(e, "Invalid arguments were provided for delete apprenticeship favourite");
                 return BadRequest();
             }
             catch (Exception e)
@@ -174,8 +174,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
         /// <param name="apprenticeshipId">Apprenticeship Id</param>
         /// <param name="ukprn">Ukprn</param>
         /// <response code="204">provider deleted from Employer apprenticeship Favourite </response>
-        /// <response code="404">No Employer favourites found for Employer account Id</response>
-        /// <response code="400">The Employer account id provided is invalid</response>  
+        /// <response code="404">No Employer favourites found for Employer account Id or apprenticeship/ukprn does not exist in favourites</response>
+        /// <response code="400">The Employer account id, apprenticeship Id or ukprn provided is invalid</response>  
         /// <response code="401">The client is not authorized to access this endpoint</response>   
         [HttpDelete]
         [ProducesResponseType(204)]
@@ -192,7 +192,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
                 if (response.CommandResult == DomainUpdateStatus.Failed)
                 {
-                    return StatusCode(500, ServerErrorMessage);
+                    return NotFound();
                 }
 
                 return NoContent();

@@ -52,7 +52,7 @@ namespace DfE.EmployerFavourites.Infrastructure
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unable to Save Apprenticeship Favourites to Api for Account: {employerAccountId}", employerAccountId);
+                _logger.LogError(ex, "Unable to Delete Apprenticeship Favourites to Api for Account: {employerAccountId} and apprenticeshipId:", employerAccountId,apprenticeshipId);
                 throw;
             }
         }

@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
@@ -168,7 +168,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
             if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
                 !_paramValidator.IsValidApprenticeshipId(apprenticeshipId) || !_paramValidator.IsValidProviderUkprn(ukprn))
             {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
+                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId}), {nameof(ukprn)}({ukprn})");
                 return BadRequest();
             }
 
@@ -181,7 +181,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
             });
 
             if (response.Provider == null)
-                throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
+                throw new EntityNotFoundException($"Provider exist for the given apprenticeship: {apprenticeshipId} and ukprn: {ukprn}");
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 

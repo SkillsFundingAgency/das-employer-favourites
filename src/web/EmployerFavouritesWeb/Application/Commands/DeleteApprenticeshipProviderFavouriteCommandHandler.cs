@@ -8,11 +8,11 @@ namespace DfE.EmployerFavourites.Application.Commands
 {
     public class DeleteApprenticeshipProviderFavouriteCommandHandler : IRequestHandler<DeleteApprenticeshipProviderFavouriteCommand>
     {
-        private readonly ILogger<SaveApprenticeshipFavouriteBasketCommandHandler> _logger;
+        private readonly ILogger<DeleteApprenticeshipProviderFavouriteCommandHandler> _logger;
         private readonly IFavouritesWriteRepository _writeRepository;
 
         public DeleteApprenticeshipProviderFavouriteCommandHandler(
-            ILogger<SaveApprenticeshipFavouriteBasketCommandHandler> logger,
+            ILogger<DeleteApprenticeshipProviderFavouriteCommandHandler> logger,
             IFavouritesReadRepository readRepository,
             IFavouritesWriteRepository writeRepository)
         {
@@ -25,7 +25,7 @@ namespace DfE.EmployerFavourites.Application.Commands
             _logger.LogInformation("Handling DeleteApprenticeshipProviderFavouriteCommand for Employer Account ID: {employerAccountId}, apprenticeship Id: {apprenticeshipId}, Ukprn:{ukprn}", request.EmployerAccountId,request.ApprenticeshipId,request.Ukprn);
 
             await _writeRepository.DeleteApprenticeshipProviderFavourites(request.EmployerAccountId, request.ApprenticeshipId,request.Ukprn);
-                _logger.LogDebug("Deleted favourite for Apprenticship Id: {basketId} and Ukprn: {ukprn} for Employer Id:{employerId}", request.ApprenticeshipId, request.Ukprn, request.EmployerAccountId);
+                _logger.LogDebug("Deleted provider favourite for Apprenticeship Id: {apprenticeshipId} and Ukprn: {ukprn} for Employer Id:{employerId}", request.ApprenticeshipId, request.Ukprn, request.EmployerAccountId);
            
             return Unit.Value;
         }

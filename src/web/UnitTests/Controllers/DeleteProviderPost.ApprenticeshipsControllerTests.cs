@@ -38,7 +38,6 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         }
 
         [Theory]
-        [InlineData(null)]
         [InlineData(0)]
         [InlineData(-1)]
         public async Task DeleteTrainingProviderPost_ReturnsBadRequest_ForInvalidUkprn(int ukprn)
