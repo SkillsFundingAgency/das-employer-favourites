@@ -10,7 +10,6 @@ using DfE.EmployerFavourites.Web.Models;
 using DfE.EmployerFavourites.Web.Validation;
 using EmployerFavouritesWeb.Security;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;

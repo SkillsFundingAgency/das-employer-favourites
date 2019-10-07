@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Api;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.IntegrationTests.Stubs;
 using DfE.EmployerFavourites.Api.Models;

@@ -1,17 +1,6 @@
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Web.Application.Exceptions;
-using DfE.EmployerFavourites.Web.Controllers;
-using DfE.EmployerFavourites.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
-using Sfa.Das.Sas.Shared.Basket.Interfaces;
-using Sfa.Das.Sas.Shared.Basket.Models;
 using Xunit;
-using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 {

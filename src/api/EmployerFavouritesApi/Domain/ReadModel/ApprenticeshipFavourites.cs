@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore.Query.Expressions;
 
 namespace DfE.EmployerFavourites.Api.Domain.ReadModel
 {

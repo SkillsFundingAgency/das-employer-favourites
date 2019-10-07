@@ -1,5 +1,4 @@
-﻿using DfE.EmployerFavourites.Api.Domain.WriteModel;
-using MediatR;
+﻿using MediatR;
 
 namespace DfE.EmployerFavourites.Api.Application.Commands
 {

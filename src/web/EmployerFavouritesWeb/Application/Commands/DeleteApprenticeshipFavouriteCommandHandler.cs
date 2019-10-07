@@ -1,12 +1,8 @@
-using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Sfa.Das.Sas.Shared.Basket.Interfaces;
-using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.Application.Commands
 {

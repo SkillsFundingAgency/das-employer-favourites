@@ -1,4 +1,3 @@
-using System;
 using MediatR;
 
 namespace DfE.EmployerFavourites.Application.Commands

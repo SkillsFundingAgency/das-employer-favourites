@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Application.Commands;
-using DfE.EmployerFavourites.Api.Application.Queries;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.Domain.WriteModel;
 using Microsoft.Extensions.Logging;

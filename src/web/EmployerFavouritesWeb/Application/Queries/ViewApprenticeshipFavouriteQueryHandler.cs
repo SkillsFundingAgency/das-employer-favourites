@@ -5,7 +5,6 @@ using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Web.Application.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.Application.Queries
 {
