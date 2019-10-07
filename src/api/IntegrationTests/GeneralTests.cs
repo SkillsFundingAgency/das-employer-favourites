@@ -84,7 +84,7 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             var response = await client.DeleteAsync("api/apprenticeships/XYZ123/123-1-2");
 
             // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
            
         }
         [Fact]
@@ -94,10 +94,10 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.DeleteAsync("api/apprenticeships/XYZ123/123-1-2/123456");
+            var response = await client.DeleteAsync("api/apprenticeships/XYZ123/123-1-2/12345678");
 
             // Assert
-            Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
         private HttpClient BuildClient()
         {

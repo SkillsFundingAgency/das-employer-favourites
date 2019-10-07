@@ -47,7 +47,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             try
             {
                 var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest
-                    {EmployerAccountId = employerAccountId});
+                { EmployerAccountId = employerAccountId });
 
                 if (apprenticeships.Count > 0)
                 {
@@ -97,7 +97,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 });
 
                 if (response.CommandResult == Domain.WriteModel.DomainUpdateStatus.Created)
-                    return CreatedAtAction("Get", new {employerAccountId}, string.Empty);
+                    return CreatedAtAction("Get", new { employerAccountId }, string.Empty);
 
                 return NoContent();
             }
@@ -107,7 +107,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 return StatusCode(500, ServerErrorMessage);
             }
         }
- 
+
         private ApprenticeshipFavourites MapToWriteModel(List<Favourite> favourites)
         {
             var writeModel = new ApprenticeshipFavourites();
@@ -118,7 +118,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             }
 
             var items = favourites.Select(x => new ApprenticeshipFavourite
-                {ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns});
+            { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns });
             writeModel.AddRange(items);
 
             return writeModel;
@@ -144,15 +144,15 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
-             var response =  await _mediator.Send(new DeleteApprenticeshipFavouriteCommand()
-                    {EmployerAccountId = employerAccountId, ApprenticeshipId = apprenticeshipId});
+                var response = await _mediator.Send(new DeleteApprenticeshipFavouriteCommand()
+                { EmployerAccountId = employerAccountId, ApprenticeshipId = apprenticeshipId });
 
-             if (response.CommandResult == DomainUpdateStatus.Failed)
-             {
-                 return StatusCode(500, ServerErrorMessage);
+                if (response.CommandResult == DomainUpdateStatus.Failed)
+                {
+                    return StatusCode(500, ServerErrorMessage);
                 }
 
-             return NoContent();
+                return NoContent();
             }
             catch (ArgumentException e)
             {
@@ -166,7 +166,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             }
         }
 
-        // DELETE api/Apprenticeships/ABC123/123-1-2
+        // DELETE api/Apprenticeships/ABC123/123-1-2/123456789
         /// <summary>
         /// deletes a provider from apprenticeship favourite of the Employer Account provided
         /// </summary>
@@ -188,7 +188,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             try
             {
                 var response = await _mediator.Send(new DeleteProviderFavouriteCommand()
-                    { EmployerAccountId = employerAccountId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn});
+                { EmployerAccountId = employerAccountId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
 
                 if (response.CommandResult == DomainUpdateStatus.Failed)
                 {
@@ -199,7 +199,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             }
             catch (ArgumentException e)
             {
-                _logger.LogError(e, "Invalid arguments were provided for get apprenticeship favourites");
+                _logger.LogError(e, "Invalid arguments were provided for delete apprenticeship provider favourites");
                 return BadRequest();
             }
             catch (Exception e)
