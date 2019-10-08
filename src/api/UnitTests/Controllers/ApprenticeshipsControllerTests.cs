@@ -80,7 +80,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
             };
 
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
-
+           
             Assert.IsAssignableFrom<NoContentResult>(result);
         }
 
@@ -95,6 +95,32 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
 
             _mockWriteRepository.Verify(x => x.SaveApprenticeshipFavourites(EmployerAccountIdExistingList, Matchers.ContainsOnly("60", 10000020)));
+        }
+
+        [Fact]
+        public async Task Put_ReturnsBadRequest_WhenAUkprnIsInvalid()
+        {
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "60" , Ukprns = new List<int>{ 111 } }
+            };
+
+            var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
+            
+            Assert.IsAssignableFrom<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task Put_ReturnsBadRequest_WhenAnApprenticeshipIdIsInvalid()
+        {
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "" , Ukprns = new List<int>{ 12345678 } }
+            };
+
+            var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
+
+            Assert.IsAssignableFrom<BadRequestObjectResult>(result);
         }
 
         private ServiceProvider BuildDependencies()

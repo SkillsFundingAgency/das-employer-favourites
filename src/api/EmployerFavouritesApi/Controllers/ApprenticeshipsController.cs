@@ -18,13 +18,12 @@ namespace DfE.EmployerFavourites.Api.Controllers
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
-    public partial class ApprenticeshipsController : ControllerBase
+    public class ApprenticeshipsController : ControllerBase
     {
         private const string ServerErrorMessage = "Internal Server Error";
         private readonly ILogger<ApprenticeshipsController> _logger;
         private readonly IMediator _mediator;
         private readonly ApprenticeshipsParameterValidator _paramValidator;
-        
         
         public ApprenticeshipsController(ILogger<ApprenticeshipsController> logger, IMediator mediator)
         {
@@ -108,12 +107,12 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 return NoContent();
             }
             catch (InvalidUkprnException ex)
-            {
-                return StatusCode(500, ex);
+            {       
+                return BadRequest(ex);              
             }
             catch (InvalidApprenticeshipIdException ex)
             {
-                return StatusCode(500, ex);
+                return BadRequest(ex);
             }
             catch (Exception ex)
             {
