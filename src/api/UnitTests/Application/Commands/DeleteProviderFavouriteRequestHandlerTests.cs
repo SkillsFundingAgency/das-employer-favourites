@@ -19,7 +19,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Application.Commands
         private readonly Mock<ILogger<DeleteProviderFavouriteCommandHandler>> _mockLogger;
         private readonly string _employerAccountId = "XXX123";
         private readonly string _apprenticeshipId = "123";
-        private readonly int _ukprn = 123456;
+        private readonly int _ukprn = 12345678;
         private ReadModel.ApprenticeshipFavourites _apprenticeFavourites;
 
         public DeleteProviderFavouriteCommandHandlerTests()
@@ -37,12 +37,12 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Application.Commands
                         new ReadModel.Provider()
                         {
                            Name = "Provider 1",
-                            Ukprn = 123456
+                            Ukprn = 12345678
                         },
                         new ReadModel.Provider()
                         {
                             Name = "Provider 2",
-                            Ukprn = 234567
+                            Ukprn = 23456789
                         }
                     }
                 },
@@ -53,12 +53,12 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Application.Commands
                         new ReadModel.Provider()
                         {
                             Name = "Provider 1",
-                            Ukprn = 123456
+                            Ukprn = 12345678
                         },
                         new ReadModel.Provider()
                         {
                             Name = "Provider 2",
-                            Ukprn = 234567
+                            Ukprn = 23456789
                         }
                     }
                 }
