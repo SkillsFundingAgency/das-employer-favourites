@@ -51,8 +51,8 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     },
                     new ResourceViewModel
                     {
-                        Id = "654321",
-                        Href = "/api/accounts/XXX321/legalentities/654321"
+                        Id = "123456",
+                        Href = "/api/accounts/XXX123/legalentities/123456"
                     }
                 } as ICollection<ResourceViewModel>);
             }

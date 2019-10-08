@@ -86,7 +86,7 @@
                         <div class="govuk-grid-column-one-third">
                             @if (Model.HasLegalEntity)
                             {
-                                <a href="@string.Format(Model.ProgrammeAndProviderUrl,Model.EmployerAccountId,Model.Items[i].Ukprn,Model.ApprenticeshipId)" class="govuk-button app-task-list__training-provider-content recruit-button">Recruit apprentice</a>
+                                <a href="@Model.Items[i].CreateVacancyUrl" class="govuk-button app-task-list__training-provider-content recruit-button">Recruit apprentice</a>
                             }
 
                             @*<a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>*@

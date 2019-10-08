@@ -25,6 +25,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         protected const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
         protected const string TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE = "https://fat-website/Apprenticeship/Apprenticeship/{0}/{1}";
         protected const string TEST_FAT_WEBSITE_PROVIDER_PAGE_TEMPLATE = "https://fat-website/Providers/{0}";
+        protected const string TEST_CREATE_VACANCY_URL = "https://recruit.at-eas.apprenticeships.education.gov.uk/accounts/{0}/employer-create-vacancy";
         protected const string EMPLOYER_ACCOUNT_ID = "XXX123";
         protected const string USER_ID = "User123";
         protected const string APPRENTICESHIPID = "123";
@@ -51,7 +52,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockAccountApiClient.Setup(x => x.GetLegalEntitiesConnectedToAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetLegalEntitiesConnectedToAccount());
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
-            _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
+            _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL, CreateVacancyUrl = TEST_CREATE_VACANCY_URL });
 
             _mockFatConfig = new Mock<IOptions<FatWebsite>>();
             _mockFatConfig.Setup(x => x.Value).Returns(new FatWebsite
@@ -105,7 +106,6 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         {
             return new List<ResourceViewModel>()
             {
-
                 new ResourceViewModel
                 {
                     Id = "123456",

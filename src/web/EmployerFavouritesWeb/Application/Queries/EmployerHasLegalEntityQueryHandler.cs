@@ -1,13 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.Application.Queries
 {
-
     public class EmployerHasLegalEntityQueryHandler : IRequestHandler<EmployerHasLegalEntityQuery, bool>
     {
         private readonly IAccountApiClient _accountApi;
@@ -21,6 +20,7 @@ namespace DfE.EmployerFavourites.Application.Queries
             _accountApi = accountApiClient;
             _logger = logger;
         }
+
         public async Task<bool> Handle(EmployerHasLegalEntityQuery request, CancellationToken cancellationToken)
         {
             try
@@ -31,7 +31,7 @@ namespace DfE.EmployerFavourites.Application.Queries
 
                 return LegalEntities.Count > 0;
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 _logger.LogWarning("No legal entities found for this account.", e);
                 

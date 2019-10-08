@@ -117,7 +117,7 @@ else
                                 @if (Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
                                 {
                                     <a id="recruit-without-provider"
-                                       href="@string.Format(Model.ProgrammeUrl,Model.EmployerAccountId,Model.Items[i].Id)"
+                                       href="@Model.Items[i].CreateVacancyUrl"
                                        class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-button">
                                         <span></span><span class="text">Recruit Apprentice</span>
                                     </a>

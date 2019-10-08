@@ -59,11 +59,16 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
+            var items = response.EmployerFavourites.Select(mapper.Map).ToList();
+
+            items.ForEach(apprenticeship =>
+            {
+                apprenticeship.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?ProgrammeId={ apprenticeship.Id }";
+            });
             var model = new ApprenticeshipFavouritesViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = response.EmployerFavourites.Select(mapper.Map).ToList(),
-                ProgrammeUrl = _externalLinks.RecruitFromProgramme,
+                Items = items,
                 HasLegalEntity = employerHasLegalEntityResponse
             };
             
@@ -114,11 +119,18 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
+            var items = response.Favourite.Providers.Select(mapper.Map).ToList();
+
+            items.ForEach(apprenticeshipProvider => {
+
+                apprenticeshipProvider.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?Ukprn={ apprenticeshipProvider.Ukprn }&ProgrammeId={ apprenticeshipId }";
+
+            });
+            
             var model = new TrainingProvidersViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = response.Favourite.Providers.Select(mapper.Map).ToList(),
-                ProgrammeAndProviderUrl = _externalLinks.RecruitFromProgrammeAndProvider,
+                Items = items,
                 ApprenticeshipId = apprenticeshipId,
                 HasLegalEntity =  employerHasLegalEntityResponse
             };
