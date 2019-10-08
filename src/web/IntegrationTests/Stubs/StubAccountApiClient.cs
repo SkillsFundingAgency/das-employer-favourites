@@ -40,7 +40,28 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
 
         public Task<ICollection<ResourceViewModel>> GetLegalEntitiesConnectedToAccount(string accountId)
         {
-            throw new NotImplementedException();
+            if (accountId == "ACCOUNT_WITH_LEGAL_ENTITIES")
+            {
+                return Task.FromResult(new List<ResourceViewModel>
+                {
+                    new ResourceViewModel
+                    {
+                        Id = "123456",
+                        Href = "/api/accounts/XXX123/legalentities/123456"
+                    },
+                    new ResourceViewModel
+                    {
+                        Id = "654321",
+                        Href = "/api/accounts/XXX321/legalentities/654321"
+                    }
+                } as ICollection<ResourceViewModel>);
+            }
+
+            return Task.FromResult(new List<ResourceViewModel>
+            {
+
+            } as ICollection<ResourceViewModel>);
+        
         }
 
         public Task<LegalEntityViewModel> GetLegalEntity(string accountId, long id)

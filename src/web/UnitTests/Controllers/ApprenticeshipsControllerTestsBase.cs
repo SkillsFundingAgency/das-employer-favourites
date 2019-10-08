@@ -103,7 +103,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
         private List<ResourceViewModel> GetLegalEntitiesConnectedToAccount()
         {
-            return  new List<ResourceViewModel>()
+            return new List<ResourceViewModel>()
             {
 
                 new ResourceViewModel

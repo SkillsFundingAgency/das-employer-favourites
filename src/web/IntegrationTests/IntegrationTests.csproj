@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <IsPackable>false</IsPackable>
@@ -6,16 +6,17 @@
     <AssemblyName>DfE.EmployerFavourites.IntegrationTests</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0"/>
-    <PackageReference Include="xunit" Version="2.4.0"/>
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0"/>
-    <PackageReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0"/>
-    <PackageReference Include="AngleSharp" Version="0.12.1"/>
-    <PackageReference Include="coverlet.msbuild" Version="2.6.3"/>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="2.2.0" />
+    <PackageReference Include="AngleSharp" Version="0.12.1" />
+    <PackageReference Include="coverlet.msbuild" Version="2.6.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj"/>
+    <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="appSettings.json">
@@ -29,6 +30,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tests\"/>
+    <Folder Include="Tests\" />
   </ItemGroup>
 </Project>
