@@ -4,8 +4,8 @@ namespace DfE.EmployerFavourites.Api.Validation
 {
     internal class ApprenticeshipsParameterValidator
     {
-        private Regex _frameworkRegex = new Regex(@"^\d{3}-\d{1,2}-\d{1,2}$");
-        private Regex _empAccRegEx = new Regex(@"^.{6,}$");
+        readonly Regex _frameworkRegex = new Regex(@"^\d{3}-\d{1,2}-\d{1,2}$");
+        readonly Regex _empAccRegEx = new Regex(@"^.{6,}$");
 
         internal bool IsValidApprenticeshipId(string id)
         {

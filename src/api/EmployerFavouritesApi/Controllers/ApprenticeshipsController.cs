@@ -6,7 +6,6 @@ using DfE.EmployerFavourites.Api.Application.Commands;
 using DfE.EmployerFavourites.Api.Application.Queries;
 using DfE.EmployerFavourites.Api.Domain.WriteModel;
 using DfE.EmployerFavourites.Api.Models;
-using DfE.EmployerFavourites.Api.Models.Exceptions;
 using DfE.EmployerFavourites.Api.Validation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -93,6 +92,11 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
+                if (!_paramValidator.IsValidEmployerAccountId(employerAccountId))
+                {
+                    throw new ArgumentException("Employer account id is invalid.");
+                }
+
                 favourites.ForEach(s => ValidateApprenticeship(s));
 
                 var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand
@@ -106,13 +110,9 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
                 return NoContent();
             }
-            catch (InvalidUkprnException ex)
+            catch (ArgumentException ex)
             {       
-                return BadRequest(ex);              
-            }
-            catch (InvalidApprenticeshipIdException ex)
-            {
-                return BadRequest(ex);
+                return BadRequest(ex.Message);              
             }
             catch (Exception ex)
             {
@@ -126,7 +126,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             if (!_paramValidator.IsValidApprenticeshipId(apprenticeship.ApprenticeshipId))
             {
-                throw new InvalidApprenticeshipIdException("An apprenticeship id is invalid");
+                _logger.LogError($"The appenticeship id {apprenticeship.ApprenticeshipId} is invalid");
+                throw new ArgumentException("An apprenticeship id is invalid");
             }
 
             apprenticeship.Ukprns.ToList().ForEach(f => ValidateProviders(f));
@@ -136,7 +137,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             if (!_paramValidator.IsValidProviderUkprn(Ukprn))
             {
-                throw new InvalidUkprnException("A ukprn is invalid");
+                _logger.LogError($"The Ukprn {Ukprn} is invalid");
+                throw new ArgumentException("A ukprn is invalid");
             }
 
             _logger.LogInformation($"Ukprn {Ukprn} is Valid.");
