@@ -52,11 +52,6 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 EmployerAccountId = employerAccountId
             });
 
-            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
-            {
-                EmployerAccountId = employerAccountId
-            });
-
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
             var items = response.EmployerFavourites.Select(mapper.Map).ToList();
@@ -65,11 +60,12 @@ namespace DfE.EmployerFavourites.Web.Controllers
             {
                 apprenticeship.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?ProgrammeId={ apprenticeship.Id }";
             });
+
             var model = new ApprenticeshipFavouritesViewModel
             {
                 EmployerAccountId = employerAccountId,
                 Items = items,
-                HasLegalEntity = employerHasLegalEntityResponse
+                HasLegalEntity = response.EmployerAccount.HasLegalEntities
             };
             
             return View(model);
@@ -109,11 +105,6 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 ApprenticeshipId = apprenticeshipId
             });
 
-            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
-            {
-                EmployerAccountId = employerAccountId
-            });
-
             if (response.Favourite.Providers.Count == 0)
                 throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
 
@@ -132,7 +123,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
                 EmployerAccountId = employerAccountId,
                 Items = items,
                 ApprenticeshipId = apprenticeshipId,
-                HasLegalEntity =  employerHasLegalEntityResponse
+                HasLegalEntity =  response.HasLegalEntities
             };
 
             return await Task.FromResult(View(model));
