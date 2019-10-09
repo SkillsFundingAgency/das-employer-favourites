@@ -35,7 +35,33 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             try
             {
-                await _retryPolicy.ExecuteAsync(context => _favouritesApi.PutAsync(employerAccountId, apprenticeshipFavourites), new Context(nameof(GetApprenticeshipFavourites)));
+                await _retryPolicy.ExecuteAsync(context => _favouritesApi.PutAsync(employerAccountId, apprenticeshipFavourites), new Context(nameof(SaveApprenticeshipFavourites)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unable to Save Apprenticeship Favourites to Api for Account: {employerAccountId}", employerAccountId);
+                throw;
+            }
+        }
+
+        public async Task DeleteApprenticeshipFavourites(string employerAccountId, string apprenticeshipId)
+        {
+            try
+            {
+                await _retryPolicy.ExecuteAsync(context => _favouritesApi.DeleteAsync(employerAccountId, apprenticeshipId), new Context(nameof(DeleteApprenticeshipFavourites)));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unable to Delete Apprenticeship Favourites to Api for Account: {employerAccountId} and apprenticeshipId:", employerAccountId,apprenticeshipId);
+                throw;
+            }
+        }
+
+        public async Task DeleteApprenticeshipProviderFavourites(string employerAccountId, string apprenticeshipId, int ukprn)
+        {
+            try
+            {
+                await _retryPolicy.ExecuteAsync(context => _favouritesApi.DeleteAsync(employerAccountId, apprenticeshipId,ukprn), new Context(nameof(DeleteApprenticeshipProviderFavourites)));
             }
             catch (Exception ex)
             {

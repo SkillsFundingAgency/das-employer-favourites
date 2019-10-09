@@ -34,6 +34,16 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
             return Task.CompletedTask;
         }
 
+        public Task DeleteApprenticeshipFavourites(string employerAccountId, string apprenticeshipId)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task DeleteApprenticeshipProviderFavourites(string employerAccountId, string apprenticeshipId, int ukprn)
+        {
+            return Task.CompletedTask;
+        }
+
         private ReadModel.ApprenticeshipFavourites GenerateEmpty()
         {
             return new ReadModel.ApprenticeshipFavourites();
