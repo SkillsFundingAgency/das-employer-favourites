@@ -6,6 +6,9 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient
 {
     public interface IFavouritesApi
     {
+        [Get("/health")]
+        Task GetHealthAsync();
+        
         [Get("/api/apprenticeships/{employerAccountId}")]
         Task<Domain.ReadModel.ApprenticeshipFavourites> GetAsync(string employerAccountId);
 
