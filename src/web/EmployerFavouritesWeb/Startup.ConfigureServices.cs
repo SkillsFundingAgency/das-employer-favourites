@@ -45,6 +45,8 @@ namespace DfE.EmployerFavourites.Web
 
             services.AddMediatR(typeof(Startup).Assembly);
 
+            services.AddHealthChecks();
+
             services.AddEmployerUrlHelper(Configuration);
 
             services.Configure<CookiePolicyOptions>(options =>

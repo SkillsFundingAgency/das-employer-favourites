@@ -4,6 +4,7 @@ using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Helpers;
 using DfE.EmployerFavourites.Web.Security;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -95,6 +96,11 @@ namespace DfE.EmployerFavourites.Web
 
             app.UseAuthentication();
 
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
