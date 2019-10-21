@@ -98,16 +98,20 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var response = await client.GetAsync($"accounts/{accountId}/apprenticeships/");
             var content = await HtmlHelpers.GetDocumentAsync(response);
 
-            var recruitButtonElement = content.QuerySelector(".recruit-button");
-
+            var recruitButtonElements = content.QuerySelectorAll(".recruit-button");
+            var recruitLinkElements = content.QuerySelectorAll(".recruit-link");
+           
             if (accountId == "ACCOUNT_WITH_LEGAL_ENTITIES")
             {
-                Assert.NotNull(recruitButtonElement);
+                // Test returns 3 apprenticeships: 1 with no providers, 2 with Providers
+                Assert.Equal(1, recruitButtonElements.Count());
+                Assert.Equal(2, recruitLinkElements.Count());
             }
 
             if (accountId == "ACCOUNT_WITHOUT_LEGAL_ENTITIES")
             {
-                Assert.Null(recruitButtonElement);
+                Assert.Empty(recruitButtonElements);
+                Assert.Empty(recruitLinkElements);
             }
 
         }
