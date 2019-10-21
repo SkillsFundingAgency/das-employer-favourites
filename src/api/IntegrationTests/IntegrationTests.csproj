@@ -4,7 +4,6 @@
     <IsPackable>false</IsPackable>
     <RootNamespace>DfE.EmployerFavourites.Api.IntegrationTests</RootNamespace>
     <AssemblyName>DfE.EmployerFavourites.IntegrationTests</AssemblyName>
-    <UserSecretsId>e4b53c92-d5f5-45a6-9912-353d3945751a</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
