@@ -156,7 +156,8 @@ namespace DfE.EmployerFavourites.Web.Controllers
             if (confirmDelete)
             {
                 await _mediator.Send(new DeleteApprenticeshipFavouriteCommand()
-                    { ApprenticeshipId = apprenticeshipId, EmployerAccountId = employerAccountId });
+
+                { ApprenticeshipId = apprenticeshipId, EmployerAccountId = employerAccountId });
             }
 
             return RedirectToAction("Index", new { employerAccountId });

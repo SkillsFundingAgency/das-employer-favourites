@@ -69,6 +69,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
             _mockFavouritesWriteRepository.Verify(v => v.DeleteApprenticeshipProviderFavourites(It.IsAny<string>(), It.IsAny<string>(),It.IsAny<int>()), Times.AtLeast(1));
         }
+        
         [Fact]
         public async Task DeleteTrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
         {
