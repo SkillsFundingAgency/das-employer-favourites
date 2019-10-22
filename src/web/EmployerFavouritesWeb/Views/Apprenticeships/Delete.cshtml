@@ -10,15 +10,21 @@
         <h1 class="govuk-heading-xl">Confirm removal of apprenticeship</h1>
         <h2 class="govuk-heading-l govuk-!-margin-bottom-2">@Model.Apprenticeship.Title</h2>
         <p class="govuk-!-font-size-24 govuk-!-margin-top-2"> <span class="das-badge das-badge--blue">@Model.Items.Count</span> <span class="das-text--muted">Training providers</span></p>
-        <div class="govuk-inset-text">
-            <p class="govuk-!-font-weight-bold">Removing this Apprenticeship will also remove the following training providers from your favourites</p>
-            <ol class="govuk-list govuk-list--number">
-                @foreach (var provider in Model.Items)
-                {
-                <li>@provider.ProviderName</li>
-                }
-            </ol>
-        </div>
+        @{
+            if (Model.Items.Count > 0)
+            {
+                <div class="govuk-inset-text">
+                    <p class="govuk-!-font-weight-bold">Removing this Apprenticeship will also remove the following training providers from your favourites</p>
+                    <ol class="govuk-list govuk-list--number">
+                        @foreach (var provider in Model.Items)
+                        {
+                            <li>@provider.ProviderName</li>
+                        }
+                    </ol>
+                </div>
+            }
+        }
+
         <form method="post">
             <div class="govuk-form-group">
                 <fieldset class="govuk-fieldset">
@@ -43,9 +49,9 @@
                     </div>
                 </fieldset>
             </div>
-            
-            <input asp-for="ApprenticeshipId" type="hidden"/>
-            <input asp-for="EmployerAccountId" type="hidden"/>
+
+            <input asp-for="ApprenticeshipId" type="hidden" />
+            <input asp-for="EmployerAccountId" type="hidden" />
 
             <button class="govuk-button">Save and continue</button>
         </form>
