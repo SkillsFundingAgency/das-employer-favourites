@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Xunit;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
@@ -51,6 +52,15 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             Assert.Equal(EMPLOYER_ACCOUNT_ID, redirectResult.RouteValues["employerAccountId"]);
         }
 
+        [Fact]
+        public async Task DeletePost_CallsDeleteApprenticeshipEndpoint()
+        {
+            string expectedAction = "Index";
+
+            var result = await Sut.DeletePost(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, true);
+
+           _mockFavouritesWriteRepository.Verify(v => v.DeleteApprenticeshipFavourites(It.IsAny<string>(),It.IsAny<string>()),Times.AtLeast(1));
+        }
 
         [Fact]
         public async Task DeletePost_WithFalseConfirmation_ReturnsRedirectToActionResult()

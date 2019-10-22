@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using DfE.EmployerFavourites.Web.Application.Exceptions;
 using DfE.EmployerFavourites.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Xunit;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
@@ -59,6 +60,15 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             Assert.IsAssignableFrom<DeleteTrainingProviderViewModel>(viewResult.ViewData.Model);
         }
 
+        [Fact]
+        public async Task DeleteTrainingProvider_CallsDeleteApprenticeshipProviderEndpoint()
+        {
+            string expectedAction = "Index";
+
+            var result = await Sut.DeleteProviderPost(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID, UKPRN,true);
+
+            _mockFavouritesWriteRepository.Verify(v => v.DeleteApprenticeshipProviderFavourites(It.IsAny<string>(), It.IsAny<string>(),It.IsAny<int>()), Times.AtLeast(1));
+        }
         [Fact]
         public async Task DeleteTrainingProvider_ThrowsException_WhenApprenticeshipNotInFavourites()
         {
