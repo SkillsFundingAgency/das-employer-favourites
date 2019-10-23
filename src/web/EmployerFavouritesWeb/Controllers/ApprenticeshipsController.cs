@@ -98,7 +98,12 @@ namespace DfE.EmployerFavourites.Web.Controllers
             });
 
             if (response.Favourite.Providers.Count == 0)
-                throw new EntityNotFoundException($"No providers exist for the given apprenticeship: {apprenticeshipId}");
+            {
+                _logger.LogWarning(($"No providers exist for the given apprenticeship: {apprenticeshipId}, redirecting to apprenticeship favourites"));
+
+                return RedirectToAction("Index", new{employerAccountId});
+            }
+                
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
