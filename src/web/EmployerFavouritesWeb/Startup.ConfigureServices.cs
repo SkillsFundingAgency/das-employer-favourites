@@ -46,7 +46,8 @@ namespace DfE.EmployerFavourites.Web
             services.AddMediatR(typeof(Startup).Assembly);
 
             services.AddHealthChecks()
-                .AddCheck<FavouritesApiHealthCheck>("favourites-api-check");
+                .AddCheck<FavouritesApiHealthCheck>("favourites-api-check")
+                .AddCheck<FatApiHealthCheck>("fat-api-check");
 
             services.AddEmployerUrlHelper(Configuration);
 
