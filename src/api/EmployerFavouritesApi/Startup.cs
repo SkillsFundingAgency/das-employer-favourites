@@ -110,7 +110,6 @@ namespace DfE.EmployerFavourites.Api
 
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
-                Predicate = _ => true,
                 ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
             });
 

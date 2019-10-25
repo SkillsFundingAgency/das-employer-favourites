@@ -98,7 +98,6 @@ namespace DfE.EmployerFavourites.Web
 
             app.UseHealthChecks("/health", new HealthCheckOptions
             {
-                Predicate = _ => true,
                 ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
             });
             app.UseStaticFiles();
