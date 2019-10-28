@@ -20,13 +20,13 @@ namespace DfE.EmployerFavourites.Web.Controllers
         
         [Route("error/{id?}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(int id)
+        public IActionResult Error(int? id = 500)
         {
-            Response.StatusCode = id;
+            Response.StatusCode = id.Value;
 
             LogException();
 
-            return View(GetViewNameForStatus(Response.StatusCode), new ErrorViewModel { StatusCode = id, RequestId = HttpContext.TraceIdentifier });
+            return View(GetViewNameForStatus(Response.StatusCode), new ErrorViewModel { StatusCode = id.Value, RequestId = HttpContext.TraceIdentifier });
         }
 
         private void LogException()
