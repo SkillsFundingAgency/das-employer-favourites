@@ -46,6 +46,7 @@ namespace DfE.EmployerFavourites.Web
             services.AddMediatR(typeof(Startup).Assembly);
 
             services.AddHealthChecks()
+                .AddRedis(Configuration.GetValue<string>("BasketConfig:BasketRedisConnectionString"), "basket-redis-check")
                 .AddCheck<FavouritesApiHealthCheck>("favourites-api-check")
                 .AddCheck<FatApiHealthCheck>("fat-api-check");
 
