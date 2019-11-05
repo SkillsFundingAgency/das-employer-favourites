@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DfE.EmployerFavourites.Web.Models;
 using Newtonsoft.Json;
 
 namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
@@ -25,5 +27,8 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
 
         [JsonProperty("LearnerSatisfaction")]
         public double LearnerSatisfaction { get; set; }
+
+        [JsonProperty("Locations")]
+        public List<LocationViewModel> Locations { get; set; }
     }
 }

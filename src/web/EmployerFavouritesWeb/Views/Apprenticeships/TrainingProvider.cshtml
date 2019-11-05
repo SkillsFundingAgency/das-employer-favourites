@@ -42,9 +42,14 @@
                             </h2>
 
                             <dl class="govuk-list govuk-!-margin-top-0">
-                                <dt class="app-training-provider__details-title">Phone:</dt>
-                                <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].Phone</dd>
-                                <dt class="app-training-provider__details-title">Email:</dt>
+                                <dt class="app-training-provider__details-title">Website:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].Website</dd>
+                                <dt class="app-training-provider__details-title">Employer Satisfaction:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].EmployerSatisfaction</dd>
+                                <dt class="app-training-provider__details-title">Learner Satisfaction:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].LearnerSatisfaction</dd>
+
+                                @*<dt class="app-training-provider__details-title">Email:</dt>
                                 <dd class="app-training-provider__details-definition fav-tp-email">
                                     @if (@Model.Items[i].Email == "no data available")
                                     {
@@ -54,32 +59,61 @@
                                     {
                                         <a href="mailto:@Model.Items[i].Email">@Model.Items[i].Email</a>
                                     }
-                                </dd>
+                                </dd>*@
                             </dl>
                             <details class="govuk-details">
                                 <summary class="govuk-details__summary">
                                     <span class="govuk-details__summary-text">
-                                        Training provider details
+
+                                        @if (Model.Items[i].Locations.Count == 1)
+                                        {
+                                            <span>( 1 ) Saved location - view contact details</span>
+                                        } else
+                                        {
+                                            <span> <span>( @Model.Items[i].Locations.Count ) Saved locations - view contact details</span> </span>
+                                        }
                                     </span>
                                 </summary>
                                 <div class="govuk-details__text">
-                                    <dl class="govuk-list">
-                                        <dt class="app-training-provider__details-title">Website:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-website">
-                                            @if (@Model.Items[i].Website == "no data available")
+                                    <table class="govuk-table">
+                                        <thead class="govuk-table__head">
+                                            <tr class="govuk-table__row">
+                                                <th scope="col" class="govuk-table__header">Address</th>
+                                                <th scope="col" class="govuk-table__header">Phone Number</th>
+                                                <th scope="col" class="govuk-table__header">Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="govuk-table__body">
+                                            @for (int j = 0; j < Model.Items[i].Locations.Count; j++)
                                             {
-                                                <span>no data available</span>
+                                                <tr class="govuk-table__row">
+                                                    <td scope="row" class="govuk-table__cell">@Model.Items[i].Locations[j].Address</td>
+                                                    <td scope="row" class="govuk-table__cell">@Model.Items[i].Locations[j].PhoneNumber</td>
+                                                    <td scope="row" class="govuk-table__cell">@Model.Items[i].Locations[j].Email</td>
+                                                </tr>
                                             }
-                                            else
-                                            {
-                                                <a href="@Model.Items[i].Website" target="_blank" rel="external">@Model.Items[i].Website</a>
-                                            }
-                                        </dd>
-                                        <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
-                                        <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-learner-satisfaction">@Model.Items[i].LearnerSatisfaction</dd>
-                                    </dl>
+                                                
+
+                                            </tbody>
+                                    </table>
+                                    
+                                    @*<dl class="govuk-list">
+            <dt class="app-training-provider__details-title">Website:</dt>
+            <dd class="app-training-provider__details-definition fav-tp-website">
+                @if (@Model.Items[i].Website == "no data available")
+                {
+                    <span>no data available</span>
+                }
+                else
+                {
+                    <a href="@Model.Items[i].Website" target="_blank" rel="external">@Model.Items[i].Website</a>
+                }
+            </dd>
+            <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
+            <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
+            <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
+            <dd class="app-training-provider__details-definition fav-tp-learner-satisfaction">@Model.Items[i].LearnerSatisfaction</dd>
+        </dl>*@
                                 </div>
                             </details>
                         </div>

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.Web.Models
 {
@@ -12,5 +13,6 @@ namespace DfE.EmployerFavourites.Web.Models
         public string LearnerSatisfaction { get; set; }
         public int Ukprn { get; set; }
         public Uri FatUrl { get; set; }
+        public List<LocationViewModel> Locations { get; set; } 
     }
 }

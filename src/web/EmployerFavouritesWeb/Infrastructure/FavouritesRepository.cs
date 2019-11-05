@@ -95,6 +95,7 @@ namespace DfE.EmployerFavourites.Infrastructure
                     provider.Website = item.Website;
                     provider.EmployerSatisfaction = item.EmployerSatisfaction;
                     provider.LearnerSatisfaction = item.LearnerSatisfaction;
+                    provider.Locations = item.Locations;
                 }
             }
         }

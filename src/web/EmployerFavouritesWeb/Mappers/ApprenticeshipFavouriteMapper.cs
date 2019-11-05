@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Helpers;
 using DfE.EmployerFavourites.Web.Models;
@@ -33,6 +34,12 @@ namespace DfE.EmployerFavourites.Web.Mappers
         public TrainingProviderViewModel Map(Domain.ReadModel.Provider src)
         {
             const string NO_DATA_AVAILABLE_MSG = "no data available";
+           
+            List<LocationViewModel> locations = new List<LocationViewModel>();
+            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
+            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
+            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
+            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
 
             return new TrainingProviderViewModel
             {
@@ -41,6 +48,8 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
                 Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
                 Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
+                Locations = locations,
+                //Locations = src.Locations,
 
                 // This below logic for Satisfaction values is copied from FAT website for Provider Details
                 // This however calls the FAT API which always returns 0 even if the data doesn't actually exist

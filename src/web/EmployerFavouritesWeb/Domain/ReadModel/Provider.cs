@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DfE.EmployerFavourites.Web.Models;
 
 namespace DfE.EmployerFavourites.Domain.ReadModel
 {
@@ -11,5 +13,6 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
         public Uri Website { get; set; }
         public double EmployerSatisfaction { get; set; }
         public double LearnerSatisfaction { get; set; }
+        public List<LocationViewModel> Locations { get; set; }
     }
 }
