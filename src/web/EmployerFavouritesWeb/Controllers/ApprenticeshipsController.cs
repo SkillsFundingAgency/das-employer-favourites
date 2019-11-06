@@ -23,12 +23,12 @@ namespace DfE.EmployerFavourites.Web.Controllers
         private readonly IMediator _mediator;
         private readonly ApprenticeshipsParameterValidator _paramValidator;
         private readonly ILogger<ApprenticeshipsController> _logger;
-
+  
         public ApprenticeshipsController(
             IOptions<ExternalLinks> externalLinks,
             IOptions<FatWebsite> fatConfig,
             IMediator mediator,
-            ILogger<ApprenticeshipsController> logger)
+            ILogger<ApprenticeshipsController> logger) 
         {
             _externalLinks = externalLinks.Value;
             _fatConfig = fatConfig.Value;
@@ -54,12 +54,20 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
+            var items = response.EmployerFavourites.Select(mapper.Map).ToList();
+
+            items.ForEach(apprenticeship =>
+            {
+                apprenticeship.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?ProgrammeId={ apprenticeship.Id }";
+            });
+
             var model = new ApprenticeshipFavouritesViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = response.EmployerFavourites.Select(mapper.Map).ToList()
+                Items = items,
+                HasLegalEntity = response.EmployerAccount.HasLegalEntities
             };
-
+            
             return View(model);
         }
 
@@ -102,10 +110,20 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
 
+            var items = response.Favourite.Providers.Select(mapper.Map).ToList();
+
+            items.ForEach(apprenticeshipProvider => {
+
+                apprenticeshipProvider.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?Ukprn={ apprenticeshipProvider.Ukprn }&ProgrammeId={ apprenticeshipId }";
+
+            });
+            
             var model = new TrainingProvidersViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = response.Favourite.Providers.Select(mapper.Map).ToList()
+                Items = items,
+                ApprenticeshipId = apprenticeshipId,
+                HasLegalEntity =  response.HasLegalEntities
             };
 
             return await Task.FromResult(View(model));

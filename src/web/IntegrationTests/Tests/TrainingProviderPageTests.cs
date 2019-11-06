@@ -64,5 +64,29 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             Assert.Equal("86%", providerEmployerSatisfactionElement.TextContent); // Employer Satisfaction
             Assert.Equal("98%", providerLearnerSatisfactionElement.TextContent); // Learner Satisfaction
         }
+
+        [Theory]
+        [InlineData("ACCOUNT_WITH_LEGAL_ENTITIES")]
+        [InlineData("ACCOUNT_WITHOUT_LEGAL_ENTITIES")]
+        public async Task TrainingProvider_CorrectlyDisplaysRecruitButton(string accountId)
+        {
+            var client = BuildClient();
+            
+            var response = await client.GetAsync($"accounts/{accountId}/apprenticeships/123/providers");
+            var content = await HtmlHelpers.GetDocumentAsync(response);
+
+            var recruitButtonElement = content.QuerySelector(".recruit-button");
+
+            if (accountId == "ACCOUNT_WITH_LEGAL_ENTITIES")
+            {
+                Assert.NotNull(recruitButtonElement);
+            }
+
+            if (accountId == "ACCOUNT_WITHOUT_LEGAL_ENTITIES")
+            {
+                Assert.Null(recruitButtonElement);   
+            }
+
+        }
     }
 }

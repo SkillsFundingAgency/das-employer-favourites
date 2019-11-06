@@ -12,5 +12,6 @@ namespace DfE.EmployerFavourites.Web.Models
         public string LearnerSatisfaction { get; set; }
         public int Ukprn { get; set; }
         public Uri FatUrl { get; set; }
+        public string CreateVacancyUrl { get; set; }
     }
 }

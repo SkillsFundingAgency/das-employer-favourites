@@ -87,5 +87,33 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             Assert.Null(secondProviderButton);
             Assert.Equal("/accounts/ABC123/apprenticeships/123/providers", firstProviderButton.Attributes["href"].Value);
         }
+
+        [Theory]
+        [InlineData("ACCOUNT_WITH_LEGAL_ENTITIES")]
+        [InlineData("ACCOUNT_WITHOUT_LEGAL_ENTITIES")]
+        public async Task TrainingProvider_CorrectlyDisplaysRecruitButton(string accountId)
+        {
+            var client = BuildClient();
+
+            var response = await client.GetAsync($"accounts/{accountId}/apprenticeships/");
+            var content = await HtmlHelpers.GetDocumentAsync(response);
+
+            var recruitButtonElements = content.QuerySelectorAll(".recruit-button");
+            var recruitLinkElements = content.QuerySelectorAll(".recruit-link");
+           
+            if (accountId == "ACCOUNT_WITH_LEGAL_ENTITIES")
+            {
+                // Test returns 3 apprenticeships: 1 with no providers, 2 with Providers
+                Assert.Equal(1, recruitButtonElements.Count());
+                Assert.Equal(2, recruitLinkElements.Count());
+            }
+
+            if (accountId == "ACCOUNT_WITHOUT_LEGAL_ENTITIES")
+            {
+                Assert.Empty(recruitButtonElements);
+                Assert.Empty(recruitLinkElements);
+            }
+
+        }
     }
 }

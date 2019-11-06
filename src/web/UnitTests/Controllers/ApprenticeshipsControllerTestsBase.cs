@@ -25,6 +25,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         protected const string TEST_MA_ACCOUNT_DASHBOARD_URL = "https://ma-accounts-home.com/{0}/teams";
         protected const string TEST_FAT_WEBSITE_APPRENTICESHIP_PAGE_TEMPLATE = "https://fat-website/Apprenticeship/Apprenticeship/{0}/{1}";
         protected const string TEST_FAT_WEBSITE_PROVIDER_PAGE_TEMPLATE = "https://fat-website/Providers/{0}";
+        protected const string TEST_CREATE_VACANCY_URL = "https://recruit.at-eas.apprenticeships.education.gov.uk/accounts/{0}/employer-create-vacancy";
         protected const string EMPLOYER_ACCOUNT_ID = "XXX123";
         protected const string USER_ID = "User123";
         protected const string APPRENTICESHIPID = "123";
@@ -48,9 +49,10 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
             _mockAccountApiClient.Setup(x => x.GetAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetAccount());
+            _mockAccountApiClient.Setup(x => x.GetLegalEntitiesConnectedToAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetLegalEntitiesConnectedToAccount());
 
             _mockConfig = new Mock<IOptions<ExternalLinks>>();
-            _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL });
+            _mockConfig.Setup(x => x.Value).Returns(new ExternalLinks { AccountsDashboardPage = TEST_MA_ACCOUNT_DASHBOARD_URL, CreateVacancyUrl = TEST_CREATE_VACANCY_URL });
 
             _mockFatConfig = new Mock<IOptions<FatWebsite>>();
             _mockFatConfig.Setup(x => x.Value).Returns(new FatWebsite
@@ -100,6 +102,23 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             };
         }
 
+        private List<ResourceViewModel> GetLegalEntitiesConnectedToAccount()
+        {
+            return new List<ResourceViewModel>()
+            {
+                new ResourceViewModel
+                {
+                    Id = "123456",
+                    Href = "/api/accounts/XXX123/legalentities/123456"
+                },
+                new ResourceViewModel
+                {
+                    Id = "123456",
+                    Href = "/api/accounts/XXX123/legalentities/123456"
+                }
+            };
+        }
+
         private void SetupUserInContext()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -123,6 +142,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
             services.AddTransient<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>(x => Mock.Of<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>());
+            services.AddTransient<ILogger<EmployerHasLegalEntityQueryHandler>>(x => Mock.Of<ILogger<EmployerHasLegalEntityQueryHandler>>());
             var provider = services.BuildServiceProvider();
             return provider;
         }
