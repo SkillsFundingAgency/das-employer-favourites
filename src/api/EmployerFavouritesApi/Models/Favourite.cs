@@ -6,10 +6,10 @@ namespace DfE.EmployerFavourites.Api.Models
     {
         public Favourite()
         {
-            Ukprns = new List<int>();
+            Ukprns = new List<ProviderData>();
         }
 
         public string ApprenticeshipId { get; set; }
-        public IList<int> Ukprns { get; set; }
+        public IList<ProviderData> Ukprns { get; set; }
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Infrastructure.Interfaces;
+using DfE.EmployerFavourites.Api.Models;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
@@ -61,6 +63,28 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                 return $"Unknown Provider ({ukprn})";
             }
         }
+        public async Task<List<LocationData>> GetLocationInformation(List<int> locationIds)
+        {
+            if (locationIds != null)
+            {
+                var location = new LocationData();
+
+                location.LocationId = 1234;
+                location.LocationAddress = "Quinton Road, Cheylsmore";
+                location.LocationEmail = "dfe@dfe.go.uk";
+                location.LocationPhone = "02476 956043";
+                location.LocationPostcode = "CV1 2DF";
+
+                List<LocationData> locations = new List<LocationData>();
+
+                foreach (var id in locationIds)
+                {
+                    locations.Add(location);
+                }
+                return locations;
+            }
+            return null;
+        }
 
         private bool IsStandard(string apprenticeshipId)
         {
@@ -81,5 +105,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                         _logger.LogWarning($"Error calling Fat Api for - {context.OperationKey} Reason: {exception.Message}. Retrying in {timeSpan.Seconds} secs...attempt: {retryCount}");
                     });
         }
+
+        
     }
 }

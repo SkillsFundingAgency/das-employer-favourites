@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
+using System.Collections.Generic;
+using DfE.EmployerFavourites.Api.Models;
 
 namespace DfE.EmployerFavourites.Api.Infrastructure
 {
@@ -95,9 +97,10 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                 Title = await _fatRepository.GetApprenticeshipNameAsync(src.ApprenticeshipId),
                 Providers = await Task.WhenAll(src.Ukprns?.Select(async x => new Domain.ReadModel.Provider
                 {
-                    Ukprn = x,
-                    Name = await _fatRepository.GetProviderNameAsync(x)
-
+                    Ukprn = x.Ukprn,
+                    Name = await _fatRepository.GetProviderNameAsync(x.Ukprn),
+                    LocationIds = x.LocationIds,
+                    Locations = await _fatRepository.GetLocationInformation(x.LocationIds)
                 }))
             };
         }
