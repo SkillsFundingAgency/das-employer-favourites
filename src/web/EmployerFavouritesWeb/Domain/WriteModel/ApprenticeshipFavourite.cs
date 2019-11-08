@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.Domain.WriteModel
@@ -13,6 +12,12 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
         public ApprenticeshipFavourite(string apprenticeshipId) : this()
         {
             ApprenticeshipId = apprenticeshipId;
+        }
+
+        public ApprenticeshipFavourite(string apprenticeshipId, IList<int> ukprns) : this(apprenticeshipId)
+        {
+            if (ukprns != null)
+                Ukprns = ukprns;
         }
 
         public ApprenticeshipFavourite(string apprenticeshipId, int ukprn) : this(apprenticeshipId)

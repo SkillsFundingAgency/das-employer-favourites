@@ -19,5 +19,15 @@ namespace DfE.EmployerFavourites.Api.Domain.ReadModel
 
             return model;
         }
+
+        public bool Exists(string apprenticeshipId)
+        {
+           return this.Any(e => e.ApprenticeshipId == apprenticeshipId);
+        }
+
+        public bool Exists(string apprenticeshipId, int ukprn)
+        {
+            return this.Any(s => s.ApprenticeshipId == apprenticeshipId && s.Providers.Any(a => a.Ukprn == ukprn));
+        }
     }
 }
