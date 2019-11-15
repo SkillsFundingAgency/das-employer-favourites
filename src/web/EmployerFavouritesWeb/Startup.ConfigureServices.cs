@@ -20,8 +20,8 @@ using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
 using System;
 using Refit;
 using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
-using SFA.DAS.EmployerUrlHelper;
 using SFA.DAS.EmployerUrlHelper.DependencyResolution;
+using DfE.EmployerFavourites.Infrastructure.HealthChecks;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -44,6 +44,11 @@ namespace DfE.EmployerFavourites.Web
             services.AddApplicationInsightsTelemetry();
 
             services.AddMediatR(typeof(Startup).Assembly);
+
+            services.AddHealthChecks()
+                .AddRedis(Configuration.GetValue<string>("BasketConfig:BasketRedisConnectionString"), "basket-redis-check")
+                .AddCheck<FavouritesApiHealthCheck>("favourites-api-check")
+                .AddCheck<FatApiHealthCheck>("fat-api-check");
 
             services.AddEmployerUrlHelper(Configuration);
 
