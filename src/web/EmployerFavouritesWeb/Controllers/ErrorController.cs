@@ -2,31 +2,40 @@ using System;
 using System.Linq;
 using System.Net;
 using DfE.EmployerFavourites.Web.Application.Exceptions;
+using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Models;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
     public class ErrorController : Controller
     {
         private readonly ILogger<ErrorController> _logger;
+        private readonly ExternalLinks _externalLinks;
 
-        public ErrorController(ILogger<ErrorController> logger)
+        public ErrorController(ILogger<ErrorController> logger, IOptions<ExternalLinks> externalLinks)
         {
             _logger = logger;
+            _externalLinks = externalLinks.Value;
         }
         
         [Route("error/{id?}")]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(int id)
+        public IActionResult Error(int? id = 500)
         {
-            Response.StatusCode = id;
-
+            Response.StatusCode = id.Value;
+            
             LogException();
 
-            return View(GetViewNameForStatus(Response.StatusCode), new ErrorViewModel { StatusCode = id, RequestId = HttpContext.TraceIdentifier });
+            return View(GetViewNameForStatus(Response.StatusCode), new ErrorViewModel { StatusCode = id.Value, RequestId = HttpContext.TraceIdentifier, MaDashboardUrl = GetReturnUrl() });
+        }
+
+        private string GetReturnUrl()
+        {
+            return _externalLinks.AccountsHomePage;
         }
 
         private void LogException()
