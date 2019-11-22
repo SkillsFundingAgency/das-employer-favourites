@@ -169,17 +169,17 @@ else
                                             <span class="text">View Training Providers</span>
                                         </a>
 
-                                    <a id="recruit-with-provider-link"
-                                       href="@Model.Items[i].CreateVacancyUrl"
-                                       class="govuk-link govuk-link--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-link">
-                                        <span></span><span class="text">Recruit Apprentice</span>
-                                    </a>
-                                }
-                                
+                                        <a id="recruit-with-provider-link"
+                                           href="@Model.Items[i].CreateVacancyUrl"
+                                           class="govuk-link govuk-link--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-link">
+                                            <span></span><span class="text">Recruit Apprentice</span>
+                                        </a>
+                                    }
+                                    
                                     <a asp-action="Delete" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.Items[i].Id" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
-                                
-                                @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
-        <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
+
+                                    @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
+                                        <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
 
                                 </div>
                             }
