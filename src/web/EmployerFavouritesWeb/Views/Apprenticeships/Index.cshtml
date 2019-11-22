@@ -39,6 +39,30 @@
     </div>
 }
 
+
+@if (Model.HasInactiveApprenticeships)
+{
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h2 class="govuk-error-summary__title" id="error-summary-title">
+                    Unavailable apprenticeship
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        @foreach (var inactiveApprenticeship in Model.Items.Where(w => w.Active == false))
+                        {
+                            <li>
+                                <a href="#apprenticeship-@inactiveApprenticeship.Id">The @inactiveApprenticeship.Title apprenticeship is no longer available. You can remove it from your shortlist below.</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @if (Model.Items.Count == 0)
 {
     <h2 class="fav-no-favourites-text govuk-heading-m">
@@ -53,92 +77,97 @@ else
             <ol class="app-task-list">
                 @for (int i = 0; i < Model.Items.Count; i++)
                 {
-                    <li class="app-task-list__item">
+                    <li class="app-task-list__item" id="apprenticeship-@Model.Items[i].Id">
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-two-thirds">
                                 <h2 class="govuk-heading-l app-task-list__heading  govuk-!-margin-bottom-2">
                                     <span class="app-task-list__section-number">@(i + 1). </span>
                                     <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link" target="_blank" rel="external">@Model.Items[i].Title</a>
                                 </h2>
-                            
-                                
-                                @*<a href="#" class="govuk-button">Choose training provider</a>
+                                @if (Model.Items[i].Active)
+                                {
 
-                                    <section class="postcode-search">
-                                        <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
-                                        <fieldset class="govuk-fieldset">
-                                            <div class="govuk-form-group">
-                                            <!-- <label class="govuk-label" for="provider-list-postcode">Postcode</label> -->
-                                                <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
-                                                <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
-                                            </div>
-                                        </fieldset>
-                                    </section>*@
-                                @if (Model.Items[i].IsFramework)
-                                {
-                                    <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
-                                        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                                        <strong class="govuk-warning-text__text">
-                                            <span class="govuk-warning-text__assistive">Warning</span>
-                                            This apprenticeship is closed to new starters from @Model.Items[i].ExpiryDate
-                                        </strong>
-                                    </div>
-                                }
-                                <dl class="govuk-list govuk-!-margin-top-0">
-                                    <dt class="app-training-provider__details-title">Level:</dt>
-                                    <dd class="app-training-provider__details-definition fav-app-level">@Model.Items[i].Level</dd>
-                                    <dt class="app-training-provider__details-title">Typical length:</dt>
-                                    <dd class="app-training-provider__details-definition fav-app-length">@Model.Items[i].TypicalLength</dd>
-                                </dl>
-                                @*<div class="govuk-form-group">
-                                        <fieldset class="govuk-fieldset">
-                                            <div class="govuk-checkboxes">
-                                                <div class="govuk-checkboxes__item">
-                                                    <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
-                                                    <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
-                                                        Compare
-                                                    </label>
+
+                                    @*<a href="#" class="govuk-button">Choose training provider</a>
+
+                                        <section class="postcode-search">
+                                            <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
+                                            <fieldset class="govuk-fieldset">
+                                                <div class="govuk-form-group">
+                                                <!-- <label class="govuk-label" for="provider-list-postcode">Postcode</label> -->
+                                                    <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
+                                                    <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
                                                 </div>
-                                                <a href="#" class="govuk-link govuk-delete-link">Remove</a>
-                                            </div>
-                                        </fieldset>
-                                    </div>*@
+                                            </fieldset>
+                                        </section>*@
+                                    @if (Model.Items[i].IsFramework)
+                                    {
+                                        <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
+                                            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                                            <strong class="govuk-warning-text__text">
+                                                <span class="govuk-warning-text__assistive">Warning</span>
+                                                This apprenticeship is closed to new starters from @Model.Items[i].ExpiryDate
+                                            </strong>
+                                        </div>
+                                    }
+                                    <dl class="govuk-list govuk-!-margin-top-0">
+                                        <dt class="app-training-provider__details-title">Level:</dt>
+                                        <dd class="app-training-provider__details-definition fav-app-level">@Model.Items[i].Level</dd>
+                                        <dt class="app-training-provider__details-title">Typical length:</dt>
+                                        <dd class="app-training-provider__details-definition fav-app-length">@Model.Items[i].TypicalLength</dd>
+                                    </dl>
+                                    @*<div class="govuk-form-group">
+                                            <fieldset class="govuk-fieldset">
+                                                <div class="govuk-checkboxes">
+                                                    <div class="govuk-checkboxes__item">
+                                                        <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
+                                                        <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
+                                                            Compare
+                                                        </label>
+                                                    </div>
+                                                    <a href="#" class="govuk-link govuk-delete-link">Remove</a>
+                                                </div>
+                                            </fieldset>
+                                        </div>*@
+                                }
                             </div>
-                            <div class="govuk-grid-column-one-third">
-                                @if (!Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
-                                {
-                                    // Nothing to display
-                                }
-                                @if (!Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
-                                {
-                                    <a id="view-training-providers"
-                                       asp-controller="Apprenticeships"
-                                       asp-action="TrainingProvider"
-                                       asp-route-employerAccountId="@Model.EmployerAccountId"
-                                       asp-route-apprenticeshipId="@Model.Items[i].Id"
-                                       class="govuk-button govuk-button--search govuk-!-margin-bottom-6 app-task-list__training-provider-content">
-                                        <span></span><span class="text">View Training Providers</span>
-                                    </a>
-                                }
-                                @if (Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
-                                {
-                                    <a id="recruit-without-provider"
-                                       href="@Model.Items[i].CreateVacancyUrl"
-                                       class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-button">
-                                        <span></span><span class="text">Recruit Apprentice</span>
-                                    </a>
-                                }
-                                @if (Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
-                                {
-                                    <a id="view-training-providers"
-                                       asp-controller="Apprenticeships"
-                                       asp-action="TrainingProvider"
-                                       asp-route-employerAccountId="@Model.EmployerAccountId"
-                                       asp-route-apprenticeshipId="@Model.Items[i].Id"
-                                       class="govuk-button govuk-button--search govuk-!-margin-bottom-6 app-task-list__training-provider-content">
-                                        <span></span>
-                                        <span class="text">View Training Providers</span>
-                                    </a>
+                            @if (Model.Items[i].Active)
+                            {
+                                <div class="govuk-grid-column-one-third">
+                                    @if (!Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
+                                    {
+                                        // Nothing to display
+                                    }
+                                    @if (!Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
+                                    {
+                                        <a id="view-training-providers"
+                                           asp-controller="Apprenticeships"
+                                           asp-action="TrainingProvider"
+                                           asp-route-employerAccountId="@Model.EmployerAccountId"
+                                           asp-route-apprenticeshipId="@Model.Items[i].Id"
+                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-6 app-task-list__training-provider-content">
+                                            <span></span><span class="text">View Training Providers</span>
+                                        </a>
+                                    }
+                                    @if (Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
+                                    {
+                                        <a id="recruit-without-provider"
+                                           href="@Model.Items[i].CreateVacancyUrl"
+                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-button">
+                                            <span></span><span class="text">Recruit Apprentice</span>
+                                        </a>
+                                    }
+                                    @if (Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
+                                    {
+                                        <a id="view-training-providers"
+                                           asp-controller="Apprenticeships"
+                                           asp-action="TrainingProvider"
+                                           asp-route-employerAccountId="@Model.EmployerAccountId"
+                                           asp-route-apprenticeshipId="@Model.Items[i].Id"
+                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-6 app-task-list__training-provider-content">
+                                            <span></span>
+                                            <span class="text">View Training Providers</span>
+                                        </a>
 
                                     <a id="recruit-with-provider-link"
                                        href="@Model.Items[i].CreateVacancyUrl"
@@ -152,7 +181,8 @@ else
                                 @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
         <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
 
-                            </div>
+                                </div>
+                            }
                         </div>
                     </li>
                 }

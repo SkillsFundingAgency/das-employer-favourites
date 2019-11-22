@@ -27,7 +27,8 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Level = GetLevelText(src.Level),
                 TypicalLength = $"{src.TypicalLength} months",
                 ExpiryDate = src.ExpiryDate?.AddDays(1).ToString("d MMMM yyyy"),
-                FatUrl = _linkGenerator.GetApprenticeshipPageUrl(src)
+                FatUrl = _linkGenerator.GetApprenticeshipPageUrl(src),
+                Active = src.Active
             };
         }
 

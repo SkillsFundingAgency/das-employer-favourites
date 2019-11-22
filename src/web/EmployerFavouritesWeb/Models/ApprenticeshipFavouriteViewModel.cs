@@ -13,5 +13,6 @@ namespace DfE.EmployerFavourites.Web.Models
         public string ExpiryDate { get; set; }
         public Uri FatUrl { get; set; }
         public string CreateVacancyUrl { get; set; }
+        public bool Active { get; set; }
     }
 }
