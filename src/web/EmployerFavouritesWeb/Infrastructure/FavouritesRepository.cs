@@ -180,6 +180,7 @@ namespace DfE.EmployerFavourites.Infrastructure
                 favourite.Level = framework.Level;
                 favourite.TypicalLength = framework.Duration;
                 favourite.ExpiryDate = framework.ExpiryDate;
+                favourite.Active = framework.IsActiveFramework;
             }
             else
             {
@@ -187,6 +188,7 @@ namespace DfE.EmployerFavourites.Infrastructure
                 favourite.Level = standard.Level;
                 favourite.TypicalLength = standard.Duration;
                 favourite.ExpiryDate = null;
+                favourite.Active = standard.IsActiveStandard;
             }
         }
 
