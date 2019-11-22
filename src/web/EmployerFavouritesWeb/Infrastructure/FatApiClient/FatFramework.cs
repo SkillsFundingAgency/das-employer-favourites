@@ -19,5 +19,8 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
 
         [JsonProperty("ExpiryDate")]
         public DateTime ExpiryDate { get; set; }
+
+        [JsonProperty("IsActiveFramework")]
+        public bool IsActiveFramework { get; set; }
     }
 }
