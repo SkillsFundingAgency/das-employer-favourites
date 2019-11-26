@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using DfE.EmployerFavourites.Api;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.IntegrationTests.Stubs;
 using DfE.EmployerFavourites.Api.Models;
@@ -72,6 +71,33 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
                 new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } } }),
                 Encoding.UTF8,
                 "application/json"));
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        }
+
+        [Fact]
+        public async Task Delete_ApprenticeshipReturnSuccessAndCorrectContentType()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.DeleteAsync("api/apprenticeships/XYZ123/123-1-2");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+           
+        }
+
+        [Fact]
+        public async Task Delete_ProviderReturnSuccessAndCorrectContentType()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.DeleteAsync("api/apprenticeships/XYZ123/123-1-2/12345678");
+
+            // Assert
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
         }
 

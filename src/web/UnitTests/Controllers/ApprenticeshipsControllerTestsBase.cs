@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Domain.ReadModel;
+using Sfa.Das.Sas.Shared.Basket.Interfaces;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 {
@@ -35,6 +36,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         protected readonly Mock<IOptions<FatWebsite>> _mockFatConfig;
         protected Mock<IFavouritesReadRepository> _mockFavouritesReadRepository;
         protected Mock<IFavouritesWriteRepository> _mockFavouritesWriteRepository;
+        protected Mock<IApprenticeshipFavouritesBasketStore> _mockBasketStore;
         protected readonly Mock<IAccountApiClient> _mockAccountApiClient;
         protected readonly ApprenticeshipsController Sut;
 
@@ -45,6 +47,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockFavouritesReadRepository.Setup(x => x.GetApprenticeshipFavourites(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetTestRepositoryFavourites());
 
             _mockFavouritesWriteRepository = new Mock<IFavouritesWriteRepository>();
+            _mockBasketStore = new Mock<IApprenticeshipFavouritesBasketStore>();
 
             _mockAccountApiClient = new Mock<IAccountApiClient>();
             _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
@@ -139,9 +142,14 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             services.AddTransient<IFavouritesReadRepository>(c => _mockFavouritesReadRepository.Object);
             services.AddTransient<IFavouritesWriteRepository>(c => _mockFavouritesWriteRepository.Object);
             services.AddTransient<IAccountApiClient>(c => _mockAccountApiClient.Object);
-            services.AddTransient<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteCommandHandler>>());
+            services.AddTransient<IApprenticeshipFavouritesBasketStore>(c => _mockBasketStore.Object);
+            services.AddTransient<ILogger<SaveApprenticeshipFavouriteBasketCommandHandler>>(x => Mock.Of<ILogger<SaveApprenticeshipFavouriteBasketCommandHandler>>());
             services.AddTransient<ILogger<ViewEmployerFavouritesQueryHandler>>(x => Mock.Of<ILogger<ViewEmployerFavouritesQueryHandler>>());
             services.AddTransient<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>(x => Mock.Of<ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler>>());
+            services.AddTransient<ILogger<DeleteApprenticeshipFavouriteCommandHandler>>(x => Mock.Of<ILogger<DeleteApprenticeshipFavouriteCommandHandler>>());
+            services.AddTransient<ILogger<DeleteApprenticeshipProviderFavouriteCommandHandler>>(x => Mock.Of<ILogger<DeleteApprenticeshipProviderFavouriteCommandHandler>>());
+            services.AddTransient<ILogger<ViewApprenticeshipFavouriteQuery>>(x => Mock.Of<ILogger<ViewApprenticeshipFavouriteQuery>>());
+
             services.AddTransient<ILogger<EmployerHasLegalEntityQueryHandler>>(x => Mock.Of<ILogger<EmployerHasLegalEntityQueryHandler>>());
             var provider = services.BuildServiceProvider();
             return provider;

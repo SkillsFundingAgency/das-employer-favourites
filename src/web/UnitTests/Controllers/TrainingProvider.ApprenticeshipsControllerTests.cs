@@ -113,9 +113,14 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         }
 
         [Fact]
-        public async Task TrainingProvider_ThrowsException_WhenNoProvidersForApprenticeship()
+        public async Task TrainingProvider_RedirectsToIndex_WhenNoProvidersForApprenticeship()
         {
-            await Assert.ThrowsAsync<EntityNotFoundException>(() => Sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "420-2-1"));
+            var result = await Sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, "420-2-1");
+
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+
+            Assert.Equal("Index",redirectResult.ActionName);
+            Assert.Equal(EMPLOYER_ACCOUNT_ID,redirectResult.RouteValues["employerAccountId"]);
         }
 
         [Theory]

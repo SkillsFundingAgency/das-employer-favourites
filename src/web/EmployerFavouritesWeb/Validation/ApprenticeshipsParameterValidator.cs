@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 
 namespace DfE.EmployerFavourites.Web.Validation
@@ -36,5 +37,7 @@ namespace DfE.EmployerFavourites.Web.Validation
 
             return _empAccRegEx.Match(employerAccountId).Success;
         }
+
+        internal bool IsValidBasketId(Guid basketId) => basketId != Guid.Empty;
     }
 }

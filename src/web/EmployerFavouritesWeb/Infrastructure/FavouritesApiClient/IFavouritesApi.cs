@@ -14,6 +14,12 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient
 
         [Put("/api/apprenticeships/{employerAccountId}")]
         Task PutAsync(string employerAccountId, List<Domain.WriteModel.ApprenticeshipFavourite> favourites);
+
+        [Delete("/api/apprenticeships/{employerAccountId}/{apprenticeshipId}")]
+        Task DeleteAsync(string employerAccountId, string apprenticeshipId);
+
+        [Delete("/api/apprenticeships/{employerAccountId}/{apprenticeshipId}/{ukprn}")]
+        Task DeleteAsync(string employerAccountId, string apprenticeshipId, int ukprn);
     }
 }
 

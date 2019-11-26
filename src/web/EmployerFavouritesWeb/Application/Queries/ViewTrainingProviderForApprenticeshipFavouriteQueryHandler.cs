@@ -6,7 +6,6 @@ using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Web.Application.Exceptions;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Account.Api.Client;
 
 namespace DfE.EmployerFavourites.Application.Queries
 {
@@ -32,11 +31,18 @@ namespace DfE.EmployerFavourites.Application.Queries
 
             // Get favourites for account
             var favourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
-            
-            var favourite = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
 
-            if (favourite == null)
-                throw new EntityNotFoundException($"Cannot find apprenticeship favourite for employer account: {{request.EmployerAccountId}} and apprenticeshipId: {request.ApprenticeshipId}");
+
+            var apprenticeship = favourites.SingleOrDefault(x => x.ApprenticeshipId == request.ApprenticeshipId);
+
+            if (apprenticeship == null)
+                throw new EntityNotFoundException($"Cannot find apprenticeship favourite for employer account: {{request.EmployerAccountId}} and apprenticeshipId: {{request.ApprenticeshipId}}");
+
+
+            var provider = apprenticeship.Providers.SingleOrDefault(w => w.Ukprn == request.Ukprn);
+
+            if (provider == null)
+                throw new EntityNotFoundException($"Cannot find Training Provider for employer account: {{request.EmployerAccountId}}, apprenticeshipId: {{request.ApprenticeshipId}} and UKPRN: {{request.Ukprn}}");
 
             var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
             {
@@ -46,8 +52,9 @@ namespace DfE.EmployerFavourites.Application.Queries
             // Build view model
             return new ViewTrainingProviderForApprenticeshipFavouriteResponse
             {
-                Favourite = favourite,
-                HasLegalEntities = employerHasLegalEntityResponse
+                Favourite = apprenticeship,
+                HasLegalEntities = employerHasLegalEntityResponse,
+                Provider = provider
             };
         }
 
