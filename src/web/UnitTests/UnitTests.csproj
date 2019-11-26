@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>DfE.EmployerFavourites.Web.UnitTests</RootNamespace>
@@ -22,8 +22,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\ReadModel\" />
+    <ProjectReference Include="..\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Domain\ReadModel\" />
     <Compile Remove="Controllers\IApprenticeshipFavouritesBasketStore.cs" />
   </ItemGroup>
 </Project>

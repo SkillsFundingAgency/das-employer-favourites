@@ -19,6 +19,9 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Providers.Api.Client;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using DfE.EmployerFavourites.Api.HealthChecks;
+using DfE.EmployerFavourites.Api.Infrastructure.HealthChecks;
 
 namespace DfE.EmployerFavourites.Api
 {
@@ -39,6 +42,12 @@ namespace DfE.EmployerFavourites.Api
             services.AddApplicationInsightsTelemetry();
             services.AddADAuthentication(Configuration);
             services.AddMediatR(typeof(GetApprenticeshipFavouritesRequest).Assembly);
+
+            var storageConnectionString = Configuration.GetSection("ConnectionStrings").Get<ConnectionStrings>().AzureStorage;
+            
+            services.AddHealthChecks()
+                .AddAzureTableStorage(storageConnectionString, "table-storage-check")
+                .AddCheck<FatApiHealthCheck>("fat-api-check");
 
             services.AddMvc(options => {
                 if (!HostingEnvironment.IsDevelopment())
@@ -98,6 +107,11 @@ namespace DfE.EmployerFavourites.Api
             }
 
             app.UseAuthentication();
+
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

@@ -12,13 +12,15 @@ namespace DfE.EmployerFavourites.Application.Queries
     {
         private readonly ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler> _logger;
         private readonly IFavouritesReadRepository _readRepository;
+        private readonly IMediator _mediator;
 
         public ViewApprenticeshipFavouriteQueryHandler(
             ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler> logger,
-            IFavouritesReadRepository readRepository)
+            IFavouritesReadRepository readRepository, IMediator mediator)
         {
             _logger = logger;
             _readRepository = readRepository;
+            _mediator = mediator;
         }
 
         public async Task<ViewApprenticeshipFavouriteResponse> Handle(ViewApprenticeshipFavouriteQuery request, CancellationToken cancellationToken)
@@ -33,10 +35,15 @@ namespace DfE.EmployerFavourites.Application.Queries
             if (favourite == null)
                 throw new EntityNotFoundException($"Cannot find apprenticeship favourite for employer account: {{request.EmployerAccountId}} and apprenticeshipId: {request.ApprenticeshipId}");
 
+            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
+            {
+                EmployerAccountId = request.EmployerAccountId
+            });
             // Build view model
             return new ViewApprenticeshipFavouriteResponse
             {
-                Favourite = favourite
+                Favourite = favourite,
+                HasLegalEntities = employerHasLegalEntityResponse
             };
         }
     }

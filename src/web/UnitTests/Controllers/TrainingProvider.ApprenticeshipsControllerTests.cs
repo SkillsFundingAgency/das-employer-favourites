@@ -137,5 +137,16 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
             Assert.IsType<BadRequestResult>(result);
         }
+        [Fact]
+        public async Task TrainingProvider_ReturnsEntities_GetLegalEntitiesLinkedToAccount()
+        {
+            
+            var result = await Sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
+
+            Assert.True(model.HasLegalEntity);
+        }
     }
 }

@@ -11,16 +11,16 @@ namespace DfE.EmployerFavourites.Application.Queries
     {
         private readonly ILogger<ViewEmployerFavouritesQueryHandler> _logger;
         private readonly IFavouritesReadRepository _readRepository;
-        private readonly IAccountApiClient _accountApi;
+        private readonly IMediator _mediator;
 
         public ViewEmployerFavouritesQueryHandler(
             ILogger<ViewEmployerFavouritesQueryHandler> logger,
             IFavouritesReadRepository readRepository,
-            IAccountApiClient accountApiClient)
+            IMediator mediator)
         {
             _logger = logger;
             _readRepository = readRepository;
-            _accountApi = accountApiClient;
+            _mediator = mediator;
         }
         public async Task<ViewEmployerFavouritesResponse> Handle(ViewEmployerFavouritesQuery request, CancellationToken cancellationToken)
         {
@@ -29,12 +29,18 @@ namespace DfE.EmployerFavourites.Application.Queries
             // Get favourites for account
             var favourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
 
+            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
+            {
+                EmployerAccountId = request.EmployerAccountId
+            });
+            
             // Build view model
             return new ViewEmployerFavouritesResponse
             {
                 EmployerAccount = new Domain.ReadModel.EmployerAccount
                 {
-                    EmployerAccountId = request.EmployerAccountId
+                    EmployerAccountId = request.EmployerAccountId,
+                    HasLegalEntities = employerHasLegalEntityResponse
                 },
                 EmployerFavourites = favourites ?? new Domain.ReadModel.ApprenticeshipFavourites()
             };
