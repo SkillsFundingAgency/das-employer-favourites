@@ -84,10 +84,10 @@ else
                             <div class="govuk-grid-column-two-thirds">
                                 <h2 class="govuk-heading-l app-task-list__heading  govuk-!-margin-bottom-2">
                                     <span class="app-task-list__section-number">@(i + 1). </span>
-                                    <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link" target="_blank" rel="external">@Model.Items[i].Title</a>
+                                    <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link" target="_blank" rel="external">@Model.Items[i].Title@(@Model.Items[i].Active == false ? " - No longer available" : "" ) </a>
                                 </h2>
                                 @if (Model.Items[i].Active)
-                                {
+                                {   
                                     @if (Model.Items[i].IsFramework)
                                      {
                                          <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
