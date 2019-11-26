@@ -8,6 +8,5 @@ namespace DfE.EmployerFavourites.Api.Infrastructure.Interfaces
     {
         Task<string> GetApprenticeshipNameAsync(string apprenticeshipId);
         Task<string> GetProviderNameAsync(int ukprn);
-        Task<List<LocationData>> GetLocationInformation(List<int> locationIds);
     }
 }

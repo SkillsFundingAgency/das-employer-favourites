@@ -18,7 +18,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.GetAsync("accounts/ABC123/apprenticeships/123-1-2/providers");
+            var response = await client.GetAsync("accounts/SINGLERESULT/apprenticeships/123-1-2/providers");
             var content = await HtmlHelpers.GetDocumentAsync(response);
             var countTextElement = content.QuerySelector(".fav-count-text");
 
@@ -63,6 +63,40 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             Assert.Equal("https://www.testprovider.com/", providerWebsiteElement.Attributes["href"].Value); // Website href
             Assert.Equal("86%", providerEmployerSatisfactionElement.TextContent); // Employer Satisfaction
             Assert.Equal("98%", providerLearnerSatisfactionElement.TextContent); // Learner Satisfaction
+        }
+
+        [Fact]
+        public async Task TrainingProvider_DisplaysHeadOfficeAddressWhenNoLocationsAreSelected()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.GetAsync("accounts/ABC123/apprenticeships/123/providers");
+            var content = await HtmlHelpers.GetDocumentAsync(response);
+
+            // Assert
+            var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
+
+            Assert.Equal("Head Office - contact details", expandContactDetailsElement.TextContent);
+
+        }
+
+        [Fact]
+        public async Task TrainingProvider_DisplaysOneLocationCorrectly()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.GetAsync("accounts/ONELOCATION/apprenticeships/890/providers");
+            var content = await HtmlHelpers.GetDocumentAsync(response);
+
+            // Assert
+            var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
+
+            Assert.Equal("1 saved location - view contact details", expandContactDetailsElement.TextContent);
+
         }
     }
 }

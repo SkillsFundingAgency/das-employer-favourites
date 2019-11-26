@@ -22,7 +22,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
         private readonly AsyncRetryPolicy _retryPolicy;
         private readonly IFatRepository _fatRepository;
         private readonly CloudStorageAccount _storageAccount;
-
+        
         public FatFavouritesTableStorageRepository(
             ILogger<FatFavouritesTableStorageRepository> logger,
             IOptions<ConnectionStrings> option,
@@ -95,12 +95,12 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             {
                 ApprenticeshipId = src.ApprenticeshipId,
                 Title = await _fatRepository.GetApprenticeshipNameAsync(src.ApprenticeshipId),
-                Providers = await Task.WhenAll(src.Ukprns?.Select(async x => new Domain.ReadModel.Provider
+                Providers = await Task.WhenAll(src.Providers?.Select(async x => new Domain.ReadModel.Provider
                 {
                     Ukprn = x.Ukprn,
                     Name = await _fatRepository.GetProviderNameAsync(x.Ukprn),
                     LocationIds = x.LocationIds,
-                    Locations = await _fatRepository.GetLocationInformation(x.LocationIds)
+                    Locations = new List<Location>() 
                 }))
             };
         }

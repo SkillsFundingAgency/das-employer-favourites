@@ -7,11 +7,12 @@ namespace DfE.EmployerFavourites.Api.Domain.WriteModel
     {
         public ApprenticeshipFavourite()
         {
-            Ukprns = new List<ProviderData>();
+            Providers = new List<Provider>();
         }
 
         public string ApprenticeshipId { get; set; }
-        public IList<ProviderData> Ukprns { get; set; }
+        public IList<Provider> Providers { get; set; }
 
+       
     }
 }

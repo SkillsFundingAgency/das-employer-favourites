@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Domain.ReadModel;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 
@@ -20,6 +21,9 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     break;
                 case "SINGLERESULT":
                     favourites = GenerateSingle();
+                    break;
+                case "ONELOCATION":
+                    favourites = GenerateSingleWithOneLocation();
                     break;
                 default:
                     favourites = GenerateMultiple();
@@ -61,7 +65,18 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     TypicalLength = 24,
                     Providers = new List<ReadModel.Provider>
                     {
-                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020 }
+                        new ReadModel.Provider { Name = "Test Provider",
+                            Ukprn = 10000020,
+                            Phone = "020 1234 5678",
+                            Email = "test@test.com",
+                            Website = new Uri("https://www.testprovider.com"),
+                            EmployerSatisfaction = 86,
+                            LearnerSatisfaction = 98,
+                            Address = new Infrastructure.FatApiClient.ProviderAddress
+                            {
+
+                            }
+                        },
                     }
                 }
             };
@@ -79,7 +94,18 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     TypicalLength = 18,
                     Providers = new List<ReadModel.Provider>
                     {
-                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020, Phone = "020 1234 5678", Email = "test@test.com", Website = new Uri("https://www.testprovider.com"), EmployerSatisfaction = 86, LearnerSatisfaction = 98 },
+                        new ReadModel.Provider { Name = "Test Provider",
+                            Ukprn = 10000020,
+                            Phone = "020 1234 5678",
+                            Email = "test@test.com",
+                            Website = new Uri("https://www.testprovider.com"),
+                            EmployerSatisfaction = 86,
+                            LearnerSatisfaction = 98,
+                            Address = new Infrastructure.FatApiClient.ProviderAddress
+                            {
+
+                            }
+                        },
                         new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028 }
                     }
                 },
@@ -99,10 +125,46 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     ExpiryDate = new DateTime(2020, 1, 1),
                     Providers = new List<ReadModel.Provider>
                     {
-                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020 }
+                       new ReadModel.Provider { Name = "Test Provider",
+                            Ukprn = 10000020,
+                            Phone = "020 1234 5678",
+                            Email = "test@test.com",
+                            Website = new Uri("https://www.testprovider.com"),
+                            EmployerSatisfaction = 86,
+                            LearnerSatisfaction = 98,
+                            Address = new Infrastructure.FatApiClient.ProviderAddress
+                            {
+
+                            }
+                            
+                        },
                     }
                 }
             };
+        }
+
+        private ReadModel.ApprenticeshipFavourites GenerateSingleWithOneLocation()
+        {
+            var newFavourites = new ReadModel.ApprenticeshipFavourites
+            {
+                new ReadModel.ApprenticeshipFavourite
+                {
+                    ApprenticeshipId = "890",
+                    Title = "Test Standard1",
+                    Level = 3,
+                    TypicalLength = 24,
+                    Providers = new List<ReadModel.Provider>
+                    {
+                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020, Address = { Primary = "1 Primary Street", Postcode = "AA1 2BB"}                                               //LocationIds = new List<int> { 1 }, 
+                                                //Locations = new List<Location> { new Location { Address1 = "1 Address One", Address2 = "Address 2", PostCode = "AA1 2BB", LocationId = 1, Name = "Test Location 1" } }
+
+                        }
+                    },
+                   
+                }
+            };
+
+            return newFavourites;
         }
 
     }

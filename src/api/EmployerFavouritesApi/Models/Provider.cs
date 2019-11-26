@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DfE.EmployerFavourites.Api.Models
 {
-    public class ProviderData
+    public class Provider
     {
         public int Ukprn { get; set; }
 

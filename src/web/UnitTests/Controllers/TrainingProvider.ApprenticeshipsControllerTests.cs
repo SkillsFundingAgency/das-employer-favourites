@@ -137,5 +137,17 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
             Assert.IsType<BadRequestResult>(result);
         }
+
+        [Fact]
+        public async Task TrainingProvider_ReturnsModel_WithLocations()
+        {
+            var result = await Sut.TrainingProvider(EMPLOYER_ACCOUNT_ID, APPRENTICESHIPID_WITH_LOCATION);
+
+            var viewResult = Assert.IsType<ViewResult>(result);
+            var model = viewResult.ViewData.Model as TrainingProvidersViewModel;
+
+            Assert.Single(model.Items[0].Locations);
+            
+        }
     }
 }

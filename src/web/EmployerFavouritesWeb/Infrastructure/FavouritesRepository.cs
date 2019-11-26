@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
+using DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
 using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,7 @@ namespace DfE.EmployerFavourites.Infrastructure
         private readonly AsyncRetryPolicy _retryPolicy;
 
         public FavouritesRepository(
-            ILogger<FavouritesRepository> logger, 
+            ILogger<FavouritesRepository> logger,
             IFavouritesApi favouritesApi,
             IFatApi fatApi)
         {
@@ -97,31 +98,104 @@ namespace DfE.EmployerFavourites.Infrastructure
 
                 List<Task<FatTrainingProvider>> fatProviderTasks = null;
 
+                List<Task<FatProviderLocationAddress>> fatGetLocationTasks = null;
+
                 if (providers != null)
                 {
                     fatProviderTasks = providers.Select(x => _fatApi.GetProviderAsync(x.ToString())).ToList();
                 }
 
-                await Task.WhenAll(apprenticeshipUpdateTasks.Concat(fatProviderTasks));
+                var providerLocationsList = favourites.Where(w => w.Providers != null).SelectMany(a => a.Providers.Where(w => w.LocationIds != null), (a, p) => new { apprenticeshipId = a.ApprenticeshipId, isFramework = a.IsFramework, ukprn = p.Ukprn, locations = p.LocationIds });
 
-                UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result));
+                fatGetLocationTasks = providerLocationsList.SelectMany(l => l.locations.Select(s => GetProviderLocations(l.apprenticeshipId, l.isFramework, l.ukprn, s))).Select(x => x).ToList();
+
+                await Task.WhenAll(apprenticeshipUpdateTasks.Concat(fatProviderTasks).Concat(fatGetLocationTasks));
+
+
+                UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result), fatGetLocationTasks.Select(y => y.Result));
+
+                // UpdateLocations(favourites, fatGetLocationTasks.Select(y => y.Result));
             }
         }
 
-        private void UpdateTrainingProviders(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatTrainingProvider> providerData)
+        private void UpdateLocations(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatProviderLocationAddress> locationData)
+        {
+            foreach (var apprenticeship in favourites)
+            {
+                if (apprenticeship.Providers != null)
+                {
+                    apprenticeship.Providers.Where(x => x.LocationIds != null).SelectMany(s => s.Locations = locationData.Where(w => s.LocationIds.Contains(w.Location.LocationId)).Select(UpdateLocation).ToList());
+                }
+            }
+        }
+
+        private Location UpdateLocation(FatProviderLocationAddress fatLocation)
+        {
+            var location = new Location();
+
+            location.Address1 = fatLocation.Location.Address.Address1;
+            location.Address2 = fatLocation.Location.Address.Address2;
+            location.Town = fatLocation.Location.Address.Town;
+            location.PostCode = fatLocation.Location.Address.PostCode;
+            location.PostCode = fatLocation.Location.LocationName;
+            location.LocationId = fatLocation.Location.LocationId;
+
+            return location;
+        }
+
+        private Task<FatProviderLocationAddress> GetProviderLocations(string apprencticeshipId, bool isFramework, int ukprn, int loc)
+        {
+            if (isFramework)
+            {
+                return _fatApi.GetFrameworkLocationInformationAsync(apprencticeshipId, ukprn.ToString(), loc.ToString());
+            }
+            else
+            {
+                return _fatApi.GetStandardLocationInformationAsync(apprencticeshipId, ukprn.ToString(), loc.ToString());
+            }
+        }
+
+        private void UpdateTrainingProviders(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatTrainingProvider> providerData, IEnumerable<FatProviderLocationAddress> locationData)
         {
             foreach(var item in providerData)
             {
                 var matchingProviders = favourites.SelectMany(x => x.Providers).Where(y => y.Ukprn == item.Ukprn);
 
-                foreach(var provider in matchingProviders)
+                List<Location> locations = new List<Location>();
+
+                foreach (var provider in matchingProviders)
                 {
                     provider.Phone = item.Phone;
                     provider.Email = item.Email;
                     provider.Website = item.Website;
                     provider.EmployerSatisfaction = item.EmployerSatisfaction;
                     provider.LearnerSatisfaction = item.LearnerSatisfaction;
-                    provider.Locations = item.Locations;
+                    provider.Address = item.Addresses.Find(x => x.ContactType == "PRIMARY");
+                    
+                    if (provider.LocationIds != null)
+                    {
+                        foreach (var id in provider.LocationIds)
+                        {
+                            foreach (var location in locationData)
+                            {
+                                if (location.Location.LocationId == id)
+                                {
+                                    locations.Add(new Location()
+                                    {
+                                        Address1 = location.Location.Address.Address1,
+                                        Address2 = location.Location.Address.Address1,
+                                        Town = location.Location.Address.Town,
+                                        County = location.Location.Address.County,
+                                        PostCode = location.Location.Address.PostCode,
+                                        LocationId = location.Location.LocationId,
+                                        Name = location.Location.LocationName,
+
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    provider.Locations = locations;
                 }
             }
         }
@@ -144,7 +218,7 @@ namespace DfE.EmployerFavourites.Infrastructure
             }
         }
 
-        
+
 
         private AsyncRetryPolicy GetRetryPolicy()
         {

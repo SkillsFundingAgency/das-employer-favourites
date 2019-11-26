@@ -18,7 +18,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
 
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<ApprenticeshipFavouritesViewModel>(viewResult.ViewData.Model);
-            Assert.Equal(4, model.Items.Count());
+            Assert.Equal(5, model.Items.Count());
         }
 
         [Fact]

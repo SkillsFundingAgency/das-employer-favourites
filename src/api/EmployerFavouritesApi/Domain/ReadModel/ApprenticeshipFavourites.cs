@@ -14,8 +14,8 @@ namespace DfE.EmployerFavourites.Api.Domain.ReadModel
             {
                 ApprenticeshipId = x.ApprenticeshipId,
                 //  Ukprns = x?.Providers.Select(y => y.Ukprn).ToList() ?? new List<ProviderData>()
-                Ukprns = x?.Providers.Select(y => new ProviderData { Ukprn = y.Ukprn, LocationIds = y.LocationIds }).ToList() ?? new List<ProviderData>()
-            }));;
+                Providers = x?.Providers.Select(y => new Models.Provider { Ukprn = y.Ukprn, LocationIds = y.LocationIds }).ToList() ?? new List<Models.Provider>()
+            }));
 
             return model;
         }

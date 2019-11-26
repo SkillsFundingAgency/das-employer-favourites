@@ -1,12 +1,11 @@
-﻿using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DfE.EmployerFavourites.Web.Models
+namespace DfE.EmployerFavourites.Domain.ReadModel
 {
-    public class LocationViewModel
+    public class Location
     {
         public int LocationId { get; set; }
         public string Address1 { get; set; }

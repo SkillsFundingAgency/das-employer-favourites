@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
+using DfE.EmployerFavourites.Web.Infrastructure;
+
 using Xunit;
+using DfE.EmployerFavourites.Infrastructure;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Domain.ReadModel
 {
@@ -38,6 +43,20 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.ReadModel
             };
 
             Assert.False(sut.IsFramework);
+        }
+
+        //[Fact]
+        //public void GenerateAddress_SelectsPrimaryAddress()
+        //{
+        //    List<ProviderAddress> Address = new List<ProviderAddress> { new ProviderAddress { ContactType = "LEGAL" },
+        //                                                                new ProviderAddress { ContactType = "PRIMARY" } };
+        //    var generator = new ();
+        //}
+
+        [Fact]
+        public void GenerateAddress_WhenAllInformationIsAvailable()
+        {
+
         }
     }
 }

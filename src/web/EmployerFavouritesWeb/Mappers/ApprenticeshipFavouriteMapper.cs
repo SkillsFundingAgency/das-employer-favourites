@@ -34,12 +34,6 @@ namespace DfE.EmployerFavourites.Web.Mappers
         public TrainingProviderViewModel Map(Domain.ReadModel.Provider src)
         {
             const string NO_DATA_AVAILABLE_MSG = "no data available";
-           
-            List<LocationViewModel> locations = new List<LocationViewModel>();
-            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
-            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
-            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
-            locations.Add(new LocationViewModel() { Address = "12 Tiverton Road, Wyken", PhoneNumber = "02476 729503", Email = "ben1.stone@education.gov.uk" });
 
             return new TrainingProviderViewModel
             {
@@ -48,8 +42,19 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
                 Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
                 Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
-                Locations = locations,
-                //Locations = src.Locations,
+                HeadOfficeAddress = src.Address ?? new Infrastructure.FatApiClient.ProviderAddress { Primary = NO_DATA_AVAILABLE_MSG ,Secondary = NO_DATA_AVAILABLE_MSG ,Street = NO_DATA_AVAILABLE_MSG , ContactType = NO_DATA_AVAILABLE_MSG , Postcode = NO_DATA_AVAILABLE_MSG , Town = NO_DATA_AVAILABLE_MSG },
+                Locations = (src.Locations != null) ? src.Locations.Select(x =>
+                {
+                    return new LocationViewModel
+                    {
+                        Address1 = x.Address1,
+                        Address2 = x.Address2,
+                        Town = x.Town,
+                        PostCode = x.PostCode,
+                        County = x.County,
+                        Name = x.Name
+                    };
+                }).ToList() : new List<LocationViewModel>(),
 
                 // This below logic for Satisfaction values is copied from FAT website for Provider Details
                 // This however calls the FAT API which always returns 0 even if the data doesn't actually exist

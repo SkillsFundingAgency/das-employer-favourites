@@ -55,7 +55,7 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             var client = BuildClient();
 
             var response = await client.PutAsync("api/apprenticeships/ABC123",
-                new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } } }),
+                new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<Provider> { new Provider { Ukprn = 10000030 } } } }),
                 Encoding.UTF8,
                 "application/json"));
 
@@ -68,7 +68,7 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests
             var client = BuildClient();
 
             var response = await client.PutAsync("api/apprenticeships/XYZ123",
-                new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } } }),
+                new StringContent(JsonConvert.SerializeObject(new List<Favourite> { new Favourite { ApprenticeshipId = "55", Ukprns = new List<Provider> { new Provider { Ukprn = 10000030 } } } }),
                 Encoding.UTF8,
                 "application/json"));
             Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);

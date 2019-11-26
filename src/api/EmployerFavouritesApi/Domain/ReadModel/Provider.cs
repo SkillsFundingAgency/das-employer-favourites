@@ -8,6 +8,6 @@ namespace DfE.EmployerFavourites.Api.Domain.ReadModel
         public int Ukprn { get; set; }
         public string Name { get; set; }
         public List<int> LocationIds { get; set; }
-        public List<LocationData> Locations { get; set; }
+        public List<Location> Locations { get; set; }
     }
 }

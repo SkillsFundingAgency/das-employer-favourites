@@ -27,8 +27,7 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
 
         [JsonProperty("LearnerSatisfaction")]
         public double LearnerSatisfaction { get; set; }
-
-        [JsonProperty("Locations")]
-        public List<LocationViewModel> Locations { get; set; }
+        [JsonProperty("Addresses")]
+        public List<ProviderAddress> Addresses { get; set; }
     }
 }

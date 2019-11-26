@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Infrastructure.Interfaces;
 using DfE.EmployerFavourites.Api.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 using SFA.DAS.Apprenticeships.Api.Client;
@@ -63,28 +64,6 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                 return $"Unknown Provider ({ukprn})";
             }
         }
-        public async Task<List<LocationData>> GetLocationInformation(List<int> locationIds)
-        {
-            if (locationIds != null)
-            {
-                var location = new LocationData();
-
-                location.LocationId = 1234;
-                location.LocationAddress = "Quinton Road, Cheylsmore";
-                location.LocationEmail = "dfe@dfe.go.uk";
-                location.LocationPhone = "02476 956043";
-                location.LocationPostcode = "CV1 2DF";
-
-                List<LocationData> locations = new List<LocationData>();
-
-                foreach (var id in locationIds)
-                {
-                    locations.Add(location);
-                }
-                return locations;
-            }
-            return null;
-        }
 
         private bool IsStandard(string apprenticeshipId)
         {
@@ -106,6 +85,8 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                     });
         }
 
-        
     }
+
 }
+
+   
