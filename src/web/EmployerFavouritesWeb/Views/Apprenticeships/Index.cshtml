@@ -33,6 +33,7 @@
             <h1 class="govuk-heading-xl govuk-!-margin-top-3 govuk-!-margin-bottom-6">
                 <span class="govuk-caption-xl">Your saved favourites</span>
                 <span class="app-icon-basket govuk-!-margin-right-2"></span>
+                <a href="C:\Users\Matt\Documents\Source\das-employer-favourites\src\api\EmployerFavouritesApi\Program.cs">C:\Users\Matt\Documents\Source\das-employer-favourites\src\api\EmployerFavouritesApi\Program.cs</a>
                 <span class="fav-count-text">@countText</span>
             </h1>
         </div>
@@ -75,9 +76,10 @@ else
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <ol class="app-task-list">
+                
                 @for (int i = 0; i < Model.Items.Count; i++)
                 {
-                    <li class="app-task-list__item" id="apprenticeship-@Model.Items[i].Id">
+                    <li class="app-task-list__item app-task-list__item--@(@Model.Items[i].Active ? "Active" : "Inactive") " id="apprenticeship-@Model.Items[i].Id">
                         <div class="govuk-grid-row">
                             <div class="govuk-grid-column-two-thirds">
                                 <h2 class="govuk-heading-l app-task-list__heading  govuk-!-margin-bottom-2">
@@ -86,49 +88,22 @@ else
                                 </h2>
                                 @if (Model.Items[i].Active)
                                 {
-
-
-                                    @*<a href="#" class="govuk-button">Choose training provider</a>
-
-                                        <section class="postcode-search">
-                                            <!-- <h4 class="govuk-heading-s">Enter the postcode of where the apprentice will work...</h4> -->
-                                            <fieldset class="govuk-fieldset">
-                                                <div class="govuk-form-group">
-                                                <!-- <label class="govuk-label" for="provider-list-postcode">Postcode</label> -->
-                                                    <a id="postcode-search" href="#" class="govuk-button govuk-button--search"><span></span><span class="text">Search</span></a>
-                                                    <input class="govuk-input govuk-input--width-10" id="provider-list-postcode" name="provider-list-postcode" placeholder="Search by postcode..." type="text">
-                                                </div>
-                                            </fieldset>
-                                        </section>*@
                                     @if (Model.Items[i].IsFramework)
-                                    {
-                                        <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
-                                            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                                            <strong class="govuk-warning-text__text">
-                                                <span class="govuk-warning-text__assistive">Warning</span>
-                                                This apprenticeship is closed to new starters from @Model.Items[i].ExpiryDate
-                                            </strong>
-                                        </div>
-                                    }
+                                     {
+                                         <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
+                                             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                                             <strong class="govuk-warning-text__text">
+                                                 <span class="govuk-warning-text__assistive">Warning</span>
+                                                 This apprenticeship is closed to new starters from @Model.Items[i].ExpiryDate
+                                             </strong>
+                                         </div>
+                                     }
                                     <dl class="govuk-list govuk-!-margin-top-0">
                                         <dt class="app-training-provider__details-title">Level:</dt>
                                         <dd class="app-training-provider__details-definition fav-app-level">@Model.Items[i].Level</dd>
                                         <dt class="app-training-provider__details-title">Typical length:</dt>
                                         <dd class="app-training-provider__details-definition fav-app-length">@Model.Items[i].TypicalLength</dd>
                                     </dl>
-                                    @*<div class="govuk-form-group">
-                                            <fieldset class="govuk-fieldset">
-                                                <div class="govuk-checkboxes">
-                                                    <div class="govuk-checkboxes__item">
-                                                        <input class="govuk-checkboxes__input" id="compare-app-1" name="compare-app" type="checkbox" value="carcasses">
-                                                        <label class="govuk-label govuk-checkboxes__label" for="compare-app-1">
-                                                            Compare
-                                                        </label>
-                                                    </div>
-                                                    <a href="#" class="govuk-link govuk-delete-link">Remove</a>
-                                                </div>
-                                            </fieldset>
-                                        </div>*@
                                 }
                             </div>
                             @if (Model.Items[i].Active)
