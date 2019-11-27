@@ -43,27 +43,40 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
                 Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
                 Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
-                HeadOfficeAddress = src.Address ?? new Infrastructure.FatApiClient.ProviderAddress { Primary = NO_DATA_AVAILABLE_MSG ,Secondary = NO_DATA_AVAILABLE_MSG ,Street = NO_DATA_AVAILABLE_MSG , ContactType = NO_DATA_AVAILABLE_MSG , Postcode = NO_DATA_AVAILABLE_MSG , Town = NO_DATA_AVAILABLE_MSG },
-                Locations = (src.Locations != null) ? src.Locations.Select(x =>
-                {
-                    return new LocationViewModel
-                    {
-                        Address1 = x.Address1,
-                        Address2 = x.Address2,
-                        Town = x.Town,
-                        PostCode = x.PostCode,
-                        County = x.County,
-                        Name = x.Name
-                    };
-                }).ToList() : new List<LocationViewModel>(),
+                HeadOfficeAddress = Map(src.Address), //src.Address ?? new Infrastructure.FatApiClient.ProviderAddress { Primary = NO_DATA_AVAILABLE_MSG, Secondary = NO_DATA_AVAILABLE_MSG, Street = NO_DATA_AVAILABLE_MSG, ContactType = NO_DATA_AVAILABLE_MSG, Postcode = NO_DATA_AVAILABLE_MSG, Town = NO_DATA_AVAILABLE_MSG },
+                Locations =  src.Locations?.Select(Map).ToList() ?? new List<LocationViewModel>(),
 
                 // This below logic for Satisfaction values is copied from FAT website for Provider Details
                 // This however calls the FAT API which always returns 0 even if the data doesn't actually exist
                 // This is not how the API call for provider location works where is doesn't return the property if no data exists.
-                EmployerSatisfaction = src.EmployerSatisfaction > 0 ? $"{src.EmployerSatisfaction}%" : NO_DATA_AVAILABLE_MSG, 
+                EmployerSatisfaction = src.EmployerSatisfaction > 0 ? $"{src.EmployerSatisfaction}%" : NO_DATA_AVAILABLE_MSG,
                 LearnerSatisfaction = src.LearnerSatisfaction > 0 ? $"{src.LearnerSatisfaction}%" : NO_DATA_AVAILABLE_MSG,
                 FatUrl = _linkGenerator.GetProviderPageUrl(src),
                 Active = src.Active
+            };
+        }
+
+        private static LocationViewModel Map(Domain.ReadModel.Location src)
+        {
+            return new LocationViewModel
+            {
+                Address1 = src.Address1,
+                Address2 = src.Address2,
+                Town = src.Town,
+                PostCode = src.PostCode,
+                County = src.County,
+                Name = src.Name 
+            };
+        }
+
+        private static AddressViewModel Map(Infrastructure.FatApiClient.ProviderAddress src)
+        {
+            return new AddressViewModel
+            {
+                Address1 = src.Primary,
+                Address2 = src.Secondary,
+                Town = src.Town,
+                PostCode = src.Postcode
             };
         }
 

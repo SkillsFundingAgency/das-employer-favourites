@@ -74,7 +74,12 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             LearnerSatisfaction = 98,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
-
+                                Primary = "1 Head Office",
+                                Secondary = "Training Provider",
+                                Street = "Training Provider Street",
+                                Town = "Training",
+                                Postcode = "AA1 1BB",
+                                ContactType = "LEGAL"
                             }
                         },
                     }
@@ -103,10 +108,20 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             LearnerSatisfaction = 98,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
-
+                                Primary = "1 Head Office",
+                                Secondary = "Training Provider",
+                                Street = "Training Provider Street",
+                                Town = "Training",
+                                Postcode = "AA1 1BB",
+                                ContactType = "LEGAL"
                             }
                         },
-                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028 }
+                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028, Address = new Infrastructure.FatApiClient.ProviderAddress { Primary = "1 Head Office",
+                                Secondary = "Training Provider",
+                                Street = "Training Provider Street",
+                                Town = "Training",
+                                Postcode = "AA1 1BB",
+                                ContactType = "LEGAL"} }
                     }
                 },
                 new ReadModel.ApprenticeshipFavourite
@@ -134,6 +149,12 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             LearnerSatisfaction = 98,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
+                                Primary = "1 Head Office",
+                                Secondary = "Training Provider",
+                                Street = "Training Provider Street",
+                                Town = "Training",
+                                Postcode = "AA1 1BB",
+                                ContactType = "LEGAL"
 
                             }
                             
@@ -155,8 +176,17 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     TypicalLength = 24,
                     Providers = new List<ReadModel.Provider>
                     {
-                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020, Address = { Primary = "1 Primary Street", Postcode = "AA1 2BB"}                                               //LocationIds = new List<int> { 1 }, 
-                                                //Locations = new List<Location> { new Location { Address1 = "1 Address One", Address2 = "Address 2", PostCode = "AA1 2BB", LocationId = 1, Name = "Test Location 1" } }
+                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020,  Address = new Infrastructure.FatApiClient.ProviderAddress
+                            {
+                                Primary = "1 Head Office",
+                                Secondary = "Training Provider",
+                                Street = "Training Provider Street",
+                                Town = "Training",
+                                Postcode = "AA1 1BB",
+                                ContactType = "LEGAL"
+
+                            }, LocationIds = new List<int> { 1 }, 
+                                                Locations = new List<Location> { new Location { Address1 = "1 Address One", Address2 = "Address 2", PostCode = "AA1 2BB", LocationId = 1, Name = "Test Location 1" } }
 
                         }
                     },

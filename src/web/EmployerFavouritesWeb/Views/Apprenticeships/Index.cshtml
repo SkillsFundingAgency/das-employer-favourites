@@ -76,7 +76,7 @@ else
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <ol class="app-task-list">
-                
+
                 @for (int i = 0; i < Model.Items.Count; i++)
                 {
                     <li class="app-task-list__item app-task-list__item--@(@Model.Items[i].Active ? "Active" : "Inactive")" id="apprenticeship-@Model.Items[i].Id">
@@ -84,20 +84,20 @@ else
                             <div class="govuk-grid-column-two-thirds">
                                 <h2 class="govuk-heading-l app-task-list__heading  govuk-!-margin-bottom-2">
                                     <span class="app-task-list__section-number">@(i + 1). </span>
-                                    <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link" target="_blank" rel="external">@Model.Items[i].Title@(@Model.Items[i].Active == false ? " - No longer available" : "" ) </a>
+                                    <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link" target="_blank" rel="external">@Model.Items[i].Title@(@Model.Items[i].Active == false ? " - No longer available" : "") </a>
                                 </h2>
                                 @if (Model.Items[i].Active)
-                                {   
+                                {
                                     @if (Model.Items[i].IsFramework)
-                                     {
-                                         <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
-                                             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-                                             <strong class="govuk-warning-text__text">
-                                                 <span class="govuk-warning-text__assistive">Warning</span>
-                                                 This apprenticeship is closed to new starters from @Model.Items[i].ExpiryDate
-                                             </strong>
-                                         </div>
-                                     }
+                                    {
+                                        <div class="fav-framework-expiry govuk-warning-text govuk-!-margin-bottom-2">
+                                            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                                            <strong class="govuk-warning-text__text">
+                                                <span class="govuk-warning-text__assistive">Warning</span>
+                                                This apprenticeship is closed to new starters from @Model.Items[i].ExpiryDate
+                                            </strong>
+                                        </div>
+                                    }
                                     <dl class="govuk-list govuk-!-margin-top-0">
                                         <dt class="app-training-provider__details-title">Level:</dt>
                                         <dd class="app-training-provider__details-definition fav-app-level">@Model.Items[i].Level</dd>
@@ -106,14 +106,11 @@ else
                                     </dl>
                                 }
                             </div>
-                            @if (Model.Items[i].Active)
-                            {
-                                <div class="govuk-grid-column-one-third">
-                                    @if (!Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
-                                    {
-                                        // Nothing to display
-                                    }
-                                    @if (!Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
+
+                            <div class="govuk-grid-column-one-third">
+                                @if (Model.Items[i].Active)
+                                {
+                                    @if (Model.Items[i].HasTrainingProviders)
                                     {
                                         <a id="view-training-providers"
                                            asp-controller="Apprenticeships"
@@ -124,38 +121,30 @@ else
                                             <span></span><span class="text">View Training Providers</span>
                                         </a>
                                     }
-                                    @if (Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
-                                    {
-                                        <a id="recruit-without-provider"
-                                           href="@Model.Items[i].CreateVacancyUrl"
-                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-button">
-                                            <span></span><span class="text">Recruit Apprentice</span>
-                                        </a>
-                                    }
-                                    @if (Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
-                                    {
-                                        <a id="view-training-providers"
-                                           asp-controller="Apprenticeships"
-                                           asp-action="TrainingProvider"
-                                           asp-route-employerAccountId="@Model.EmployerAccountId"
-                                           asp-route-apprenticeshipId="@Model.Items[i].Id"
-                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-6 app-task-list__training-provider-content">
-                                            <span></span>
-                                            <span class="text">View Training Providers</span>
-                                        </a>
 
+                                    @if (Model.HasLegalEntity)
+                                    {
                                         <a id="recruit-with-provider-link"
                                            href="@Model.Items[i].CreateVacancyUrl"
                                            class="govuk-link govuk-link--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-link">
                                             <span></span><span class="text">Recruit Apprentice</span>
                                         </a>
                                     }
+                                }
+                                <a id="delete-apprenticeship-favourite"
+                                   asp-controller="Apprenticeships"
+                                   asp-action="Delete"
+                                   asp-route-employerAccountId="@Model.EmployerAccountId"
+                                   asp-route-apprenticeshipId="@Model.Items[i].Id"
+                                   class="govuk-link govuk-link--search govuk-!-margin-bottom-0 app-task-list__training-provider-content">
+                                    <span></span><span class="text">Delete <span class="govuk-visually-hidden">@Model.Items[i].Title</span> favourite</span>
+                                </a>
 
-                                    @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
-                                        <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
+                                @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
+                                    <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
 
-                                </div>
-                            }
+                            </div>
+
                         </div>
                     </li>
                 }
