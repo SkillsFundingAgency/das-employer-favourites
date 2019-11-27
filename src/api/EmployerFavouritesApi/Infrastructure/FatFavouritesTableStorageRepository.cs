@@ -112,6 +112,13 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                 throw new ArgumentNullException(nameof(apprenticeshipFavourite));
             }
 
+            var providers = apprenticeshipFavourite.SelectMany(s => s.Providers);
+
+            foreach (var provider in providers)
+            {
+                provider.Name = await _fatRepository.GetProviderNameAsync(provider.Ukprn);
+            }
+
             try
             {
                 var table = await GetTable();
