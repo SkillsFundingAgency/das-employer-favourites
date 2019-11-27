@@ -112,20 +112,17 @@ namespace DfE.EmployerFavourites.Infrastructure
                 await Task.WhenAll(apprenticeshipUpdateTasks.Concat(fatProviderTasks).Concat(fatGetLocationTasks));
 
 
-                UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result), fatGetLocationTasks.Select(y => y.Result));
+                UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result));
 
-                // UpdateLocations(favourites, fatGetLocationTasks.Select(y => y.Result));
+                UpdateLocations(favourites, fatGetLocationTasks.Select(y => y.Result));
             }
         }
 
         private void UpdateLocations(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatProviderLocationAddress> locationData)
         {
-            foreach (var apprenticeship in favourites)
+            foreach (var provider in favourites.SelectMany(s => s.Providers).Where(w => w != null && w.LocationIds != null))
             {
-                if (apprenticeship.Providers != null)
-                {
-                    apprenticeship.Providers.Where(x => x.LocationIds != null).SelectMany(s => s.Locations = locationData.Where(w => s.LocationIds.Contains(w.Location.LocationId)).Select(UpdateLocation).ToList());
-                }
+                   provider.Locations = locationData.Where(w => provider.LocationIds.Contains(w.Location.LocationId)).Select(UpdateLocation).ToList();
             }
         }
 
@@ -133,11 +130,11 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             var location = new Location();
 
+            location.Name = fatLocation.Location.LocationName;
             location.Address1 = fatLocation.Location.Address.Address1;
             location.Address2 = fatLocation.Location.Address.Address2;
             location.Town = fatLocation.Location.Address.Town;
             location.PostCode = fatLocation.Location.Address.PostCode;
-            location.PostCode = fatLocation.Location.LocationName;
             location.LocationId = fatLocation.Location.LocationId;
 
             return location;
@@ -155,7 +152,7 @@ namespace DfE.EmployerFavourites.Infrastructure
             }
         }
 
-        private void UpdateTrainingProviders(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatTrainingProvider> providerData, IEnumerable<FatProviderLocationAddress> locationData)
+        private void UpdateTrainingProviders(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatTrainingProvider> providerData)
         {
             foreach(var item in providerData)
             {
@@ -172,30 +169,6 @@ namespace DfE.EmployerFavourites.Infrastructure
                     provider.LearnerSatisfaction = item.LearnerSatisfaction;
                     provider.Address = item.Addresses.Find(x => x.ContactType == "PRIMARY");
                     
-                    if (provider.LocationIds != null)
-                    {
-                        foreach (var id in provider.LocationIds)
-                        {
-                            foreach (var location in locationData)
-                            {
-                                if (location.Location.LocationId == id)
-                                {
-                                    locations.Add(new Location()
-                                    {
-                                        Address1 = location.Location.Address.Address1,
-                                        Address2 = location.Location.Address.Address1,
-                                        Town = location.Location.Address.Town,
-                                        County = location.Location.Address.County,
-                                        PostCode = location.Location.Address.PostCode,
-                                        LocationId = location.Location.LocationId,
-                                        Name = location.Location.LocationName,
-
-                                    });
-                                }
-                            }
-                        }
-                    }
-                    provider.Locations = locations;
                 }
             }
         }

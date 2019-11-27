@@ -18,7 +18,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.GetAsync("accounts/SINGLERESULT/apprenticeships/123-1-2/providers");
+            var response = await client.GetAsync("accounts/SINGLERESULT/apprenticeships/123/providers");
             var content = await HtmlHelpers.GetDocumentAsync(response);
             var countTextElement = content.QuerySelector(".fav-count-text");
 

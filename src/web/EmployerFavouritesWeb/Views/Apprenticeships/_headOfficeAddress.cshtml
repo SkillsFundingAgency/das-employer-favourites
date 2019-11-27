@@ -1,0 +1,31 @@
+﻿@model AddressViewModel
+@inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
+
+
+<details class="govuk-details">
+    <summary class="govuk-details__summary">
+        <span class="govuk-details__summary-text">
+            <span class="expand-location-details-header">Head Office - contact details</span>
+        </span>
+    </summary>
+    <div class="govuk-details__text">
+        <table class="govuk-table">
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">      
+                    <th scope="col" class="govuk-table__header">Address</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                                  
+                <tr class="govuk-table__row">
+                                                
+                    <td scope="row" class="govuk-table__cell">
+                       @Model.GetCommaDelimitedAddress(), @Model.PostCode
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</details>
+      

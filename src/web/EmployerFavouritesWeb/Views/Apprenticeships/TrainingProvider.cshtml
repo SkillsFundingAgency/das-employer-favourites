@@ -65,127 +65,16 @@
                                     }
                                 </dd>*@
                             </dl>
-                            <details class="govuk-details">
-                                <summary class="govuk-details__summary">
-                                    <span class="govuk-details__summary-text expand-location-details-header">
-                                        @if (Model.Items[i].Locations.Count == 0)
-                                        {
-                                            <span>Head Office - contact details</span>
-                                        }
-                                        else if (Model.Items[i].Locations.Count == 1)
-                                        {
-                                            <span>1 saved location - view contact details</span>
-                                        } else
-                                        {
-                                            <span>@Model.Items[i].Locations.Count saved locations - view contact details</span>
-                                        }
-                                    </span>
-                                </summary>
-                                <div class="govuk-details__text">
-                                    <table class="govuk-table">
-                                        <thead class="govuk-table__head">
-                                            <tr class="govuk-table__row">
-                                                @if (Model.Items[i].Locations.Count > 0)
-                                                {
-                                                    <th scope="col" class="govuk-table__header">Name</th>
-                                                }
-                                                <th scope="col" class="govuk-table__header">Address</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="govuk-table__body">
-                                            @if (Model.Items[i].Locations.Count == 0)
-                                            {
-                                            <tr class="govuk-table__row">
-                                                
-                                                <td scope="row" class="govuk-table__cell">
-                                                    @{
 
-                                                        var address = Model.Items[i].HeadOfficeAddress;
+                            @if (Model.Items[i].Locations.Count == 0)
+                            {
+                                <partial name="_headOfficeAddress" model="Model.Items[i].HeadOfficeAddress" />
+                            }
+                            else
+                            {
+                                <partial name="_locationAddresses" model="Model.Items[i].Locations" />
+                            }
 
-                                                        if (!String.IsNullOrEmpty(address.Primary))
-                                                        {
-                                                            <span>@address.Primary, </span>
-                                                        }
-                                                        if (!String.IsNullOrEmpty(address.Secondary))
-                                                        {
-                                                            <span>@address.Secondary, </span>
-                                                        }
-                                                        if (!String.IsNullOrEmpty(address.Town))
-                                                        {
-                                                            <span>@address.Town, </span>
-                                                        }
-                                                        if (!String.IsNullOrEmpty(address.Postcode))
-                                                        {
-                                                            <span><strong>@address.Postcode </strong></span>
-                                                        }
-
-                                                    }
-
-
-                                                </td>
-                                            </tr>
-                                            }
-                                            @for (int j = 0; j < Model.Items[i].Locations.Count; j++)
-                                            {
-                                        <tr class="govuk-table__row">
-                                            <td scope="row" class="govuk-table__cell">
-                                                @Model.Items[i].Locations[j].Name
-                                            </td>
-                                            <td scope="row" class="govuk-table__cell">
-                                                @{
-                                                    var address = Model.Items[i].Locations[j];
-
-                                                    if (!String.IsNullOrEmpty(address.Address1))
-                                                    {
-                                                        <span>@address.Address1, </span>
-                                                    }
-                                                    if (!String.IsNullOrEmpty(address.Address2))
-                                                    {
-                                                        <span>@address.Address2, </span>
-                                                    }
-                                                    if (!String.IsNullOrEmpty(address.Town))
-                                                    {
-                                                        <span>@address.Town, </span>
-                                                    }
-                                                    if (!String.IsNullOrEmpty(address.County))
-                                                    {
-                                                        <span>@address.County, </span>
-                                                    }
-                                                    if (!String.IsNullOrEmpty(address.PostCode))
-                                                    {
-                                                        <span><strong>@address.PostCode </strong></span>
-                                                    }
-
-                                                }
-
-                                            </td>
-
-                                        </tr>
-                                            }
-                                                
-
-                                            </tbody>
-                                    </table>
-                                    
-                                    @*<dl class="govuk-list">
-            <dt class="app-training-provider__details-title">Website:</dt>
-            <dd class="app-training-provider__details-definition fav-tp-website">
-                @if (@Model.Items[i].Website == "no data available")
-                {
-                    <span>no data available</span>
-                }
-                else
-                {
-                    <a href="@Model.Items[i].Website" target="_blank" rel="external">@Model.Items[i].Website</a>
-                }
-            </dd>
-            <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
-            <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
-            <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
-            <dd class="app-training-provider__details-definition fav-tp-learner-satisfaction">@Model.Items[i].LearnerSatisfaction</dd>
-        </dl>*@
-                                </div>
-                            </details>
                         </div>
                         <div class="govuk-grid-column-one-third">
                             <a asp-action="DeleteProvider" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.ApprenticeshipId" asp-route-ukprn="@Model.Items[i].Ukprn" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
