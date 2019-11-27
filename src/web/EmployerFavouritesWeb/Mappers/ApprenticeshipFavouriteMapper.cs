@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using DfE.EmployerFavourites.Web.Configuration;
 using DfE.EmployerFavourites.Web.Helpers;
 using DfE.EmployerFavourites.Web.Models;
@@ -42,6 +43,19 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
                 Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
                 Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
+                HeadOfficeAddress = src.Address ?? new Infrastructure.FatApiClient.ProviderAddress { Primary = NO_DATA_AVAILABLE_MSG ,Secondary = NO_DATA_AVAILABLE_MSG ,Street = NO_DATA_AVAILABLE_MSG , ContactType = NO_DATA_AVAILABLE_MSG , Postcode = NO_DATA_AVAILABLE_MSG , Town = NO_DATA_AVAILABLE_MSG },
+                Locations = (src.Locations != null) ? src.Locations.Select(x =>
+                {
+                    return new LocationViewModel
+                    {
+                        Address1 = x.Address1,
+                        Address2 = x.Address2,
+                        Town = x.Town,
+                        PostCode = x.PostCode,
+                        County = x.County,
+                        Name = x.Name
+                    };
+                }).ToList() : new List<LocationViewModel>(),
 
                 // This below logic for Satisfaction values is copied from FAT website for Provider Details
                 // This however calls the FAT API which always returns 0 even if the data doesn't actually exist

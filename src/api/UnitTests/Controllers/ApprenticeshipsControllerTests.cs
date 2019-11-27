@@ -50,7 +50,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         {
             var favourites = new List<Favourite>
             {
-                new Favourite { ApprenticeshipId = "50", Ukprns = new List<int> { 10000020 } }
+                new Favourite { ApprenticeshipId = "50", Ukprns = new List<Provider> { new Provider { Ukprn = 10000020, LocationIds = new List<int>  { 1, 2, 3 } } } }
             };
 
             var result = await _sut.Put(EmployerAccountIdNewList, favourites);
@@ -63,7 +63,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         {
             var favourites = new List<Favourite>
             {
-                new Favourite { ApprenticeshipId = "50", Ukprns = new List<int> { 10000020 } }
+                new Favourite { ApprenticeshipId = "50", Ukprns = new List<Provider > { new Provider { Ukprn = 10000020, LocationIds = new List<int>() } } }
             };
 
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
@@ -76,7 +76,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         {
             var favourites = new List<Favourite>
             {
-                new Favourite { ApprenticeshipId = "55", Ukprns = new List<int> { 10000030 } }
+                new Favourite { ApprenticeshipId = "55", Ukprns = new List<Provider> { new Provider { Ukprn = 10000030, LocationIds = new List<int>() } } }
             };
 
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
@@ -89,7 +89,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         {
             var favourites = new List<Favourite>
             {
-                new Favourite { ApprenticeshipId = "60", Ukprns = new List<int> { 10000020 } }
+                new Favourite { ApprenticeshipId = "60", Ukprns = new List<Provider> { new Provider { Ukprn = 10000020, LocationIds = new List<int>() } }  }
             };
 
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
@@ -120,7 +120,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
 
                     var item = s.First();
 
-                    if (item.ApprenticeshipId != apprenticeshipId || item.Ukprns.First() != ukprn)
+                    if (item.ApprenticeshipId != apprenticeshipId || item.Providers.First().Ukprn != ukprn)
                         return false;
 
                     return true;

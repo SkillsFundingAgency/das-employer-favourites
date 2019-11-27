@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
 
 namespace DfE.EmployerFavourites.Domain.ReadModel
 {
@@ -11,5 +13,8 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
         public Uri Website { get; set; }
         public double EmployerSatisfaction { get; set; }
         public double LearnerSatisfaction { get; set; }
+        public List<Location> Locations { get; set; }
+        public ProviderAddress Address { get; set; }
+        public IList<int> LocationIds { get; set; }
     }
 }

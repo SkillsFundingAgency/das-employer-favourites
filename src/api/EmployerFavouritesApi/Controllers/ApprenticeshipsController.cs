@@ -118,7 +118,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
             }
 
             var items = favourites.Select(x => new ApprenticeshipFavourite
-            { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns });
+            { ApprenticeshipId = x.ApprenticeshipId, Providers = x.Ukprns });
             writeModel.AddRange(items);
 
             return writeModel;

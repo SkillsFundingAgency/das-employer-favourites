@@ -10,6 +10,8 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
+using System.Collections.Generic;
+using DfE.EmployerFavourites.Api.Models;
 
 namespace DfE.EmployerFavourites.Api.Infrastructure
 {
@@ -20,7 +22,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
         private readonly AsyncRetryPolicy _retryPolicy;
         private readonly IFatRepository _fatRepository;
         private readonly CloudStorageAccount _storageAccount;
-
+        
         public FatFavouritesTableStorageRepository(
             ILogger<FatFavouritesTableStorageRepository> logger,
             IOptions<ConnectionStrings> option,
@@ -93,11 +95,12 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             {
                 ApprenticeshipId = src.ApprenticeshipId,
                 Title = await _fatRepository.GetApprenticeshipNameAsync(src.ApprenticeshipId),
-                Providers = await Task.WhenAll(src.Ukprns?.Select(async x => new Domain.ReadModel.Provider
+                Providers = await Task.WhenAll(src.Providers?.Select(async x => new Domain.ReadModel.Provider
                 {
-                    Ukprn = x,
-                    Name = await _fatRepository.GetProviderNameAsync(x)
-
+                    Ukprn = x.Ukprn,
+                    Name = await _fatRepository.GetProviderNameAsync(x.Ukprn),
+                    LocationIds = x.LocationIds,
+                    Locations = new List<Location>() 
                 }))
             };
         }

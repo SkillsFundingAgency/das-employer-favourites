@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.Domain.WriteModel;
@@ -29,6 +30,12 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
 
             var existingFavourites = await _readRepository.GetApprenticeshipFavourites(request.EmployerAccountId);
             var hasExistingRecord = existingFavourites != null && existingFavourites.Count > 0;
+
+            foreach (var provider in request.Favourites.SelectMany(w => w.Providers))
+            {
+                
+            }
+
 
             await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, request.Favourites);
 

@@ -13,7 +13,9 @@ namespace DfE.EmployerFavourites.Api.Domain.WriteModel
 
         public void Remove(string apprenticeshipId, int ukprn)
         {
-            this.Where(w => w.ApprenticeshipId == apprenticeshipId).ToList().ForEach(item => item.Ukprns.Remove(ukprn));
+            var provider = this.FirstOrDefault(w => w.ApprenticeshipId == apprenticeshipId)?.Providers;
+
+            provider.Remove(provider.SingleOrDefault(w => w.Ukprn == ukprn));
         }
     }
 }

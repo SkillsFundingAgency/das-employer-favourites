@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Infrastructure.Interfaces;
+using DfE.EmployerFavourites.Api.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 using SFA.DAS.Apprenticeships.Api.Client;
@@ -81,5 +84,9 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                         _logger.LogWarning($"Error calling Fat Api for - {context.OperationKey} Reason: {exception.Message}. Retrying in {timeSpan.Seconds} secs...attempt: {retryCount}");
                     });
         }
+
     }
+
 }
+
+   

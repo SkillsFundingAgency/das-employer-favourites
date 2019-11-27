@@ -20,6 +20,12 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
             Providers.Add(provider);
         }
 
+        public ApprenticeshipFavourite(string apprenticeshipId, List<Provider> providers) : this(apprenticeshipId)
+        {
+            ApprenticeshipId = apprenticeshipId;
+            Providers = providers;
+        }
+
         public string ApprenticeshipId { get; set; }
         public IList<Provider> Providers { get; set; }
         public string Title { get; set; }

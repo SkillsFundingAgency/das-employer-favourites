@@ -1,3 +1,4 @@
+using DfE.EmployerFavourites.Api.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,7 +13,8 @@ namespace DfE.EmployerFavourites.Api.Domain.ReadModel
             model.AddRange(this.Select(x => new WriteModel.ApprenticeshipFavourite
             {
                 ApprenticeshipId = x.ApprenticeshipId,
-                Ukprns = x?.Providers.Select(y => y.Ukprn).ToList() ?? new List<int>(0)
+                //  Ukprns = x?.Providers.Select(y => y.Ukprn).ToList() ?? new List<ProviderData>()
+                Providers = x?.Providers.Select(y => new Models.Provider { Ukprn = y.Ukprn, LocationIds = y.LocationIds }).ToList() ?? new List<Models.Provider>()
             }));
 
             return model;

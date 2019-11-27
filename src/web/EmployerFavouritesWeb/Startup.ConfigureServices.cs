@@ -106,7 +106,8 @@ namespace DfE.EmployerFavourites.Web
                 builder.AddHttpMessageHandler<AdAuthMessageHandler>();
 
             services.AddRefitClient<IFatApi>()
-                .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("FatApi:ApiBaseUrl")));
+                .ConfigureHttpClient(c => c.BaseAddress = new Uri("https://at-fatapi.apprenticeships.education.gov.uk")); // change back to Configuration.GetValue<string>(FatApi:ApiBaseUrl)
+
         }
 
         private void AddConfiguration(IServiceCollection services)
