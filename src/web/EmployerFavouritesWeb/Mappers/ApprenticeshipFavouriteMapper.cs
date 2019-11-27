@@ -62,7 +62,8 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 // This is not how the API call for provider location works where is doesn't return the property if no data exists.
                 EmployerSatisfaction = src.EmployerSatisfaction > 0 ? $"{src.EmployerSatisfaction}%" : NO_DATA_AVAILABLE_MSG, 
                 LearnerSatisfaction = src.LearnerSatisfaction > 0 ? $"{src.LearnerSatisfaction}%" : NO_DATA_AVAILABLE_MSG,
-                FatUrl = _linkGenerator.GetProviderPageUrl(src)
+                FatUrl = _linkGenerator.GetProviderPageUrl(src),
+                Active = src.Active
             };
         }
 

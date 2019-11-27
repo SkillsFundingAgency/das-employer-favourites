@@ -17,5 +17,6 @@ namespace DfE.EmployerFavourites.Web.Models
         public List<LocationViewModel> Locations { get; set; } 
         public ProviderAddress HeadOfficeAddress { get; set; }
         public string CreateVacancyUrl { get; set; }
+        public bool Active { get; set; }
     }
 }
