@@ -58,12 +58,12 @@ namespace DfE.EmployerFavourites.Web.Mappers
         {
             return new LocationViewModel
             {
-                Address1 = src.Address1 ?? "",
-                Address2 = src.Address2 ?? "",
-                Town = src.Town ?? "",
-                PostCode = src.PostCode ?? "",
-                County = src.County ?? "",
-                Name = src.Name ?? ""
+                Address1 = src.Address1,
+                Address2 = src.Address2,
+                Town = src.Town,
+                PostCode = src.PostCode,
+                County = src.County,
+                Name = src.Name 
             };
         }
 
@@ -71,10 +71,10 @@ namespace DfE.EmployerFavourites.Web.Mappers
         {
             return new AddressViewModel
             {
-                Address1 = src.Primary ?? "",
-                Address2 = src.Secondary ?? "",
-                Town = src.Town ?? "",
-                PostCode = src.Postcode ?? ""
+                Address1 = src.Primary,
+                Address2 = src.Secondary,
+                Town = src.Town,
+                PostCode = src.Postcode
             };
         }
 
