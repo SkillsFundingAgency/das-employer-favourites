@@ -167,6 +167,7 @@ namespace DfE.EmployerFavourites.Infrastructure
                     provider.EmployerSatisfaction = item.EmployerSatisfaction;
                     provider.LearnerSatisfaction = item.LearnerSatisfaction;
                     provider.Address = item.Addresses.Find(x => x.ContactType == "PRIMARY");
+                    provider.Active = true;
                     
                 }
             }

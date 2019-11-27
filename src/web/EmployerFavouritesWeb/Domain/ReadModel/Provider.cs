@@ -16,5 +16,6 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
         public List<Location> Locations { get; set; }
         public ProviderAddress Address { get; set; }
         public IList<int> LocationIds { get; set; }
+        public bool Active { get; set; } = false;
     }
 }
