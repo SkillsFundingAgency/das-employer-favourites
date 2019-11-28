@@ -8,5 +8,6 @@ namespace DfE.EmployerFavourites.Web.Models
         public string ApprenticeshipId { get; set; }
         public ApprenticeshipFavouriteViewModel Apprenticeship { get; set; }
         public IReadOnlyList<TrainingProviderViewModel> Items { get; set; }
+        public bool HasLegalEntity { get; set; }
     }
 }

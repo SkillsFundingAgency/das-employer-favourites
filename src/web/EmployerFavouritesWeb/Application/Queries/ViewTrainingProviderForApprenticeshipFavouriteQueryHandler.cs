@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,13 +13,16 @@ namespace DfE.EmployerFavourites.Application.Queries
     {
         private readonly ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler> _logger;
         private readonly IFavouritesReadRepository _readRepository;
+        private readonly IMediator _mediator;
 
         public ViewTrainingProviderForApprenticeshipFavouriteQueryHandler(
             ILogger<ViewTrainingProviderForApprenticeshipFavouriteQueryHandler> logger,
-            IFavouritesReadRepository readRepository)
+            IFavouritesReadRepository readRepository,
+            IMediator mediator)
         {
             _logger = logger;
             _readRepository = readRepository;
+            _mediator = mediator;
         }
 
         public async Task<ViewTrainingProviderForApprenticeshipFavouriteResponse> Handle(ViewTrainingProviderForApprenticeshipFavouriteQuery request, CancellationToken cancellationToken)
@@ -40,11 +44,20 @@ namespace DfE.EmployerFavourites.Application.Queries
             if (provider == null)
                 throw new EntityNotFoundException($"Cannot find Training Provider for employer account: {{request.EmployerAccountId}}, apprenticeshipId: {{request.ApprenticeshipId}} and UKPRN: {{request.Ukprn}}");
 
+            var employerHasLegalEntityResponse = await _mediator.Send(new EmployerHasLegalEntityQuery
+            {
+                EmployerAccountId = request.EmployerAccountId
+            });
+
             // Build view model
             return new ViewTrainingProviderForApprenticeshipFavouriteResponse
             {
+                Favourite = apprenticeship,
+                HasLegalEntities = employerHasLegalEntityResponse,
                 Provider = provider
             };
         }
+
+        
     }
 }
