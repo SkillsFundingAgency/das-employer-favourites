@@ -82,22 +82,22 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
 
         }
 
-        [Fact]
-        public async Task TrainingProvider_DisplaysOneLocationCorrectly()
-        {
-            // Arrange
-            var client = BuildClient();
+        //[Fact]
+        //public async Task TrainingProvider_DisplaysOneLocationCorrectly()
+        //{
+        //    // Arrange
+        //    var client = BuildClient();
 
-            // Act
-            var response = await client.GetAsync("accounts/ONELOCATION/apprenticeships/890/providers");
-            var content = await HtmlHelpers.GetDocumentAsync(response);
+        //    // Act
+        //    var response = await client.GetAsync("accounts/ONELOCATION/apprenticeships/890/providers");
+        //    var content = await HtmlHelpers.GetDocumentAsync(response);
 
-            // Assert
-            var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
+        //    // Assert
+        //    var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
 
-            Assert.Equal("1 saved location - view contact details", expandContactDetailsElement.TextContent);
+        //    Assert.Equal("1 saved location - view contact details", expandContactDetailsElement.TextContent);
 
-        }
+        //}
 
         [Theory]
         [InlineData("ACCOUNT_WITH_LEGAL_ENTITIES")]

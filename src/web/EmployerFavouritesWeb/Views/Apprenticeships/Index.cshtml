@@ -109,7 +109,11 @@ else
                             <div class="govuk-grid-column-one-third">
                                 @if (Model.Items[i].Active)
                                 {
-                                    @if (Model.Items[i].HasTrainingProviders)
+                                    @if (!Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
+                                    {
+                                        // Nothing to display
+                                    }
+                                    @if (!Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
                                     {
                                         <a id="view-training-providers"
                                            asp-controller="Apprenticeships"
@@ -120,9 +124,26 @@ else
                                             <span></span><span class="text">View Training Providers</span>
                                         </a>
                                     }
-
-                                    @if (Model.HasLegalEntity)
+                                    @if (Model.HasLegalEntity && !Model.Items[i].HasTrainingProviders)
                                     {
+                                        <a id="recruit-without-provider"
+                                           href="@Model.Items[i].CreateVacancyUrl"
+                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-button">
+                                            <span></span><span class="text">Recruit Apprentice</span>
+                                        </a>
+                                    }
+                                    @if (Model.HasLegalEntity && Model.Items[i].HasTrainingProviders)
+                                    {
+                                        <a id="view-training-providers"
+                                           asp-controller="Apprenticeships"
+                                           asp-action="TrainingProvider"
+                                           asp-route-employerAccountId="@Model.EmployerAccountId"
+                                           asp-route-apprenticeshipId="@Model.Items[i].Id"
+                                           class="govuk-button govuk-button--search govuk-!-margin-bottom-6 app-task-list__training-provider-content">
+                                            <span></span>
+                                            <span class="text">View Training Providers</span>
+                                        </a>
+
                                         <a id="recruit-with-provider-link"
                                            href="@Model.Items[i].CreateVacancyUrl"
                                            class="govuk-link govuk-link--search govuk-!-margin-bottom-0 app-task-list__training-provider-content recruit-link">
@@ -140,7 +161,7 @@ else
                                 </a>
 
                                 @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
-                                    <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
+        <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
 
                             </div>
 
