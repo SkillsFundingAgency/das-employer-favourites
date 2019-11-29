@@ -43,13 +43,13 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
                         {
                             var currentProvider = existingUkprns.FindIndex(x => x == provider.Key);
 
-                            var existingLocations = existing.Providers[currentProvider].Locations;
+                            var existingLocations = existing.Providers[currentProvider].LocationIds;
 
                             foreach (var location in provider.Value)
                             {
                                 if (!existingLocations.Contains(location))
                                 {
-                                    existing.Providers[currentProvider].Locations.Add(location);
+                                    existing.Providers[currentProvider].LocationIds.Add(location);
                                     changeMade = true;
                                 }
                             }
