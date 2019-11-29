@@ -42,7 +42,8 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
                 Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
                 Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
-                HeadOfficeAddress = Map(src.Address), //src.Address ?? new Infrastructure.FatApiClient.ProviderAddress { Primary = NO_DATA_AVAILABLE_MSG, Secondary = NO_DATA_AVAILABLE_MSG, Street = NO_DATA_AVAILABLE_MSG, ContactType = NO_DATA_AVAILABLE_MSG, Postcode = NO_DATA_AVAILABLE_MSG, Town = NO_DATA_AVAILABLE_MSG },
+                HeadOfficeAddress = src.Address != null ? Map(src.Address) : new AddressViewModel(),
+                //HeadOfficeAddress = Map(src.Address) ?? new AddressViewModel { Address1 = NO_DATA_AVAILABLE_MSG, Address2 = NO_DATA_AVAILABLE_MSG, County = NO_DATA_AVAILABLE_MSG, PostCode = NO_DATA_AVAILABLE_MSG, Town = NO_DATA_AVAILABLE_MSG },
                 Locations =  src.Locations?.Select(Map).ToList() ?? new List<LocationViewModel>(),
 
                 // This below logic for Satisfaction values is copied from FAT website for Provider Details

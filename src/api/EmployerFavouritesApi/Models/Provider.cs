@@ -10,5 +10,6 @@ namespace DfE.EmployerFavourites.Api.Models
         public int Ukprn { get; set; }
 
         public List<int> LocationIds { get; set; }
+        
     }
 }

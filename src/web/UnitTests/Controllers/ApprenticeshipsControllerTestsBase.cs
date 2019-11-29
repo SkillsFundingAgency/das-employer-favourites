@@ -85,7 +85,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
                 Ukprn = 10027893,
                 Name = "Test Provider Ltd",
                 LocationIds = new List<int> { 155399 },
-                Locations = new List<Location>() {
+                Locations = new List<Location> {
                     new Location
                     {
                         Address1 = "1 Test Address",

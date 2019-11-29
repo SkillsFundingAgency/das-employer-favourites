@@ -72,7 +72,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.GetAsync("accounts/ABC123/apprenticeships/123/providers");
+            var response = await client.GetAsync("accounts/NOLOCATIONS/apprenticeships/123/providers");
             var content = await HtmlHelpers.GetDocumentAsync(response);
 
             // Assert
@@ -98,5 +98,6 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             Assert.Equal("1 saved location - view contact details", expandContactDetailsElement.TextContent);
 
         }
+      
     }
 }
