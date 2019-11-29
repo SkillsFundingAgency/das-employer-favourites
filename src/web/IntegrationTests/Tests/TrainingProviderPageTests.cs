@@ -89,7 +89,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var client = BuildClient();
 
             // Act
-            var response = await client.GetAsync("accounts/ONELOCATION/apprenticeships/890/providers");
+            var response = await client.GetAsync("accounts/ONELOCATION/apprenticeships/123/providers");
             var content = await HtmlHelpers.GetDocumentAsync(response);
 
             // Assert
