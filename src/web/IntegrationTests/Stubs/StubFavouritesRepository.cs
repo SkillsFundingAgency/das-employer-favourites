@@ -72,6 +72,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             Website = new Uri("https://www.testprovider.com"),
                             EmployerSatisfaction = 86,
                             LearnerSatisfaction = 98,
+                            Active = true,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
                                 Primary = "1 Head Office",
@@ -106,6 +107,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             Website = new Uri("https://www.testprovider.com"),
                             EmployerSatisfaction = 86,
                             LearnerSatisfaction = 98,
+                            Active = true,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
                                 Primary = "1 Head Office",
@@ -116,7 +118,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                                 ContactType = "LEGAL"
                             }
                         },
-                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028, Address = new Infrastructure.FatApiClient.ProviderAddress { Primary = "1 Head Office",
+                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028, Active = true, Address = new Infrastructure.FatApiClient.ProviderAddress { Primary = "1 Head Office",
                                 Secondary = "Training Provider",
                                 Street = "Training Provider Street",
                                 Town = "Training",
@@ -147,6 +149,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             Website = new Uri("https://www.testprovider.com"),
                             EmployerSatisfaction = 86,
                             LearnerSatisfaction = 98,
+                            Active = true,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
                                 Primary = "1 Head Office",

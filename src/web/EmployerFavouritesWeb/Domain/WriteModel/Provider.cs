@@ -8,6 +8,8 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
         public Provider(int ukprn, List<Location> locations)
         {
             Ukprn = ukprn;
+            Locations = new List<int>();
+
             if (locations != null)
             {
                 foreach (var location in locations)
