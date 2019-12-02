@@ -24,7 +24,7 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
             }
             else
             {
-                if (providers != null || providers.Count > 0)
+                if (providers != null ) //|| providers.Count > 0)
                 {
                     var changeMade = false;
 

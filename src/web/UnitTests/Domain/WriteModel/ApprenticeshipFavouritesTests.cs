@@ -24,10 +24,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         [Fact]
         public void Update_FromOneApprenticeshipsToAnotherApprenticeshipWithNoTrainingProviders()
         {
-            var sut = new Write.ApprenticeshipFavourites
-            {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" }
-            };
+            var sut = GetAnApprenticeshipWithNoProvider();
 
             var result = sut.Update("DEF123", null);
 
@@ -37,10 +34,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         [Fact]
         public void Update_FromOneApprenticeshipsToAnotherApprenticeshipWithOneTrainingProvidersNoLocation()
         {
-            var sut = new Write.ApprenticeshipFavourites
-            {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" }
-            };
+            var sut = GetAnApprenticeshipWithNoProvider();
 
             var result = sut.Update("DEF123", new Dictionary<int, IList<int>> { { 12345678, null } });
 
@@ -50,10 +44,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         [Fact]
         public void Update_FromOneApprenticeshipsToAnotherApprenticeshipWithOneTrainingProvidersOneLocation()
         {
-            var sut = new Write.ApprenticeshipFavourites
-            {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" }
-            };
+            var sut = GetAnApprenticeshipWithNoProvider();
 
             var result = sut.Update("DEF123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1 } } });
 
@@ -63,10 +54,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         [Fact]
         public void Update_AddProviderAndLocationToExistingApprenticeship()
         {
-            var sut = new Write.ApprenticeshipFavourites
-            {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" }
-            };
+            var sut = GetAnApprenticeshipWithNoProvider();
 
             var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1 } } });
 
@@ -77,16 +65,23 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         public void Update_AddAnotherLocationToAnExistingProvider()
         {
 
-            var sut = new Write.ApprenticeshipFavourites
-            {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = new List<Write.Provider> { new Write.Provider( 12345678, new List<int> { 1, 2, 3 }) } }
-            };
+            var sut = GetAnApprenticeshipWithAProvider();
             
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 4 } } });
+            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 10000020, new List<int> { 4 } } });
 
             Assert.True(result);
         }
-        
+        [Fact]
+        public void Update_DoesntAddALocationIdIfItAlreadyExists()
+        {
+
+            var sut = GetAnApprenticeshipWithAProvider();
+
+            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 10000020, new List<int> { 1 } } });
+
+            Assert.False(result);
+        }
+
         [Fact]
         public void Update_AddMultipleLocationsToAnExistingProvider()
         {
@@ -116,76 +111,69 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         }
 
         [Fact]
-        public void Update_AddingLocationThatAlreadyExists()
+        public void Update_AddingMultipleLocationsThatAlreadyExists()
         {
 
-            var sut = new Write.ApprenticeshipFavourites
-            {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = new List<Write.Provider> { new Write.Provider( 12345678, new List<int> { 1, 2, 3 }) } }
-            };
+            var sut = GetAnApprenticeshipWithAProvider();
 
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1 } } });
+            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 10000020, new List<int> { 1, 2, 3 } } });
 
             Assert.False(result);
         }
 
         [Fact]
-        public void Update_AddingMultipleLocationsThatAlreadyExists()
+        public void Update_AddingAnApprenticeshipThatIsAlreadyInAListOfApprenticeships()
+        {
+            var sut = GetMultipleApprenticeshipsWithNoProviders();
+
+            var result = sut.Update("DEF123", null);
+
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Update_AddingMultipleApprenticeshipsWithLocationsThatAlreadyExists()
         {
 
             var sut = new Write.ApprenticeshipFavourites
             {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = new List<Write.Provider> { new Write.Provider( 12345678, new List<int> { 1, 2, 3 }) } }
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = new List<Write.Provider> { new Write.Provider( 12345678, new List<int> { 1, 2, 3 }) } },
+
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "DEF123", Providers = new List<Write.Provider> { new Write.Provider( 87654321, new List<int> { 1, 2, 3 }) } }
             };
 
             var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1, 2, 3 } } });
-
-            //Assert.Equal(5,)
+            
             Assert.False(result);
         }
-        // Tests
-        // Correctly returns whether changes have been made for each apprenticeship
-        // Scenarios
-
-        // empty -> add apprenticeship
-        // empty -> add apprenticeship, tp
-        // empty -> add apprenticeship, tp, location
-        // empty -> add apprenticeship, tp, multiple locations
-        // 1 apprenticeship -> add a different apprenticeship
-        // 1 apprenticeship -> add a different apprenticeship + tp
-        // 1 apprenticeship -> add a different apprenticeship, tp, location
-        // 1 apprenticeship -> add identical apprenticeship, 
-        // 1 apprenticeship -> add identical apprenticeship, tp
-        // 1 apprenticeship -> add identical apprenticeship, tp, multiple location
-        // 1 apprenticeship -> add identical apprenticeship, tp, multiple locations
-        // 2 apprenticeships -> add a different apprenticeship
-        // 2 apprenticeships -> add a different apprenticeship + tp
-        // 2 apprenticeships -> add a different apprenticeship, tp, location
-        // 2 apprenticeships -> add identical apprenticeship, 
-        // 2 apprenticeships -> add identical apprenticeship, tp
-        // 2 apprenticeships -> add identical apprenticeship, tp, multiple location
-        // 2 apprenticeships -> add identical apprenticeship, tp, multiple locations
 
 
-        private IDictionary<int, IList<int>> GetDictionaryOfApprenticeshipWithNoProvider()
+        public Write.ApprenticeshipFavourites GetAnApprenticeshipWithNoProvider()
         {
-            return new Dictionary<int, IList<int>>
+            return new Write.ApprenticeshipFavourites
             {
-                { 10000020, null }
-
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" }
             };
         }
-        private IList<Write.Provider> GetNoProvider()
-        {
-            return new List<Write.Provider> { };
-        }
 
-        private Dictionary<int, IList<int>> GetDictionaryOfApprenticeshipWithOneProvider()
+        public Write.ApprenticeshipFavourites GetAnApprenticeshipWithAProvider()
         {
-            return new Dictionary<int, IList<int>>
+            return new Write.ApprenticeshipFavourites
             {
-                { 10000020, new List<int> { 1 } }
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" , Providers = new List<Write.Provider> { new Write.Provider(10000020, new List<int> {1, 2, 3 }) }
+                }
             };
         }
+
+        public Write.ApprenticeshipFavourites GetMultipleApprenticeshipsWithNoProviders()
+        {
+            return new Write.ApprenticeshipFavourites
+            {
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123" },
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "DEF123" },
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = "GHI123" }
+            };
+        }
+
     }
 }
