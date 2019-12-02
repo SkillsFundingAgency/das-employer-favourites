@@ -66,6 +66,16 @@
                                 </dd>*@
                             </dl>
 
+                        </div>
+                        <div class="govuk-grid-column-one-third">
+                            <a asp-action="DeleteProvider" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.ApprenticeshipId" asp-route-ukprn="@Model.Items[i].Ukprn" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
+                            @*<a href="#" class="govuk-button app-task-list__training-provider-content">Recruit an apprentice</a>
+                            <a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>*@
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
                             @if (Model.Items[i].Locations.Count == 0)
                             {
                                 <partial name="_headOfficeAddress" model="Model.Items[i].HeadOfficeAddress" />
@@ -74,12 +84,6 @@
                             {
                                 <partial name="_locationAddresses" model="Model.Items[i].Locations" />
                             }
-
-                        </div>
-                        <div class="govuk-grid-column-one-third">
-                            <a asp-action="DeleteProvider" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.ApprenticeshipId" asp-route-ukprn="@Model.Items[i].Ukprn" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
-                            @*<a href="#" class="govuk-button app-task-list__training-provider-content">Recruit an apprentice</a>
-                            <a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>*@
                         </div>
                     </div>
                 </li>

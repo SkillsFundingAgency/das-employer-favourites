@@ -2,13 +2,14 @@
 @inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
 
 @{
-    var countText = Model.Count > 1 ? "saved locations" : "saved location";
+    var countText = Model.Count > 1 ? "saved locations - view address" : "saved location - view addresses";
+    
 }
 
 <details class="govuk-details">
     <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
-            <span class="expand-location-details-header">@Model.Count @countText - view contact details</span>
+            <span class="expand-location-details-header">@Model.Count @countText </span>
         </span>
     </summary>
     <div class="govuk-details__text">
