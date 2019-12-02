@@ -1,15 +1,18 @@
 @model ErrorViewModel
-@using Microsoft.Extensions.Options
-@inject IOptions<ExternalLinks> options;
-
-@{
-    var accountsHomePage = options.Value.AccountsHomePage;
-}
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Access denied</h1>
-        <p class="govuk-body">Your account does not have sufficient privileges</p>
-        <p><a href="@accountsHomePage" class="govuk-button">Go back to the service homepage</a></p>
+        <header class="page-header group">
+            <h1 class="govuk-heading-xl govuk-!-margin-bottom-6">Access denied</h1>
+        </header>
+        <div class="article-container">
+            <article role="article" class="group">
+                <div class="inner">
+                    <p>Your account does not have sufficient privileges</p>
+                    <p>If you’re unable to access the area of the site you need, you should contact the account owner to make sure you have the correct role assigned to your account.</p>
+                    <p>Alternatively, you can <a href="@Model.MaDashboardUrl">return to the homepage</a>.</p>
+                </div>
+            </article>
+        </div>
     </div>
 </div>

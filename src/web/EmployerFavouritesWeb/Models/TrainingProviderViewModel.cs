@@ -15,6 +15,7 @@ namespace DfE.EmployerFavourites.Web.Models
         public int Ukprn { get; set; }
         public Uri FatUrl { get; set; }
         public List<LocationViewModel> Locations { get; set; } 
+        public string CreateVacancyUrl { get; set; }
         public AddressViewModel HeadOfficeAddress { get; set; }
     }
 }
