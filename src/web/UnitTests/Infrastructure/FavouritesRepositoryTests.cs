@@ -145,7 +145,8 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Infrastructure
             _mockFatApi.Setup(x => x.GetStandardAsync("123")).ReturnsAsync(new FatStandard { StandardId = "123", Duration = 2, Level = 4, Title = "Test Standard" });
             _mockFatApi.Setup(x => x.GetFrameworkAsync("435-1-2")).ReturnsAsync(new FatFramework { FrameworkId = "435-1-2", Duration = 1, Level = 3, Title = "Test Framework", ExpiryDate = new DateTime(2020, 9, 30) });
 
-            _mockFatApi.Setup(x => x.GetProviderAsync("12345678")).ReturnsAsync(new FatTrainingProvider { Ukprn = 12345678, Phone = "123123", Email = "email@email.com", Website = new Uri("https://site.com"), EmployerSatisfaction = 123, LearnerSatisfaction = 321 });
+            _mockFatApi.Setup(x => x.GetProviderAsync("12345678")).ReturnsAsync(new FatTrainingProvider { Ukprn = 12345678, Phone = "123123", Email = "email@email.com", Website = new Uri("https://site.com"), EmployerSatisfaction = 123, LearnerSatisfaction = 321,
+                Addresses = new System.Collections.Generic.List<ProviderAddress> { new ProviderAddress { ContactType = "PRIMARY", Primary = "1 Training Street", Secondary = "Provider", Town = "Town", Postcode = "AA1 2BB" } } });
 
             var result = await _sut.GetApprenticeshipFavourites("123");
 

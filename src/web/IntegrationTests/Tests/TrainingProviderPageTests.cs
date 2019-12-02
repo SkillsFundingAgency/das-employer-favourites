@@ -78,7 +78,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             // Assert
             var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
 
-            Assert.Equal("Head Office - contact details", expandContactDetailsElement.TextContent);
+            Assert.Equal("Head office - view address", expandContactDetailsElement.TextContent);
 
         }
 
@@ -95,10 +95,27 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             // Assert
             var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
 
-            Assert.Equal("1 saved location - view contact details", expandContactDetailsElement.TextContent);
+            Assert.Equal("1 saved location - view address", expandContactDetailsElement.TextContent);
 
         }
-        
+
+        [Fact]
+        public async Task TrainingProvider_DisplaysHeadingCorrectlyForMultipleLocations()
+        {
+            // Arrange
+            var client = BuildClient();
+
+            // Act
+            var response = await client.GetAsync("accounts/TWOLOCATIONS/apprenticeships/123/providers");
+            var content = await HtmlHelpers.GetDocumentAsync(response);
+
+            // Assert
+            var expandContactDetailsElement = content.QuerySelector(".expand-location-details-header");
+
+            Assert.Equal("1 saved location - view address", expandContactDetailsElement.TextContent);
+
+        }
+
         [Theory]
         [InlineData("ACCOUNT_WITH_LEGAL_ENTITIES")]
         [InlineData("ACCOUNT_WITHOUT_LEGAL_ENTITIES")]

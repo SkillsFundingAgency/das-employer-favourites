@@ -28,6 +28,9 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                 case "NOLOCATIONS":
                     favourites = GenerateSingleWithNoLocation();
                     break;
+                case "TWOLOCATIONS":
+                    favourites = GenerateSingleWithTwoLocations();
+                    break;
                 default:
                     favourites = GenerateMultiple();
                     break;
@@ -169,7 +172,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
 
         private ReadModel.ApprenticeshipFavourites GenerateSingleWithOneLocation()
         {
-            var newFavourites = new ReadModel.ApprenticeshipFavourites
+            return new ReadModel.ApprenticeshipFavourites
             {
                 new ReadModel.ApprenticeshipFavourite
                 {
@@ -179,26 +182,57 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     TypicalLength = 24,
                     Providers = new List<ReadModel.Provider>
                     {
-                        new ReadModel.Provider { Name = "Test Provider", Ukprn = 10000020,  Address = new Infrastructure.FatApiClient.ProviderAddress
-                            {
-                                Primary = "1 Head Office",
-                                Secondary = "Training Provider",
-                                Street = "Training Provider Street",
-                                Town = "Training",
-                                Postcode = "AA1 1BB",
-                                ContactType = "PRIMARY"
+                        new ReadModel.Provider
+                        {       Name = "Test Provider", Ukprn = 10000020,
+                                Address = new Infrastructure.FatApiClient.ProviderAddress
+                                {
+                                    Primary = "1 Head Office",
+                                    Secondary = "Training Provider",
+                                    Street = "Training Provider Street",
+                                    Town = "Training",
+                                    Postcode = "AA1 1BB",
+                                    ContactType = "PRIMARY"
 
-                            }, LocationIds = new List<int> { 1 }, 
-                                                Locations = new List<Location> { new Location { Address1 = "1 Address One", Address2 = "Address 2", PostCode = "AA1 2BB", LocationId = 1, Name = "Test Location 1" } }
-
+                                },
+                                LocationIds = new List<int> { 1 }, 
+                                Locations = new List<Location> { new Location { Address1 = "1 Address One", Address2 = "Address 2", PostCode = "AA1 2BB", LocationId = 1, Name = "Test Location 1" } }
                         }
-                    },
-                   
+                    },                   
                 }
             };
-
-            return newFavourites;
         }
+        private ReadModel.ApprenticeshipFavourites GenerateSingleWithTwoLocations()
+        {
+            return new ReadModel.ApprenticeshipFavourites
+            {
+                new ReadModel.ApprenticeshipFavourite
+                {
+                    ApprenticeshipId = "123",
+                    Title = "Test Standard1",
+                    Level = 3,
+                    TypicalLength = 24,
+                    Providers = new List<ReadModel.Provider>
+                    {
+                        new ReadModel.Provider
+                        {       Name = "Test Provider", Ukprn = 10000020,
+                                Address = new Infrastructure.FatApiClient.ProviderAddress
+                                {
+                                    Primary = "1 Head Office",
+                                    Secondary = "Training Provider",
+                                    Street = "Training Provider Street",
+                                    Town = "Training",
+                                    Postcode = "AA1 1BB",
+                                    ContactType = "PRIMARY"
+
+                                },
+                                LocationIds = new List<int> { 1 },
+                                Locations = new List<Location> { new Location { Address1 = "1 Address One", Address2 = "Address 2", PostCode = "AA1 2BB", LocationId = 1, Name = "Test Location 1" } }
+                        }
+                    },
+                }
+            };
+        }
+
         private ReadModel.ApprenticeshipFavourites GenerateSingleWithNoLocation()
         {
             var newFavourites = new ReadModel.ApprenticeshipFavourites
