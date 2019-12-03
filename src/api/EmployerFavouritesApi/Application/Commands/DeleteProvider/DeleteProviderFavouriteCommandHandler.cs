@@ -5,6 +5,7 @@ using DfE.EmployerFavourites.Api.Domain;
 using DfE.EmployerFavourites.Api.Domain.WriteModel;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace DfE.EmployerFavourites.Api.Application.Commands
 {
@@ -63,6 +64,7 @@ namespace DfE.EmployerFavourites.Api.Application.Commands
 
             updatedFavourites.Remove(request.ApprenticeshipId, request.Ukprn);
 
+            
             await _writeRepository.SaveApprenticeshipFavourites(request.EmployerAccountId, updatedFavourites);
             return new DeleteProviderFavouriteCommandResponse { CommandResult = DomainUpdateStatus.Deleted };
 

@@ -5,36 +5,54 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
 {
     public class ApprenticeshipFavourites : List<ApprenticeshipFavourite>
     {
-        public bool Update(string apprenticeshipId, IList<int> ukprns)
+        public bool Update(string apprenticeshipId, IDictionary<int,IList<int>> providers)
         {
             var existing = this.SingleOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
-
+            
             if (existing == null)
             {
-                if (ukprns == null || ukprns.Count == 0)
+                if (providers == null || providers.Count == 0)
                 {
                     Add(new ApprenticeshipFavourite(apprenticeshipId));
                     return true;
                 }
                 else
                 {
-                    Add(new ApprenticeshipFavourite(apprenticeshipId, ukprns));
+                    Add(new ApprenticeshipFavourite(apprenticeshipId, providers));
                     return true;
                 }
             }
             else
             {
-                if (ukprns != null || ukprns.Count > 0)
+                if (providers != null ) //|| providers.Count > 0)
                 {
                     var changeMade = false;
 
-                    foreach (var ukprn in ukprns)
+                    var existingUkprns = existing.Providers.Select(x => x.Ukprn).ToList();
+                    
+                    foreach (var provider in providers)
                     {
-                        if (!existing.Ukprns.Contains(ukprn))
+
+                        if (!existingUkprns.Contains(provider.Key))
                         {
-                            existing.Ukprns.Add(ukprn);
+                            existing.Providers.Add(new Provider(provider.Key, provider.Value));
 
                             changeMade = true;
+                        }
+                        else
+                        {
+                            var currentProvider = existingUkprns.FindIndex(x => x == provider.Key);
+
+                            var existingLocations = existing.Providers[currentProvider].LocationIds;
+
+                            foreach (var location in provider.Value)
+                            {
+                                if (!existingLocations.Contains(location))
+                                {
+                                    existing.Providers[currentProvider].LocationIds.Add(location);
+                                    changeMade = true;
+                                }
+                            }
                         }
                     }
 

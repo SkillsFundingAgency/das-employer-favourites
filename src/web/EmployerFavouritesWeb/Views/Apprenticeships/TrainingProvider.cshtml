@@ -2,7 +2,7 @@
 @inject SFA.DAS.EmployerUrlHelper.ILinkGenerator linkGenerator
 
 @{
-    var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Training Providers" : "(1) Training Provider";
+    var countText = Model.Items.Count > 1 ? $"({Model.Items.Count}) Training Providers" : "(1) Training Provider";    
 }
 @section BodyHeader{
     <div class="govuk-grid-row">
@@ -44,7 +44,16 @@
                             <dl class="govuk-list govuk-!-margin-top-0">
                                 <dt class="app-training-provider__details-title">Phone:</dt>
                                 <dd class="app-training-provider__details-definition fav-tp-phone">@Model.Items[i].Phone</dd>
+                                <dt class="app-training-provider__details-title">Website:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-website"><a class="govuk-link" href="@Model.Items[i].Website">@Model.Items[i].Website</a></dd>
                                 <dt class="app-training-provider__details-title">Email:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-email"><a class="govuk-link" href="mailto:@Model.Items[i].Email">@Model.Items[i].Email</a></dd>
+                                <dt class="app-training-provider__details-title">Employer Satisfaction:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
+                                <dt class="app-training-provider__details-title">Learner Satisfaction:</dt>
+                                <dd class="app-training-provider__details-definition fav-tp-learner-satisfaction">@Model.Items[i].LearnerSatisfaction</dd>
+
+                                @*<dt class="app-training-provider__details-title">Email:</dt>
                                 <dd class="app-training-provider__details-definition fav-tp-email">
                                     @if (@Model.Items[i].Email == "no data available")
                                     {
@@ -54,34 +63,9 @@
                                     {
                                         <a href="mailto:@Model.Items[i].Email">@Model.Items[i].Email</a>
                                     }
-                                </dd>
+                                </dd>*@
                             </dl>
-                            <details class="govuk-details">
-                                <summary class="govuk-details__summary">
-                                    <span class="govuk-details__summary-text">
-                                        Training provider details
-                                    </span>
-                                </summary>
-                                <div class="govuk-details__text">
-                                    <dl class="govuk-list">
-                                        <dt class="app-training-provider__details-title">Website:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-website">
-                                            @if (@Model.Items[i].Website == "no data available")
-                                            {
-                                                <span>no data available</span>
-                                            }
-                                            else
-                                            {
-                                                <a href="@Model.Items[i].Website" target="_blank" rel="external">@Model.Items[i].Website</a>
-                                            }
-                                        </dd>
-                                        <dt class="app-training-provider__details-title">Employer satisfaction:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-employer-satisfaction">@Model.Items[i].EmployerSatisfaction</dd>
-                                        <dt class="app-training-provider__details-title">Learner satisfaction:</dt>
-                                        <dd class="app-training-provider__details-definition fav-tp-learner-satisfaction">@Model.Items[i].LearnerSatisfaction</dd>
-                                    </dl>
-                                </div>
-                            </details>
+
                         </div>
                         <div class="govuk-grid-column-one-third">
                             @if (Model.HasLegalEntity)
@@ -92,6 +76,19 @@
                             <a asp-action="DeleteProvider" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.ApprenticeshipId" asp-route-ukprn="@Model.Items[i].Ukprn" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
 
                             @*<a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>*@
+                        </div>
+                    </div>
+
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-full">
+                            @if (Model.Items[i].Locations.Count == 0)
+                            {
+                                <partial name="_headOfficeAddress" model="Model.Items[i].HeadOfficeAddress" />
+                            }
+                            else
+                            {
+                                <partial name="_locationAddresses" model="Model.Items[i].Locations" />
+                            }
                         </div>
                     </div>
                 </li>

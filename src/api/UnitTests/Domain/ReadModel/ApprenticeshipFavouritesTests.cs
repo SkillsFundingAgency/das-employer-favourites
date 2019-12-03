@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Xunit;
+using FluentAssertions;
 using Read = DfE.EmployerFavourites.Api.Domain.ReadModel;
 using Write = DfE.EmployerFavourites.Api.Domain.WriteModel;
+using System;
 
 namespace DfE.EmployerFavourites.Api.UnitTests.Domain.ReadModel
 {
@@ -15,8 +17,25 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Domain.ReadModel
         {
             var sut = new Read.ApprenticeshipFavourites
             {
-                new Read.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = GetListOfTestProviders() },
+                new Read.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = GetReadModelListOfTestProviders() },
                 new Read.ApprenticeshipFavourite { ApprenticeshipId = "XYZ123" }
+            };
+
+            var expected = new List<Write.ApprenticeshipFavourite>()
+            {
+                new Write.ApprenticeshipFavourite()
+                {
+                    ApprenticeshipId = "ABC123",
+                    Providers = new List<Write.Provider>
+                    {
+                        new Write.Provider { Ukprn = 1},
+                        new Write.Provider { Ukprn = 2, LocationIds = new List<int> { 1, 2}}
+                    }
+                },
+                new Write.ApprenticeshipFavourite()
+                {
+                    ApprenticeshipId = "XYZ123"
+                }
             };
 
             var result = sut.MapToWriteModel();
@@ -24,43 +43,21 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Domain.ReadModel
             Assert.NotNull(result);
             Assert.Equal(sut.Count, result.Count);
 
-            Assert.Collection(result,
-                item => { Assert.Equal("ABC123", item.ApprenticeshipId); Assert.Equal(new List<int> { 1, 2, 3 }, item.Ukprns); },
-                item => { Assert.Equal("XYZ123", item.ApprenticeshipId); Assert.Equal(0, item.Ukprns.Count); });
+            result.Should().BeEquivalentTo(expected);
         }
-
-
-        private List<Read.Provider> GetListOfTestProviders()
-        {
-            return new List<Read.Provider>
-            {
-                new Read.Provider { Ukprn = 1 },
-                new Read.Provider { Ukprn = 2 },
-                new Read.Provider { Ukprn = 3 }
-            };
-        }
-
-        private List<int> GetIntListOfTestProviders()
-        {
-            return new List<int>
-            {
-               1,2,3
-            };
-        }
-
+        
         [Fact]
         public void WhenRemoveCalledWithApprenticeshipId_ThenRemoveApprenticeshipFromList()
         {
             var sut = new Write.ApprenticeshipFavourites
             {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = _apprenticeshipId, Ukprns = GetIntListOfTestProviders() },
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = _apprenticeshipId, Providers = GetWriteModelListOfTestProviders() },
                 new Write.ApprenticeshipFavourite { ApprenticeshipId = "XYZ123" }
             };
 
             sut.Remove("ABC123");
 
-            Assert.NotNull(sut);
-            Assert.Equal(1,sut.Count);
+            Assert.Single(sut);
         }
 
         [Fact]
@@ -68,7 +65,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Domain.ReadModel
         {
             var sut = new Write.ApprenticeshipFavourites
             {
-                new Write.ApprenticeshipFavourite { ApprenticeshipId = _apprenticeshipId, Ukprns = GetIntListOfTestProviders() },
+                new Write.ApprenticeshipFavourite { ApprenticeshipId = _apprenticeshipId, Providers = GetWriteModelListOfTestProviders() },
                 new Write.ApprenticeshipFavourite { ApprenticeshipId = "XYZ123" }
             };
 
@@ -77,8 +74,34 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Domain.ReadModel
             Assert.NotNull(sut);
             Assert.Equal(2, sut.Count);
 
-            Assert.Equal(2,sut.FirstOrDefault(w => w.ApprenticeshipId != null && w.ApprenticeshipId == _apprenticeshipId).Ukprns.Count);
+            Assert.Equal(2, sut.FirstOrDefault(w => w.ApprenticeshipId != null && w.ApprenticeshipId == _apprenticeshipId).Providers.Count);
+
         }
 
+        private IList<Read.Provider> GetReadModelListOfTestProviders( )
+        {
+            return new List<Read.Provider>
+            {
+                new Read.Provider { Ukprn = 1 },
+                new Read.Provider { Ukprn = 2, LocationIds = GetReadModelListOfTestLocationIds() }
+            };
+        }
+
+        private List<int> GetReadModelListOfTestLocationIds()
+        {
+            return new List<int> { 1, 2 };
+        }
+
+        private IList<Write.Provider> GetWriteModelListOfTestProviders()
+        {
+            return new List<Write.Provider>
+            {
+                new Write.Provider { Ukprn = 1 },
+                new Write.Provider { Ukprn = 2 , LocationIds = new List<int> { 100, 101, 102 } },
+                new Write.Provider { Ukprn = 3 }
+            };
+        }
+
+        
     }
 }

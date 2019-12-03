@@ -171,13 +171,13 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         private static bool ContainsExistingAndNewApprenticeshipWithUkprn(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
         {
             return ContainsExistingPlusNewApprenticeship(a, apprenticeshipId)
-                && a.Any(b => b.ApprenticeshipId == apprenticeshipId && b.Ukprns.Contains(ukprn));
+                && a.Any(b => b.ApprenticeshipId == apprenticeshipId && b.Providers.Select(c => c.Ukprn).Contains(ukprn));
         }
 
         private static bool ContainsNewUkprnForExistingApprenticeship(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
         {
             return a.Count == GetTestRepositoryFavourites().Count
-                && a.Any(b => b.ApprenticeshipId == apprenticeshipId && b.Ukprns.Contains(ukprn));
+                && a.Any(b => b.ApprenticeshipId == apprenticeshipId && b.Providers.Select(c => c.Ukprn).Contains(ukprn));
         }
 
         private static bool ContainsExistingPlusNewApprenticeship(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId)
@@ -191,12 +191,12 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             {
                 var matchingItem = a.SingleOrDefault(x => x.ApprenticeshipId == item.Item1);
 
-                if (matchingItem == null || matchingItem.Ukprns == null || matchingItem.Ukprns.Count != item.Item2.Count)
+                if (matchingItem == null || matchingItem.Providers == null || matchingItem.Providers.Count != item.Item2.Count)
                     return false;
 
                 for (int i = 0; i < item.Item2.Count; i++)
                 {
-                    if (item.Item2[i] != matchingItem.Ukprns[i])
+                    if (item.Item2[i] != matchingItem.Providers[i].Ukprn)
                         return false;
                 }
             }

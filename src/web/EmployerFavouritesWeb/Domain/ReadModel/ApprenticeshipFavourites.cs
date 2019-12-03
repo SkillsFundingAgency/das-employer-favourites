@@ -12,8 +12,8 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
             model.AddRange(this.Select(x => new Domain.WriteModel.ApprenticeshipFavourite
             {
                 ApprenticeshipId = x.ApprenticeshipId,
-                Ukprns = x?.Providers.Select(y => y.Ukprn).ToList() ?? new List<int>(0)
-            }));
+                Providers = x.Providers.Select(y => new WriteModel.Provider(y.Ukprn, y.Locations)).ToList() ?? new List<WriteModel.Provider> { }
+            })); 
 
             return model;
         }

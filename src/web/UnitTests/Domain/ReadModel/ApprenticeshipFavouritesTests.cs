@@ -20,9 +20,6 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.ReadModel
             Assert.NotNull(result);
             Assert.Equal(sut.Count, result.Count);
 
-            Assert.Collection(result,
-                item => { Assert.Equal("ABC123", item.ApprenticeshipId); Assert.Equal(new List<int> { 1, 2, 3 }, item.Ukprns); },
-                item => { Assert.Equal("XYZ123", item.ApprenticeshipId); Assert.Equal(0, item.Ukprns.Count); });
         }
 
 

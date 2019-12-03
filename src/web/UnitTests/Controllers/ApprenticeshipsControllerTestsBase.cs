@@ -31,6 +31,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         protected const string USER_ID = "User123";
         protected const string APPRENTICESHIPID = "123";
         protected const string APPRENTICESHIPID_NO_PROVIDER_DATA = "30";
+        protected const string APPRENTICESHIPID_WITH_LOCATION = "2";
         protected const int UKPRN = 10000020;
         protected readonly Mock<IOptions<ExternalLinks>> _mockConfig;
         protected readonly Mock<IOptions<FatWebsite>> _mockFatConfig;
@@ -80,6 +81,25 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             list.Add(new ReadModel.ApprenticeshipFavourite("420-2-1") { Title = "Framework-420-2-1", Level = 3, TypicalLength = 18, ExpiryDate = new DateTime(2020, 1, 1) });
             list.Add(new ReadModel.ApprenticeshipFavourite("70", new Provider { Ukprn = 12345678 }) { Title = "Standard-70", Level = 5, TypicalLength = 12 });
             list.Add(new ReadModel.ApprenticeshipFavourite("123", new Provider { Ukprn = 10000020, Name = "Test Provider Ltd", Phone = "020 123 1234", Email = "test@test.com", Website = new Uri("https://www.testprovider.com"), EmployerSatisfaction = 66, LearnerSatisfaction = 99 }) { Title = "Standard-123", Level = 2, TypicalLength = 24 });
+            list.Add(new ReadModel.ApprenticeshipFavourite("2", new Provider
+            {
+                Ukprn = 10027893,
+                Name = "Test Provider Ltd",
+                LocationIds = new List<int> { 155399 },
+                Locations = new List<Location> {
+                    new Location
+                    {
+                        Address1 = "1 Test Address",
+                        Address2 = "Location",
+                        County = "Location",
+                        Town = "City of Provider",
+                        PostCode = "AA1 2BB",
+                        Name = "Location Provider",
+                        LocationId = 155399
+
+                    } }
+            })
+            { Title = "Standard-70", Level = 5, TypicalLength = 12 });
 
             return list;
         }

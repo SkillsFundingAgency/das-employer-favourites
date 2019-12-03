@@ -39,5 +39,13 @@ namespace DfE.EmployerFavourites.Web.Validation
         }
 
         internal bool IsValidBasketId(Guid basketId) => basketId != Guid.Empty;
+
+        internal bool IsValidLocationId(int? locationId)
+        {
+            if (locationId == null )
+                return false;
+
+            return true;
+        }
     }
 }

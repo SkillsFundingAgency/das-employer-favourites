@@ -107,6 +107,7 @@ namespace DfE.EmployerFavourites.Web
 
             services.AddRefitClient<IFatApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("FatApi:ApiBaseUrl")));
+
         }
 
         private void AddConfiguration(IServiceCollection services)

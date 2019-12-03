@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -54,7 +55,7 @@ namespace DfE.EmployerFavourites.Application.Commands
 
             foreach(var item in basketContent)
             {
-                changesMade |= writeModel.Update(item.ApprenticeshipId, item.Ukprns);
+                changesMade |= writeModel.Update(item.ApprenticeshipId, item.Providers);
             }
 
             if (changesMade)

@@ -118,16 +118,14 @@ namespace DfE.EmployerFavourites.Web.Controllers
             var items = response.Favourite.Providers.Select(mapper.Map).ToList();
 
             items.ForEach(apprenticeshipProvider => {
-
                 apprenticeshipProvider.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?Ukprn={ apprenticeshipProvider.Ukprn }&ProgrammeId={ apprenticeshipId }";
-
             });
             
             var model = new TrainingProvidersViewModel
             {
                 EmployerAccountId = employerAccountId,
-                Items = items,
                 ApprenticeshipId = apprenticeshipId,
+                Items = items,
                 HasLegalEntity =  response.HasLegalEntities
             };
 
