@@ -101,8 +101,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                 {
                     Ukprn = x.Ukprn,
                     Name = await _fatRepository.GetProviderNameAsync(x.Ukprn),
-                    LocationIds = x.LocationIds,
-                    Locations = new List<ReadModel.Location>() 
+                    LocationIds = x.LocationIds
                 }))
             };
         }

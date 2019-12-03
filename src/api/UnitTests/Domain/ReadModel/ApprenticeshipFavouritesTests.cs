@@ -83,16 +83,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Domain.ReadModel
             return new List<Read.Provider>
             {
                 new Read.Provider { Ukprn = 1 },
-                new Read.Provider { Ukprn = 2, LocationIds = GetReadModelListOfTestLocationIds(), Locations = GetReadModelListOfTestLocations()},
-            };
-        }
-
-        private List<Read.Location> GetReadModelListOfTestLocations()
-        {
-            return new List<Read.Location>
-            {
-                new Read.Location { Id = 1, Name = "Location 1"},
-                new Read.Location { Id = 2, Name = "Location 2"}
+                new Read.Provider { Ukprn = 2, LocationIds = GetReadModelListOfTestLocationIds() }
             };
         }
 
