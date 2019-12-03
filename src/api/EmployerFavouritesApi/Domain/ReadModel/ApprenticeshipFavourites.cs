@@ -1,6 +1,7 @@
 using DfE.EmployerFavourites.Api.Models;
 using System.Collections.Generic;
 using System.Linq;
+using WriteModel = DfE.EmployerFavourites.Api.Domain.WriteModel;
 
 namespace DfE.EmployerFavourites.Api.Domain.ReadModel
 {
@@ -13,7 +14,7 @@ namespace DfE.EmployerFavourites.Api.Domain.ReadModel
             model.AddRange(this.Select(x => new WriteModel.ApprenticeshipFavourite
             {
                 ApprenticeshipId = x.ApprenticeshipId,
-                Providers = x?.Providers.Select(y => new Models.Provider { Ukprn = y.Ukprn, LocationIds = y.LocationIds }).ToList() ?? new List<Models.Provider>()
+                Providers = x?.Providers.Select(y => new WriteModel.Provider { Ukprn = y.Ukprn, LocationIds = y.LocationIds }).ToList() ?? new List<WriteModel.Provider>()
             }));
 
             return model;

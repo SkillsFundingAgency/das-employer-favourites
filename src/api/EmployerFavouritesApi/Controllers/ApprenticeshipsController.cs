@@ -9,6 +9,7 @@ using DfE.EmployerFavourites.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WriteModel = DfE.EmployerFavourites.Api.Domain.WriteModel;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -119,7 +120,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
             var items = favourites.Select(x => new ApprenticeshipFavourite
             {
-                ApprenticeshipId = x.ApprenticeshipId, Providers = x.Providers
+                ApprenticeshipId = x.ApprenticeshipId,
+                Providers = x.Providers.Select(s => new WriteModel.Provider() { Ukprn = s.Ukprn, LocationIds = s.LocationIds }).ToList()
             });
 
             writeModel.AddRange(items);
@@ -191,7 +193,10 @@ namespace DfE.EmployerFavourites.Api.Controllers
             try
             {
                 var response = await _mediator.Send(new DeleteProviderFavouriteCommand()
-                { EmployerAccountId = employerAccountId, ApprenticeshipId = apprenticeshipId, Ukprn = ukprn });
+                {
+                    EmployerAccountId = employerAccountId,
+                    ApprenticeshipId = apprenticeshipId, Ukprn = ukprn
+                });
 
                 if (response.CommandResult == DomainUpdateStatus.Failed)
                 {

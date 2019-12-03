@@ -21,7 +21,6 @@
     <PackageReference Include="Microsoft.Azure.Cosmos.Table" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Account.Api.Client" Version="1.6.1" />
     <PackageReference Include="Polly" Version="7.1.0" />
-    <PackageReference Include="SFA.DAS.SAS.Shared.Components" Version="1.1.0.14-alpha-basket" />
     <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers" Version="1.0.16" />
     <PackageReference Include="NWebsec.AspNetCore.Mvc.TagHelpers" Version="2.0.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.49" />

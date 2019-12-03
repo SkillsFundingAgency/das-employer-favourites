@@ -21,11 +21,6 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
                 Providers = providers.Select(p => new Provider (p.Key,p.Value )).ToList();
         }
 
-        //public ApprenticeshipFavourite(string apprenticeshipId, Provider provider) : this(apprenticeshipId)
-        //{
-        //    Providers.Add(new Provider(provider.Ukprn,provider.Locations));
-        //}
-
         public string ApprenticeshipId { get; set; }
         public IList<Provider> Providers { get; set; }
     }

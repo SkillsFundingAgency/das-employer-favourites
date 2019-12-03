@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Infrastructure.Interfaces;
-using DfE.EmployerFavourites.Api.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Polly;
 using Polly.Retry;
 using SFA.DAS.Apprenticeships.Api.Client;

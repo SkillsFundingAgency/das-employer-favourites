@@ -1,5 +1,4 @@
-﻿using DfE.EmployerFavourites.Api.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace DfE.EmployerFavourites.Api.Domain.ReadModel
 {

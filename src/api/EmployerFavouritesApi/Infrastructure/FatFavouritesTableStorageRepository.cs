@@ -12,6 +12,8 @@ using Polly;
 using Polly.Retry;
 using System.Collections.Generic;
 using DfE.EmployerFavourites.Api.Models;
+using ReadModel = DfE.EmployerFavourites.Api.Domain.ReadModel;
+using WriteModel = DfE.EmployerFavourites.Api.Domain.WriteModel;
 
 namespace DfE.EmployerFavourites.Api.Infrastructure
 {
@@ -49,7 +51,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             }
         }
 
-        public async Task<Domain.ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
+        public async Task<ReadModel.ApprenticeshipFavourites> GetApprenticeshipFavourites(string employerAccountId)
         {
             try
             {
@@ -64,7 +66,7 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                     _logger.LogTrace("\t{0}\t{1}\t{2}", entity.PartitionKey, entity.RowKey, JsonConvert.SerializeObject(entity.Favourites));
                 }
 
-                var favouritesFromTableStorage = entity?.ToApprenticeshipFavouritesWriteModel() ?? new Domain.WriteModel.ApprenticeshipFavourites();
+                var favouritesFromTableStorage = entity?.ToApprenticeshipFavouritesWriteModel() ?? new WriteModel.ApprenticeshipFavourites();
 
                 var favourites = await BuildReadModel(favouritesFromTableStorage);
 
@@ -77,13 +79,13 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             }
         }
 
-        private async Task<Domain.ReadModel.ApprenticeshipFavourites> BuildReadModel(Domain.WriteModel.ApprenticeshipFavourites favouritesFromTableStorage)
+        private async Task<ReadModel.ApprenticeshipFavourites> BuildReadModel(Domain.WriteModel.ApprenticeshipFavourites favouritesFromTableStorage)
         {
             var buildFavouritesTasks = favouritesFromTableStorage.Select(BuildReadModelItem).ToList();
 
             await Task.WhenAll(buildFavouritesTasks);
 
-            var favourites = new Domain.ReadModel.ApprenticeshipFavourites();
+            var favourites = new ReadModel.ApprenticeshipFavourites();
             favourites.AddRange(buildFavouritesTasks.Select(x => x.Result));
 
             return favourites;
@@ -95,12 +97,12 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             {
                 ApprenticeshipId = src.ApprenticeshipId,
                 Title = await _fatRepository.GetApprenticeshipNameAsync(src.ApprenticeshipId),
-                Providers = await Task.WhenAll(src.Providers?.Select(async x => new Domain.ReadModel.Provider
+                Providers = await Task.WhenAll(src.Providers?.Select(async x => new ReadModel.Provider
                 {
                     Ukprn = x.Ukprn,
                     Name = await _fatRepository.GetProviderNameAsync(x.Ukprn),
                     LocationIds = x.LocationIds,
-                    Locations = new List<Location>() 
+                    Locations = new List<ReadModel.Location>() 
                 }))
             };
         }

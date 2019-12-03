@@ -44,19 +44,5 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.ReadModel
 
             Assert.False(sut.IsFramework);
         }
-
-        //[Fact]
-        //public void GenerateAddress_SelectsPrimaryAddress()
-        //{
-        //    List<ProviderAddress> Address = new List<ProviderAddress> { new ProviderAddress { ContactType = "LEGAL" },
-        //                                                                new ProviderAddress { ContactType = "PRIMARY" } };
-        //    var generator = new ();
-        //}
-
-        [Fact]
-        public void GenerateAddress_WhenAllInformationIsAvailable()
-        {
-
-        }
     }
 }

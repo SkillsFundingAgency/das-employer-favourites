@@ -42,10 +42,10 @@ namespace DfE.EmployerFavourites.Web.Validation
 
         internal bool IsValidLocationId(int? locationId)
         {
-            if (locationId == null || locationId > 0)
-                return true;
+            if (locationId == null )
+                return false;
 
-            return false;
+            return true;
         }
     }
 }

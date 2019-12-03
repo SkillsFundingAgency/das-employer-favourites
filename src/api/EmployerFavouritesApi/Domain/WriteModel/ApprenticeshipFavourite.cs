@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using DfE.EmployerFavourites.Api.Models;
 
 namespace DfE.EmployerFavourites.Api.Domain.WriteModel
 {
@@ -9,10 +8,7 @@ namespace DfE.EmployerFavourites.Api.Domain.WriteModel
         {
             Providers = new List<Provider>();
         }
-
         public string ApprenticeshipId { get; set; }
         public IList<Provider> Providers { get; set; }
-
-       
     }
 }

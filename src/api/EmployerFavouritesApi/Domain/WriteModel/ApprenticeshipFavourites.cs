@@ -15,7 +15,8 @@ namespace DfE.EmployerFavourites.Api.Domain.WriteModel
         {
             var provider = this.FirstOrDefault(w => w.ApprenticeshipId == apprenticeshipId)?.Providers;
 
-            provider.Remove(provider.SingleOrDefault(w => w.Ukprn == ukprn));
+            if (provider != null)
+                provider.Remove(provider.SingleOrDefault(w => w.Ukprn == ukprn));
         }
     }
 }
