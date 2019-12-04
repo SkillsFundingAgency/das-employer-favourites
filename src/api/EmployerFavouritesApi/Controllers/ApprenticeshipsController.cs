@@ -6,10 +6,12 @@ using DfE.EmployerFavourites.Api.Application.Commands;
 using DfE.EmployerFavourites.Api.Application.Queries;
 using DfE.EmployerFavourites.Api.Domain.WriteModel;
 using DfE.EmployerFavourites.Api.Models;
+using DfE.EmployerFavourites.Api.Validation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WriteModel = DfE.EmployerFavourites.Api.Domain.WriteModel;
+using System.Text.RegularExpressions;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -21,11 +23,13 @@ namespace DfE.EmployerFavourites.Api.Controllers
         private const string ServerErrorMessage = "Internal Server Error";
         private readonly ILogger<ApprenticeshipsController> _logger;
         private readonly IMediator _mediator;
-
+        private readonly ApprenticeshipsParameterValidator _paramValidator;
+        
         public ApprenticeshipsController(ILogger<ApprenticeshipsController> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
+            _paramValidator = new ApprenticeshipsParameterValidator();
         }
 
         // GET api/Apprenticeships/ABC123
@@ -90,7 +94,13 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
-                //TODO: LWA validate parameters
+                if (!_paramValidator.IsValidEmployerAccountId(employerAccountId))
+                {
+                    throw new ArgumentException("Employer account id is invalid.");
+                }
+
+                favourites.ForEach(s => ValidateApprenticeship(s));
+
                 var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand
                 {
                     EmployerAccountId = employerAccountId,
@@ -102,11 +112,38 @@ namespace DfE.EmployerFavourites.Api.Controllers
 
                 return NoContent();
             }
+            catch (ArgumentException ex)
+            {       
+                return BadRequest(ex.Message);              
+            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error in get apprenticeship favourites");
                 return StatusCode(500, ServerErrorMessage);
             }
+
+        }
+
+        private void ValidateApprenticeship(Favourite apprenticeship)
+        {
+            if (!_paramValidator.IsValidApprenticeshipId(apprenticeship.ApprenticeshipId))
+            {
+                _logger.LogError($"The appenticeship id {apprenticeship.ApprenticeshipId} is invalid");
+                throw new ArgumentException("An apprenticeship id is invalid");
+            }
+
+            apprenticeship.Ukprns.ToList().ForEach(f => ValidateProviders(f));
+        }
+
+        private void ValidateProviders(int Ukprn)
+        {
+            if (!_paramValidator.IsValidProviderUkprn(Ukprn))
+            {
+                _logger.LogError($"The Ukprn {Ukprn} is invalid");
+                throw new ArgumentException("A ukprn is invalid");
+            }
+
+            _logger.LogInformation($"Ukprn {Ukprn} is Valid.");
         }
 
         private ApprenticeshipFavourites MapToWriteModel(List<Favourite> favourites)
