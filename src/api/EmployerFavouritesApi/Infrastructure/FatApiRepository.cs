@@ -81,5 +81,9 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
                         _logger.LogWarning($"Error calling Fat Api for - {context.OperationKey} Reason: {exception.Message}. Retrying in {timeSpan.Seconds} secs...attempt: {retryCount}");
                     });
         }
+
     }
+
 }
+
+   

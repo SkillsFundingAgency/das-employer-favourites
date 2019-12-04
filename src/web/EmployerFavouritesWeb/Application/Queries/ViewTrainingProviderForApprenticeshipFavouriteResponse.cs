@@ -6,5 +6,6 @@ namespace DfE.EmployerFavourites.Application.Queries
     {
         public ApprenticeshipFavourite Favourite { get; internal set; }
         public bool HasLegalEntities { get; set; }
+        public Provider Provider { get; set; }
     }
 }

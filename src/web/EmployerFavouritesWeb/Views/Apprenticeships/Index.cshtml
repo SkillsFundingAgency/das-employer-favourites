@@ -60,6 +60,8 @@ else
                                     <span class="app-task-list__section-number">@(i + 1). </span>
                                     <a href="@Model.Items[i].FatUrl" class="fav-app-name govuk-link" target="_blank" rel="external">@Model.Items[i].Title</a>
                                 </h2>
+                            
+                                
                                 @*<a href="#" class="govuk-button">Choose training provider</a>
 
                                     <section class="postcode-search">
@@ -144,7 +146,9 @@ else
                                         <span></span><span class="text">Recruit Apprentice</span>
                                     </a>
                                 }
-
+                                
+                                    <a asp-action="Delete" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.Items[i].Id" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
+                                
                                 @*<h3 class="govuk-heading-s app-task-list__training-provider-content"><span class="text-numbers"><span class="app-provider-number ">5</span> saved training providers</span></h3>
         <div><a href="#" class="govuk-link app-task-list__training-provider-content">Reserve funding</a></div>*@
 

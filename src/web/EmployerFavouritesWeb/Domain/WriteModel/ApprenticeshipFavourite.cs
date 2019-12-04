@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DfE.EmployerFavourites.Domain.WriteModel
 {
@@ -7,7 +7,7 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
     {
         public ApprenticeshipFavourite()
         {
-            Ukprns = new List<int>();
+            Providers = new List<Provider>();
         }
 
         public ApprenticeshipFavourite(string apprenticeshipId) : this()
@@ -15,12 +15,13 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
             ApprenticeshipId = apprenticeshipId;
         }
 
-        public ApprenticeshipFavourite(string apprenticeshipId, int ukprn) : this(apprenticeshipId)
+        public ApprenticeshipFavourite(string apprenticeshipId, IDictionary<int,IList<int>> providers) : this(apprenticeshipId)
         {
-            Ukprns.Add(ukprn);
+            if (providers != null)
+                Providers = providers.Select(p => new Provider (p.Key,p.Value )).ToList();
         }
 
         public string ApprenticeshipId { get; set; }
-        public IList<int> Ukprns { get; set; }
+        public IList<Provider> Providers { get; set; }
     }
 }

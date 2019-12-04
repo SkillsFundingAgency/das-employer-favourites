@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Infrastructure;
 using DfE.EmployerFavourites.Infrastructure.Configuration;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient

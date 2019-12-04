@@ -10,7 +10,9 @@ using DfE.EmployerFavourites.Api.Validation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WriteModel = DfE.EmployerFavourites.Api.Domain.WriteModel;
 using System.Text.RegularExpressions;
+using Provider = DfE.EmployerFavourites.Api.Models.Provider;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -50,7 +52,8 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             try
             {
-                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest { EmployerAccountId = employerAccountId });
+                var apprenticeships = await _mediator.Send(new GetApprenticeshipFavouritesRequest
+                { EmployerAccountId = employerAccountId });
 
                 if (apprenticeships.Count > 0)
                 {
@@ -88,7 +91,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
         [ProducesResponseType(401)]
         [HttpPut]
         [Route("{employerAccountId}")]
-        public async Task<IActionResult> Put(string employerAccountId, [FromBody]List<Favourite> favourites)
+        public async Task<IActionResult> Put(string employerAccountId, [FromBody] List<Favourite> favourites)
         {
             try
             {
@@ -97,7 +100,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
                     throw new ArgumentException("Employer account id is invalid.");
                 }
 
-                favourites.ForEach(s => ValidateApprenticeship(s));
+                favourites.ForEach(ValidateApprenticeship);
 
                 var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand
                 {
@@ -126,22 +129,31 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             if (!_paramValidator.IsValidApprenticeshipId(apprenticeship.ApprenticeshipId))
             {
-                _logger.LogError($"The appenticeship id {apprenticeship.ApprenticeshipId} is invalid");
+                _logger.LogError($"The apprenticeship id {apprenticeship.ApprenticeshipId} is invalid");
                 throw new ArgumentException("An apprenticeship id is invalid");
             }
 
-            apprenticeship.Ukprns.ToList().ForEach(f => ValidateProviders(f));
+            apprenticeship.Providers.ToList().ForEach(ValidateProviders);
         }
 
-        private void ValidateProviders(int Ukprn)
+        private void ValidateProviders(Provider provider)
         {
-            if (!_paramValidator.IsValidProviderUkprn(Ukprn))
+            if (!_paramValidator.IsValidProviderUkprn(provider.Ukprn))
             {
-                _logger.LogError($"The Ukprn {Ukprn} is invalid");
+                _logger.LogError($"The Ukprn {provider.Ukprn} is invalid");
                 throw new ArgumentException("A ukprn is invalid");
             }
+            
+            provider.LocationIds.ForEach(ValidateLocationId);
+        }
 
-            _logger.LogInformation($"Ukprn {Ukprn} is Valid.");
+        private void ValidateLocationId(int locationId)
+        {
+            if (!_paramValidator.IsValidLocationId(locationId))
+            {
+                _logger.LogError($"The LocationId {locationId} is invalid");
+                throw new ArgumentException("A locationId is invalid");
+            }
         }
 
         private ApprenticeshipFavourites MapToWriteModel(List<Favourite> favourites)
@@ -153,10 +165,103 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 return writeModel;
             }
 
-            var items = favourites.Select(x => new ApprenticeshipFavourite { ApprenticeshipId = x.ApprenticeshipId, Ukprns = x.Ukprns });
+            var items = favourites.Select(x => new ApprenticeshipFavourite
+            {
+                ApprenticeshipId = x.ApprenticeshipId,
+                Providers = x.Providers.Select(s => new WriteModel.Provider() { Ukprn = s.Ukprn, LocationIds = s.LocationIds }).ToList()
+            });
+
             writeModel.AddRange(items);
 
             return writeModel;
+        }
+
+        // DELETE api/Apprenticeships/ABC123/123-1-2
+        /// <summary>
+        /// deletes a single apprenticeship favourite from the Employer Account provided
+        /// </summary>
+        /// <param name="employerAccountId">Hashed Employer Account Id</param>
+        /// <param name="apprenticeshipId">Apprenticeship Id</param>
+        /// <response code="204">Apprenticeship deleted from Employer Favourite </response>
+        /// <response code="404">No Employer favourites found for Employer account Id or apprenticeship does not exist in favourites</response>
+        /// <response code="400">The Employer account id or apprenticeship Id provided is invalid</response>  
+        /// <response code="401">The client is not authorized to access this endpoint</response>   
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Route("{employerAccountId}/{apprenticeshipId}")]
+        public async Task<IActionResult> Delete(string employerAccountId, string apprenticeshipId)
+        {
+            try
+            {
+                var response = await _mediator.Send(new DeleteApprenticeshipFavouriteCommand()
+                { EmployerAccountId = employerAccountId, ApprenticeshipId = apprenticeshipId });
+
+                if (response.CommandResult == DomainUpdateStatus.Failed)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogError(e, "Invalid arguments were provided for delete apprenticeship favourite");
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error in delete apprenticeship favourites");
+                return StatusCode(500, ServerErrorMessage);
+            }
+        }
+
+        // DELETE api/Apprenticeships/ABC123/123-1-2/123456789
+        /// <summary>
+        /// deletes a provider from apprenticeship favourite of the Employer Account provided
+        /// </summary>
+        /// <param name="employerAccountId">Hashed Employer Account Id</param>
+        /// <param name="apprenticeshipId">Apprenticeship Id</param>
+        /// <param name="ukprn">Ukprn</param>
+        /// <response code="204">provider deleted from Employer apprenticeship Favourite </response>
+        /// <response code="404">No Employer favourites found for Employer account Id or apprenticeship/ukprn does not exist in favourites</response>
+        /// <response code="400">The Employer account id, apprenticeship Id or ukprn provided is invalid</response>  
+        /// <response code="401">The client is not authorized to access this endpoint</response>   
+        [HttpDelete]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Route("{employerAccountId}/{apprenticeshipId}/{ukprn}")]
+        public async Task<IActionResult> Delete(string employerAccountId, string apprenticeshipId, int ukprn)
+        {
+            try
+            {
+                var response = await _mediator.Send(new DeleteProviderFavouriteCommand()
+                {
+                    EmployerAccountId = employerAccountId,
+                    ApprenticeshipId = apprenticeshipId, Ukprn = ukprn
+                });
+
+                if (response.CommandResult == DomainUpdateStatus.Failed)
+                {
+                    return NotFound();
+                }
+
+                return NoContent();
+            }
+            catch (ArgumentException e)
+            {
+                _logger.LogError(e, "Invalid arguments were provided for delete apprenticeship provider favourites");
+                return BadRequest();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error in delete apprenticeship provider favourites");
+                return StatusCode(500, ServerErrorMessage);
+            }
         }
     }
 }

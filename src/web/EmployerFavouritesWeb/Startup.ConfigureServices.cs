@@ -22,6 +22,7 @@ using Refit;
 using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
 using SFA.DAS.EmployerUrlHelper.DependencyResolution;
 using DfE.EmployerFavourites.Infrastructure.HealthChecks;
+using Sfa.Das.Sas.Shared.Basket;
 
 namespace DfE.EmployerFavourites.Web
 {
@@ -51,6 +52,9 @@ namespace DfE.EmployerFavourites.Web
                 .AddCheck<FatApiHealthCheck>("fat-api-check");
 
             services.AddEmployerUrlHelper(Configuration);
+
+            var basketConfig = Configuration.GetSection("BasketConfig").Get<BasketConfig>();
+            services.AddFavouritesBasket(basketConfig.BasketRedisConnectionString, basketConfig.SlidingExpiryDays);
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -103,6 +107,7 @@ namespace DfE.EmployerFavourites.Web
 
             services.AddRefitClient<IFatApi>()
                 .ConfigureHttpClient(c => c.BaseAddress = new Uri(Configuration.GetValue<string>("FatApi:ApiBaseUrl")));
+
         }
 
         private void AddConfiguration(IServiceCollection services)

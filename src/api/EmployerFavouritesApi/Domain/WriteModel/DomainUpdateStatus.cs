@@ -3,6 +3,8 @@
     public enum DomainUpdateStatus
     {
         Created,
-        Updated
+        Updated,
+        Deleted,
+        Failed
     }
 }
