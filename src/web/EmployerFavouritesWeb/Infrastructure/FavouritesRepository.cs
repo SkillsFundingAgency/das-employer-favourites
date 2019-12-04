@@ -111,10 +111,9 @@ namespace DfE.EmployerFavourites.Infrastructure
 
                 await Task.WhenAll(apprenticeshipUpdateTasks.Concat(fatProviderTasks).Concat(fatGetLocationTasks));
 
-
                 UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result));
 
-                UpdateLocations(favourites, fatGetLocationTasks.Select(y => y.Result));
+                UpdateLocations(favourites, fatGetLocationTasks.Select(y => y.Result).GroupBy(x => x.Location.LocationId).Select(g => g.First()));
             }
         }
 
@@ -122,7 +121,7 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             foreach (var provider in favourites.SelectMany(s => s.Providers).Where(w => w != null && w.LocationIds != null))
             {
-                   provider.Locations = locationData.Where(w => provider.LocationIds.Contains(w.Location.LocationId)).Select(UpdateLocation).ToList();
+                provider.Locations = locationData.Where(w => provider.LocationIds.Contains(w.Location.LocationId)).Select(UpdateLocation).ToList();
             }
         }
 
