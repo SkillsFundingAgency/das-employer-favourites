@@ -102,7 +102,20 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         {
             var favourites = new List<Favourite>
             {
-                new Favourite { ApprenticeshipId = "60" , Ukprns = new List<int>{ 111 } }
+                new Favourite { ApprenticeshipId = "60" , Providers = new List<Provider>{ new Provider { Ukprn = 111, LocationIds = new List<int> { 1234 } } } }
+            };
+
+            var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
+            
+            Assert.IsAssignableFrom<BadRequestObjectResult>(result);
+        }
+        
+        [Fact]
+        public async Task Put_ReturnsBadRequest_WhenALocationIdIsInvalid()
+        {
+            var favourites = new List<Favourite>
+            {
+                new Favourite { ApprenticeshipId = "60" , Providers = new List<Provider>{ new Provider { Ukprn = 12345678, LocationIds = new List<int> { 1234, 0 } } } }
             };
 
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);
@@ -115,7 +128,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         {
             var favourites = new List<Favourite>
             {
-                new Favourite { ApprenticeshipId = "" , Ukprns = new List<int>{ 12345678 } }
+                new Favourite { ApprenticeshipId = "" , Providers = new List<Provider>{ new Provider { Ukprn = 12345678, LocationIds = new List<int> { 1234 } } } }
             };
 
             var result = await _sut.Put(EmployerAccountIdExistingList, favourites);

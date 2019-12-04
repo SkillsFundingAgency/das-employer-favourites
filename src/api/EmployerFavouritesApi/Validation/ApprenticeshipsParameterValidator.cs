@@ -36,5 +36,13 @@ namespace DfE.EmployerFavourites.Api.Validation
 
             return _empAccRegEx.Match(employerAccountId).Success;
         }
+
+        internal bool IsValidLocationId(int locationId)
+        {
+            if (locationId == 0)
+                return false;
+
+            return true;
+        }
     }
 }

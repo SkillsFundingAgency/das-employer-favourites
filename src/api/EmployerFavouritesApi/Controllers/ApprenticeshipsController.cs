@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WriteModel = DfE.EmployerFavourites.Api.Domain.WriteModel;
 using System.Text.RegularExpressions;
+using Provider = DfE.EmployerFavourites.Api.Models.Provider;
 
 namespace DfE.EmployerFavourites.Api.Controllers
 {
@@ -99,7 +100,7 @@ namespace DfE.EmployerFavourites.Api.Controllers
                     throw new ArgumentException("Employer account id is invalid.");
                 }
 
-                favourites.ForEach(s => ValidateApprenticeship(s));
+                favourites.ForEach(ValidateApprenticeship);
 
                 var response = await _mediator.Send(new SaveApprenticeshipFavouriteCommand
                 {
@@ -128,22 +129,31 @@ namespace DfE.EmployerFavourites.Api.Controllers
         {
             if (!_paramValidator.IsValidApprenticeshipId(apprenticeship.ApprenticeshipId))
             {
-                _logger.LogError($"The appenticeship id {apprenticeship.ApprenticeshipId} is invalid");
+                _logger.LogError($"The apprenticeship id {apprenticeship.ApprenticeshipId} is invalid");
                 throw new ArgumentException("An apprenticeship id is invalid");
             }
 
-            apprenticeship.Ukprns.ToList().ForEach(f => ValidateProviders(f));
+            apprenticeship.Providers.ToList().ForEach(ValidateProviders);
         }
 
-        private void ValidateProviders(int Ukprn)
+        private void ValidateProviders(Provider provider)
         {
-            if (!_paramValidator.IsValidProviderUkprn(Ukprn))
+            if (!_paramValidator.IsValidProviderUkprn(provider.Ukprn))
             {
-                _logger.LogError($"The Ukprn {Ukprn} is invalid");
+                _logger.LogError($"The Ukprn {provider.Ukprn} is invalid");
                 throw new ArgumentException("A ukprn is invalid");
             }
+            
+            provider.LocationIds.ForEach(ValidateLocationId);
+        }
 
-            _logger.LogInformation($"Ukprn {Ukprn} is Valid.");
+        private void ValidateLocationId(int locationId)
+        {
+            if (!_paramValidator.IsValidLocationId(locationId))
+            {
+                _logger.LogError($"The LocationId {locationId} is invalid");
+                throw new ArgumentException("A locationId is invalid");
+            }
         }
 
         private ApprenticeshipFavourites MapToWriteModel(List<Favourite> favourites)

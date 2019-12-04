@@ -17,7 +17,11 @@ namespace DfE.EmployerFavourites.Api.IntegrationTests.Stubs
                 new Domain.ReadModel.ApprenticeshipFavourite()
                 {
                     ApprenticeshipId = "123-1-2",
-                    Providers = new List<Provider>(){new Provider(){Name = "Provider 1",Ukprn = 12345678 },new Provider() { Name = "Provider 2", Ukprn= 23456789} }
+                    Providers = new List<Provider>()
+                    {
+                        new Provider(){ Name = "Provider 1", Ukprn = 12345678 },
+                        new Provider() { Name = "Provider 2", Ukprn= 23456789 }
+                    }
                 }
             };
 
