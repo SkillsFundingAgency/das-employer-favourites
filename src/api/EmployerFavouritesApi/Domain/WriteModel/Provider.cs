@@ -10,6 +10,6 @@ namespace DfE.EmployerFavourites.Api.Domain.WriteModel
         public int Ukprn { get; set; }
 
         public List<int> LocationIds { get; set; }
-        
+        public string Name { get; set; }
     }
 }

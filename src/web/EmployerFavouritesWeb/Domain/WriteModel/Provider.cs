@@ -9,7 +9,6 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
         {
             Ukprn = ukprn;
             LocationIds = new List<int>();
-            Locations = new List<int>();
 
             if (locations != null)
             {
