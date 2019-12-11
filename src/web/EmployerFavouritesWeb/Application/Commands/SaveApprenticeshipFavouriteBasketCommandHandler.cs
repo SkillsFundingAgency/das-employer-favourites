@@ -68,6 +68,7 @@ namespace DfE.EmployerFavourites.Application.Commands
                 _logger.LogDebug("No changes required for basket: {basketId}", request.BasketId);
             }
 
+            _logger.LogDebug("Post save clean up. Deleting basket: {basketId}", request.BasketId);
             await _basketStore.RemoveAsync(request.BasketId);
 
             return employerAccountId;
