@@ -7,6 +7,11 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
 {
     public class StubFavouritesBasketStore : IApprenticeshipFavouritesBasketStore
     {
+        public Task RemoveAsync(Guid basketId)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<ApprenticeshipFavouritesBasket> GetAsync(Guid basketId)
         {
             return Task.FromResult(new ApprenticeshipFavouritesBasket());
