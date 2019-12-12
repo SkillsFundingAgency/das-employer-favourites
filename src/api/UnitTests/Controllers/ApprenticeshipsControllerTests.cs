@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using DfE.EmployerFavourites.Api.Application.Commands;
 using DfE.EmployerFavourites.Api.Controllers;
 using DfE.EmployerFavourites.Api.Domain;
+using DfE.EmployerFavourites.Api.Infrastructure.Interfaces;
 using DfE.EmployerFavourites.Api.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
         private readonly ApprenticeshipsController _sut;
         private readonly Mock<IFavouritesWriteRepository> _mockWriteRepository = new Mock<IFavouritesWriteRepository>();
         private readonly Mock<IFavouritesReadRepository> _mockReadRepository = new Mock<IFavouritesReadRepository>();
+        private readonly Mock<IFatRepository> _mockFatRepository = new Mock<IFatRepository>();
 
         public ApprenticeshipsControllerTests()
         {
@@ -41,6 +43,8 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
 
             _mockReadRepository.Setup(x => x.GetApprenticeshipFavourites(EmployerAccountIdNewList)).ReturnsAsync(new ReadModel.ApprenticeshipFavourites());
             _mockReadRepository.Setup(x => x.GetApprenticeshipFavourites(EmployerAccountIdExistingList)).ReturnsAsync(existingFavourites);
+
+            _mockFatRepository.Setup(s => s.GetProviderNameAsync(It.IsAny<int>())).ReturnsAsync("ProviderName");
 
             _sut = new ApprenticeshipsController(new NullLogger<ApprenticeshipsController>(), mediator);
         }
@@ -142,6 +146,7 @@ namespace DfE.EmployerFavourites.Api.UnitTests.Controllers
             services.AddMediatR(typeof(Startup).Assembly);
             services.AddScoped<IFavouritesWriteRepository>(x => _mockWriteRepository.Object);
             services.AddScoped<IFavouritesReadRepository>(x => _mockReadRepository.Object);
+            services.AddScoped(x => _mockFatRepository.Object);
             services.AddScoped<ILogger<SaveApprenticeshipFavouriteCommandHandler>>(x => new NullLogger<SaveApprenticeshipFavouriteCommandHandler>());
             var provider = services.BuildServiceProvider();
 
