@@ -79,12 +79,13 @@
                             }
                         </div>
                         <div class="govuk-grid-column-one-third">
-                            @if (Model.HasLegalEntity)
+                            @if (Model.HasLegalEntity && Model.Items[i].Active)
                             {
                                 <a href="@Model.Items[i].CreateVacancyUrl" class="govuk-button app-task-list__training-provider-content recruit-button">Recruit apprentice</a>
                             }
 
-                                                    
+                            <a asp-action="DeleteProvider" asp-route-employerAccountId="@Model.EmployerAccountId" asp-route-apprenticeshipId="@Model.ApprenticeshipId" asp-route-ukprn="@Model.Items[i].Ukprn" class="govuk-link app-task-list__training-provider-content">Remove from favourites</a>
+
 
                             @*<a href="#" class="govuk-link app-task-list__training-provider-content">Manage permissions</a>*@
                         </div>
