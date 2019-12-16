@@ -170,7 +170,6 @@ namespace DfE.EmployerFavourites.Api.Controllers
                 ApprenticeshipId = x.ApprenticeshipId,
                 Providers = x.Providers.Select(s => new WriteModel.Provider() { Ukprn = s.Ukprn, LocationIds = s.LocationIds }).ToList()
             });
-
             writeModel.AddRange(items);
 
             return writeModel;

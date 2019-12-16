@@ -78,6 +78,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             Website = new Uri("https://www.testprovider.com"),
                             EmployerSatisfaction = 86,
                             LearnerSatisfaction = 98,
+                            Active = true,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
                                 Primary = "1 Head Office",
@@ -102,6 +103,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                     ApprenticeshipId = "123",
                     Title = "Test Standard1",
                     Level = 3,
+                    Active = true,
                     TypicalLength = 18,
                     Providers = new List<ReadModel.Provider>
                     {
@@ -112,6 +114,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             Website = new Uri("https://www.testprovider.com"),
                             EmployerSatisfaction = 86,
                             LearnerSatisfaction = 98,
+                            Active = true,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
                                 Primary = "1 Head Office",
@@ -122,7 +125,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                                 ContactType = "PRIMARY"
                             }
                         },
-                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028, Address = new Infrastructure.FatApiClient.ProviderAddress { Primary = "1 Head Office",
+                        new ReadModel.Provider { Name = "Test Provider2", Ukprn = 10000028, Active = true, Address = new Infrastructure.FatApiClient.ProviderAddress { Primary = "1 Head Office",
                                 Secondary = "Training Provider",
                                 Street = "Training Provider Street",
                                 Town = "Training",
@@ -134,6 +137,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                 {
                     ApprenticeshipId = "456",
                     Title = "Test Standard2",
+                    Active = true,
                     Level = 3,
                     TypicalLength = 18,
                 },
@@ -141,6 +145,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                 {
                     ApprenticeshipId = "123-1-2",
                     Title = "Test Framework1",
+                    Active = true,
                     Level = 3,
                     TypicalLength = 18,
                     ExpiryDate = new DateTime(2020, 1, 1),
@@ -153,6 +158,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
                             Website = new Uri("https://www.testprovider.com"),
                             EmployerSatisfaction = 86,
                             LearnerSatisfaction = 98,
+                            Active = true,
                             Address = new Infrastructure.FatApiClient.ProviderAddress
                             {
                                 Primary = "1 Head Office",

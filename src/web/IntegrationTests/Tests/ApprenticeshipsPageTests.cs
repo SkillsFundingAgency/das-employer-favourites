@@ -69,7 +69,7 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests
             var levelElement = firstAppItemElement.QuerySelector(".fav-app-level");
             var lengthElement = firstAppItemElement.QuerySelector(".fav-app-length");
             var frameworkWarning = firstAppItemElement.QuerySelector(".fav-framework-expiry");
-            Assert.Equal("Test Standard1", nameElement.TextContent); // Item contains the name
+            Assert.Contains("Test Standard1", nameElement.TextContent); // Item contains the name
             Assert.Contains("3 (equivalent to A levels at grades A to E)", levelElement.TextContent); // Item contains the name
             Assert.Contains("18 months", lengthElement.TextContent); // Item contains the name
             Assert.Null(frameworkWarning); // Should not be showing the warning for a standard

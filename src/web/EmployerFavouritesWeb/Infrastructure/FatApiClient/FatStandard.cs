@@ -15,5 +15,8 @@ namespace DfE.EmployerFavourites.Web.Infrastructure.FatApiClient
 
         [JsonProperty("Duration")]
         public byte Duration { get; set; }
+
+        [JsonProperty("IsActiveStandard")]
+        public bool IsActiveStandard { get; set; }
     }
 }
