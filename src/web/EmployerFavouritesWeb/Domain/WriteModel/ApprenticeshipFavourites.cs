@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using Basket = Sfa.Das.Sas.Shared.Basket.Models;
 
 namespace DfE.EmployerFavourites.Domain.WriteModel
 {
     public class ApprenticeshipFavourites : List<ApprenticeshipFavourite>
     {
-        public bool Update(string apprenticeshipId, IDictionary<int,IList<int>> providers)
+        public bool Update(string apprenticeshipId, IList<Basket.Provider> providers)
         {
             var existing = this.SingleOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
             
@@ -33,19 +34,19 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
                     foreach (var provider in providers)
                     {
 
-                        if (!existingUkprns.Contains(provider.Key))
+                        if (!existingUkprns.Contains(provider.Ukprn))
                         {
-                            existing.Providers.Add(new Provider(provider.Key, provider.Value));
+                            existing.Providers.Add(new Provider(provider.Ukprn, provider.Locations));
 
                             changeMade = true;
                         }
                         else
                         {
-                            var currentProvider = existingUkprns.FindIndex(x => x == provider.Key);
+                            var currentProvider = existingUkprns.FindIndex(x => x == provider.Ukprn);
 
                             var existingLocations = existing.Providers[currentProvider].LocationIds;
 
-                            foreach (var location in provider.Value)
+                            foreach (var location in provider.Locations)
                             {
                                 if (!existingLocations.Contains(location))
                                 {

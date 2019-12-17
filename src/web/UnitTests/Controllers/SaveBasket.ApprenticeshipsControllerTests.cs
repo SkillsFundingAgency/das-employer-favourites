@@ -77,7 +77,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AddsApprenticeshipAndUkprn_WhenNoFavouritesExist()
         {
-            _basket.Add("60", 12345678);
+            _basket.Add("60", 12345678,"Test Provider");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -105,7 +105,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_IgnoresDuplicateUkprn_IfItAlreadyExistsForApprenticeship()
         {
-            _basket.Add("70", 12345678);
+            _basket.Add("70", 12345678, "Test Provider");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -119,7 +119,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AppendsUkprnToList_WhenTheApprenticeshipAlreadyExistsAndAlreadyHasUkprns()
         {
-            _basket.Add("30", 12345678);
+            _basket.Add("30", 12345678, "Test Provider");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -133,7 +133,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AddsUkprnToList_WhenTheApprenticeshipAlreadyExistsAndHasNoUkprns()
         {
-            _basket.Add("30", 12345678);
+            _basket.Add("30", 12345678, "Test Provider");
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
 
@@ -147,16 +147,16 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         [Fact]
         public async Task SaveBasket_AddsMultipleFavourites()
         {
-            var items = new List<Tuple<string, List<int>>>
+            var items = new List<Tuple<string, string, List<int>>>
             {
-                { new Tuple<string, List<int>>("66", new List<int> { 12345678 }) },
-                { new Tuple<string, List<int>>("67", new List<int> { 98765432 }) },
-                { new Tuple<string, List<int>>("68", new List<int> { 98765432 }) }
+                { new Tuple<string, string, List<int>>("66","Test Provider 1", new List<int> { 12345678 }) },
+                { new Tuple<string, string, List<int>>("67","Test Provider 2", new List<int> { 98765432 }) },
+                { new Tuple<string, string, List<int>>("68","Test Provider 3", new List<int> { 98765432 }) }
             };
 
             foreach(var item in items)
             {
-                _basket.Add(item.Item1, item.Item2.First());
+                _basket.Add(item.Item1, item.Item3.First(), item.Item2);
             }
 
             var result = await Sut.SaveBasket(Guid.NewGuid());
@@ -185,18 +185,18 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             return a.Count == (GetTestRepositoryFavourites().Count + 1) && a.Any(b => b.ApprenticeshipId == apprenticeshipId);
         }
 
-        private static bool ContainsAllNewApprenticeships(WriteModel.ApprenticeshipFavourites a, List<Tuple<string, List<int>>> newFavourites)
+        private static bool ContainsAllNewApprenticeships(WriteModel.ApprenticeshipFavourites a, List<Tuple<string, string, List<int>>> newFavourites)
         {
             foreach(var item in newFavourites)
             {
                 var matchingItem = a.SingleOrDefault(x => x.ApprenticeshipId == item.Item1);
 
-                if (matchingItem == null || matchingItem.Providers == null || matchingItem.Providers.Count != item.Item2.Count)
+                if (matchingItem == null || matchingItem.Providers == null || matchingItem.Providers.Count != item.Item3.Count)
                     return false;
 
-                for (int i = 0; i < item.Item2.Count; i++)
+                for (int i = 0; i < item.Item3.Count; i++)
                 {
-                    if (item.Item2[i] != matchingItem.Providers[i].Ukprn)
+                    if (item.Item3[i] != matchingItem.Providers[i].Ukprn)
                         return false;
                 }
             }

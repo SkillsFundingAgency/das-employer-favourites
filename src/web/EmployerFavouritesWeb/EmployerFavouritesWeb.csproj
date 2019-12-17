@@ -31,7 +31,7 @@
     <PackageReference Include="Refit" Version="4.7.9" />
     <PackageReference Include="Refit.HttpClientFactory" Version="4.7.9" />
     <PackageReference Include="SFA.DAS.EmployerUrlHelper" Version="3.0.18" />
-    <PackageReference Include="Sfa.Das.Sas.Shared.Basket" Version="3.0.2" />
+    <PackageReference Include="Sfa.Das.Sas.Shared.Basket" Version="3.0.3" />
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="2.2.4" />
   </ItemGroup>
   <ItemGroup>
