@@ -9,12 +9,15 @@ namespace DfE.EmployerFavourites.Web.IntegrationTests.Stubs
     {
         public Task RemoveAsync(Guid basketId)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<ApprenticeshipFavouritesBasket> GetAsync(Guid basketId)
         {
-            return Task.FromResult(new ApprenticeshipFavouritesBasket());
+            var basket = new ApprenticeshipFavouritesBasket();
+            basket.Add("123456");
+
+            return Task.FromResult(basket); 
         }
 
         public Task UpdateAsync(ApprenticeshipFavouritesBasket basket)

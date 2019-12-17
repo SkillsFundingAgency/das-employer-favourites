@@ -168,6 +168,26 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
                 Times.Once);
         }
 
+        [Fact]
+        public async Task SaveBasket_DeletesTheBasketAfterItHasSaved()
+        {
+            var items = new List<Tuple<string, List<int>>>
+            {
+                { new Tuple<string, List<int>>("66", new List<int> { 12345678 }) },
+                { new Tuple<string, List<int>>("67", new List<int> { 98765432 }) },
+                { new Tuple<string, List<int>>("68", new List<int> { 98765432 }) }
+            };
+
+            foreach (var item in items)
+            {
+                _basket.Add(item.Item1, item.Item2.First());
+            }
+
+            var result = await Sut.SaveBasket(_basket.Id);
+
+            _mockBasketStore.Verify(s => s.RemoveAsync(It.IsAny<Guid>()), Times.Once);
+        }
+
         private static bool ContainsExistingAndNewApprenticeshipWithUkprn(WriteModel.ApprenticeshipFavourites a, string apprenticeshipId, int ukprn)
         {
             return ContainsExistingPlusNewApprenticeship(a, apprenticeshipId)
