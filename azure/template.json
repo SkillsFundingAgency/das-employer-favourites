@@ -264,7 +264,7 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('ui-app-service-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
                             }
                         ]
                     },
@@ -286,7 +286,7 @@
                 }
             },
             "dependsOn": [
-                "ui-app-service-app-insights",
+                "ui-app-insights",
                 "ui-app-service-certificate"
             ]
         }
