@@ -43,6 +43,10 @@
         },
         "sharedKeyVaultResourceGroupName": {
             "type": "string"
+        },
+        "appServiceAllowedIPs": {
+            "type": "array",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -196,6 +200,9 @@
                     },
                     "certificateThumbprint": {
                         "value": "[reference('api-app-service-certificate').outputs.certificateThumbprint.value]"
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('appServiceAllowedIPs')]"
                     }
                 }
             },
@@ -282,6 +289,9 @@
                     },
                     "certificateThumbprint": {
                         "value": "[reference('ui-app-service-certificate').outputs.certificateThumbprint.value]"
+                    },
+                    "ipSecurityRestrictions": {
+                        "value": "[parameters('appServiceAllowedIPs')]"
                     }
                 }
             },
