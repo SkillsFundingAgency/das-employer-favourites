@@ -33,6 +33,7 @@ namespace DfE.EmployerFavourites.Domain.ReadModel
         public byte Level { get; set; }
         public byte TypicalLength { get; set; }
         public DateTime? ExpiryDate { get; set; }
+        public bool Active { get; set; }
 
         private bool TestForFramework()
         {

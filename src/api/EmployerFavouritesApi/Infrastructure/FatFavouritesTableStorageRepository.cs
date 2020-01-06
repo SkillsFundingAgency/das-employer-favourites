@@ -22,7 +22,6 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
         private const string TABLE_NAME = "EmployerFavourites";
         private readonly ILogger<FatFavouritesTableStorageRepository> _logger;
         private readonly AsyncRetryPolicy _retryPolicy;
-        private readonly IFatRepository _fatRepository;
         private readonly CloudStorageAccount _storageAccount;
         
         public FatFavouritesTableStorageRepository(
@@ -33,7 +32,6 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
 
             _logger = logger;
             _retryPolicy = GetRetryPolicy();
-            _fatRepository = fatRepository;
 
             try
             {
@@ -96,11 +94,10 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             return new Domain.ReadModel.ApprenticeshipFavourite
             {
                 ApprenticeshipId = src.ApprenticeshipId,
-                Title = await _fatRepository.GetApprenticeshipNameAsync(src.ApprenticeshipId),
                 Providers = await Task.WhenAll(src.Providers?.Select(async x => new ReadModel.Provider
                 {
+                    Name = x.Name,
                     Ukprn = x.Ukprn,
-                    Name = await _fatRepository.GetProviderNameAsync(x.Ukprn),
                     LocationIds = x.LocationIds
                 }))
             };
@@ -112,6 +109,8 @@ namespace DfE.EmployerFavourites.Api.Infrastructure
             {
                 throw new ArgumentNullException(nameof(apprenticeshipFavourite));
             }
+
+            var providers = apprenticeshipFavourite.SelectMany(s => s.Providers);
 
             try
             {

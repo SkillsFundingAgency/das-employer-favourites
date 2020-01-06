@@ -9,6 +9,7 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
         {
             Ukprn = ukprn;
             LocationIds = new List<int>();
+
             if (locations != null)
             {
                 foreach (var location in locations)
@@ -21,7 +22,6 @@ namespace DfE.EmployerFavourites.Domain.WriteModel
         public Provider(int ukprn, IList<int> locations)
         {
             Ukprn = ukprn;
-            LocationIds = new List<int>();
             LocationIds = locations;
         }
 

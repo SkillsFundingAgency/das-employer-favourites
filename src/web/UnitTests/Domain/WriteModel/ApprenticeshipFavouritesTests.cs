@@ -5,6 +5,7 @@ using System.Text;
 using Xunit;
 using Read = DfE.EmployerFavourites.Domain.ReadModel;
 using Write = DfE.EmployerFavourites.Domain.WriteModel;
+using Basket = Sfa.Das.Sas.Shared.Basket.Models;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
 {
@@ -14,8 +15,8 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         [Fact]
         public void Update_FromNoApprenticeshipsToAnApprenticeshipWithNoTrainingProviders()
         {
-            var sut = new Write.ApprenticeshipFavourites { }; 
-           
+            var sut = new Write.ApprenticeshipFavourites { };
+
             var result = sut.Update("DEF123", null);
 
             Assert.True(result);
@@ -36,7 +37,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         {
             var sut = GetAnApprenticeshipWithNoProvider();
 
-            var result = sut.Update("DEF123", new Dictionary<int, IList<int>> { { 12345678, null } });
+            var result = sut.Update("DEF123", new List<Basket.Provider>() { new Basket.Provider(12345678, null) });
 
             Assert.True(result);
         }
@@ -46,7 +47,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         {
             var sut = GetAnApprenticeshipWithNoProvider();
 
-            var result = sut.Update("DEF123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1 } } });
+            var result = sut.Update("DEF123", new List<Basket.Provider>() { new Basket.Provider(12345678, "Test Provider") { Locations = new List<int> { 1 } } });
 
             Assert.True(result);
         }
@@ -56,7 +57,9 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         {
             var sut = GetAnApprenticeshipWithNoProvider();
 
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1 } } });
+            var result = sut.Update("ABC123",
+                new List<Basket.Provider>()
+                    {new Basket.Provider(12345678, "Test Provider") {Locations = new List<int> {1}}});
 
             Assert.True(result);
         }
@@ -66,8 +69,8 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
         {
 
             var sut = GetAnApprenticeshipWithAProvider();
-            
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 10000020, new List<int> { 4 } } });
+
+            var result = sut.Update("ABC123", new List<Basket.Provider>() { new Basket.Provider(10000020, "Test Provider") { Locations = new List<int> { 4 } } });
 
             Assert.True(result);
         }
@@ -77,7 +80,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
 
             var sut = GetAnApprenticeshipWithAProvider();
 
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 10000020, new List<int> { 1 } } });
+            var result = sut.Update("ABC123", new List<Basket.Provider>() { new Basket.Provider(10000020, "Test Provider") { Locations = new List<int> { 1 } } });
 
             Assert.False(result);
         }
@@ -90,9 +93,9 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
             {
                 new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = new List<Write.Provider> { new Write.Provider( 12345678, new List<int> { 1, 2, 3 }) } }
             };
+            var result = sut.Update("ABC123", new List<Basket.Provider>() { new Basket.Provider(12345678, "Test Provider") { Locations = new List<int> { 4, 5 } } });
 
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 4, 5 } } });
-            
+
             Assert.True(result);
         }
 
@@ -105,7 +108,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
                 new Write.ApprenticeshipFavourite { ApprenticeshipId = "ABC123", Providers = new List<Write.Provider> { new Write.Provider( 12345678, new List<int> { 1, 2, 3 }) } }
             };
 
-            var result = sut.Update("XYZ123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 4, 5 } } });
+            var result = sut.Update("XYZ123", new List<Basket.Provider>() { new Basket.Provider(12345678, "Test Provider") { Locations = new List<int> { 4, 5 } } });
 
             Assert.True(result);
         }
@@ -116,7 +119,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
 
             var sut = GetAnApprenticeshipWithAProvider();
 
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 10000020, new List<int> { 1, 2, 3 } } });
+            var result = sut.Update("ABC123", new List<Basket.Provider>() { new Basket.Provider(10000020, "Test Provider") { Locations = new List<int> { 1, 2, 3 } } });
 
             Assert.False(result);
         }
@@ -142,8 +145,8 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Domain.WriteModel
                 new Write.ApprenticeshipFavourite { ApprenticeshipId = "DEF123", Providers = new List<Write.Provider> { new Write.Provider( 87654321, new List<int> { 1, 2, 3 }) } }
             };
 
-            var result = sut.Update("ABC123", new Dictionary<int, IList<int>> { { 12345678, new List<int> { 1, 2, 3 } } });
-            
+            var result = sut.Update("ABC123", new List<Basket.Provider>() { new Basket.Provider(12345678, "Test Provider") { Locations = new List<int> { 1, 2, 3 } } });
+
             Assert.False(result);
         }
 

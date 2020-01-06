@@ -27,7 +27,8 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Level = GetLevelText(src.Level),
                 TypicalLength = $"{src.TypicalLength} months",
                 ExpiryDate = src.ExpiryDate?.AddDays(1).ToString("d MMMM yyyy"),
-                FatUrl = _linkGenerator.GetApprenticeshipPageUrl(src)
+                FatUrl = _linkGenerator.GetApprenticeshipPageUrl(src),
+                Active = src.Active
             };
         }
 
@@ -42,7 +43,7 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 Phone = string.IsNullOrEmpty(src.Phone) ? NO_DATA_AVAILABLE_MSG : src.Phone,
                 Email = string.IsNullOrEmpty(src.Email) ? NO_DATA_AVAILABLE_MSG : src.Email,
                 Website = src.Website == null || string.IsNullOrEmpty(src.Website.ToString()) ? NO_DATA_AVAILABLE_MSG : src.Website.ToString(),
-                HeadOfficeAddress = src.Address != null ? Map(src.Address) : new AddressViewModel { Address1 = NO_DATA_AVAILABLE_MSG, Address2 = NO_DATA_AVAILABLE_MSG, County = NO_DATA_AVAILABLE_MSG, PostCode = NO_DATA_AVAILABLE_MSG, Town = NO_DATA_AVAILABLE_MSG },
+                HeadOfficeAddress = src.Address != null ? Map(src.Address) : new AddressViewModel(),
                 Locations =  src.Locations?.Select(Map).ToList() ?? new List<LocationViewModel>(),
 
                 // This below logic for Satisfaction values is copied from FAT website for Provider Details
@@ -50,7 +51,8 @@ namespace DfE.EmployerFavourites.Web.Mappers
                 // This is not how the API call for provider location works where is doesn't return the property if no data exists.
                 EmployerSatisfaction = src.EmployerSatisfaction > 0 ? $"{src.EmployerSatisfaction}%" : NO_DATA_AVAILABLE_MSG,
                 LearnerSatisfaction = src.LearnerSatisfaction > 0 ? $"{src.LearnerSatisfaction}%" : NO_DATA_AVAILABLE_MSG,
-                FatUrl = _linkGenerator.GetProviderPageUrl(src)
+                FatUrl = _linkGenerator.GetProviderPageUrl(src),
+                Active = src.Active
             };
         }
 

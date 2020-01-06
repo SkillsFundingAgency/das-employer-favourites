@@ -17,6 +17,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using DfE.EmployerFavourites.Domain.ReadModel;
+using DfE.EmployerFavourites.Web.Infrastructure.FatApiClient;
 using Sfa.Das.Sas.Shared.Basket.Interfaces;
 
 namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
@@ -85,6 +86,7 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             {
                 Ukprn = 10027893,
                 Name = "Test Provider Ltd",
+                Address = new ProviderAddress(),
                 LocationIds = new List<int> { 155399 },
                 Locations = new List<Location> {
                     new Location

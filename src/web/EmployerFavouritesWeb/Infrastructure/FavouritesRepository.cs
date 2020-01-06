@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Domain;
 using DfE.EmployerFavourites.Domain.ReadModel;
@@ -9,6 +10,7 @@ using DfE.EmployerFavourites.Web.Infrastructure.FavouritesApiClient;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
+using Refit;
 using ReadModel = DfE.EmployerFavourites.Domain.ReadModel;
 using WriteModel = DfE.EmployerFavourites.Domain.WriteModel;
 
@@ -53,7 +55,7 @@ namespace DfE.EmployerFavourites.Infrastructure
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Unable to Delete Apprenticeship Favourites to Api for Account: {employerAccountId} and apprenticeshipId:", employerAccountId,apprenticeshipId);
+                _logger.LogError(ex, "Unable to Delete Apprenticeship Favourites to Api for Account: {employerAccountId} and apprenticeshipId:", employerAccountId, apprenticeshipId);
                 throw;
             }
         }
@@ -62,7 +64,7 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             try
             {
-                await _retryPolicy.ExecuteAsync(context => _favouritesApi.DeleteAsync(employerAccountId, apprenticeshipId,ukprn), new Context(nameof(DeleteApprenticeshipProviderFavourites)));
+                await _retryPolicy.ExecuteAsync(context => _favouritesApi.DeleteAsync(employerAccountId, apprenticeshipId, ukprn), new Context(nameof(DeleteApprenticeshipProviderFavourites)));
             }
             catch (Exception ex)
             {
@@ -102,7 +104,7 @@ namespace DfE.EmployerFavourites.Infrastructure
 
                 if (providers != null)
                 {
-                    fatProviderTasks = providers.Select(x => _fatApi.GetProviderAsync(x.ToString())).ToList();
+                    fatProviderTasks = providers.Select(x => GetProviderDetails(x.ToString())).ToList();
                 }
 
                 var providerLocationsList = favourites.Where(w => w.Providers != null).SelectMany(a => a.Providers.Where(w => w.LocationIds != null), (a, p) => new { apprenticeshipId = a.ApprenticeshipId, isFramework = a.IsFramework, ukprn = p.Ukprn, locations = p.LocationIds });
@@ -111,10 +113,25 @@ namespace DfE.EmployerFavourites.Infrastructure
 
                 await Task.WhenAll(apprenticeshipUpdateTasks.Concat(fatProviderTasks).Concat(fatGetLocationTasks));
 
-                UpdateTrainingProviders(favourites, fatProviderTasks.Select(x => x.Result));
+                UpdateTrainingProviders(favourites, fatProviderTasks.Where(w => w.Result != null).Select(x => x.Result));
 
-                UpdateLocations(favourites, fatGetLocationTasks.Select(y => y.Result).GroupBy(x => x.Location.LocationId).Select(g => g.First()));
+                UpdateLocations(favourites, fatGetLocationTasks.Where(w => w.Result != null).Select(y => y.Result).GroupBy(x => x.Location.LocationId).Select(g => g.First()));
             }
+        }
+
+
+        private async Task<FatTrainingProvider> GetProviderDetails(string ukprn)
+        {
+            try
+            {
+                return await _fatApi.GetProviderAsync(ukprn);
+            }
+            catch (ApiException e)
+            {
+                _logger.LogWarning(e, $"The requested ukprn: {ukprn}, doesnt exist, this is probably due to a favourite item no longer being available");
+            }
+
+            return null;
         }
 
         private void UpdateLocations(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatProviderLocationAddress> locationData)
@@ -139,21 +156,27 @@ namespace DfE.EmployerFavourites.Infrastructure
             return location;
         }
 
-        private Task<FatProviderLocationAddress> GetProviderLocations(string apprencticeshipId, bool isFramework, int ukprn, int loc)
+        private async Task<FatProviderLocationAddress> GetProviderLocations(string apprenticeshipId, bool isFramework, int ukprn, int loc)
         {
-            if (isFramework)
+            try
             {
-                return _fatApi.GetFrameworkLocationInformationAsync(apprencticeshipId, ukprn.ToString(), loc.ToString());
+                if (isFramework)
+                {
+                    return await _fatApi.GetFrameworkLocationInformationAsync(apprenticeshipId, ukprn.ToString(), loc.ToString());
+                }
+
+                return await _fatApi.GetStandardLocationInformationAsync(apprenticeshipId, ukprn.ToString(), loc.ToString());
             }
-            else
+            catch (ApiException e)
             {
-                return _fatApi.GetStandardLocationInformationAsync(apprencticeshipId, ukprn.ToString(), loc.ToString());
+                _logger.LogWarning(e, $"The requested ukprn: {ukprn}, doesnt exist, this is probably due to a favourite item no longer being available");
+                return null;
             }
         }
 
         private void UpdateTrainingProviders(ReadModel.ApprenticeshipFavourites favourites, IEnumerable<FatTrainingProvider> providerData)
         {
-            foreach(var item in providerData)
+            foreach (var item in providerData)
             {
                 var matchingProviders = favourites.SelectMany(x => x.Providers).Where(y => y.Ukprn == item.Ukprn);
 
@@ -161,13 +184,15 @@ namespace DfE.EmployerFavourites.Infrastructure
 
                 foreach (var provider in matchingProviders)
                 {
+                    provider.Name = item.ProviderName;
                     provider.Phone = item.Phone;
                     provider.Email = item.Email;
                     provider.Website = item.Website;
                     provider.EmployerSatisfaction = item.EmployerSatisfaction;
                     provider.LearnerSatisfaction = item.LearnerSatisfaction;
                     provider.Address = item.Addresses.Find(x => x.ContactType == "PRIMARY");
-                    
+                    provider.Active = true;
+
                 }
             }
         }
@@ -176,20 +201,25 @@ namespace DfE.EmployerFavourites.Infrastructure
         {
             if (favourite.IsFramework)
             {
+
                 var framework = await _fatApi.GetFrameworkAsync(favourite.ApprenticeshipId);
+                favourite.Title = framework.Title;
                 favourite.Level = framework.Level;
                 favourite.TypicalLength = framework.Duration;
                 favourite.ExpiryDate = framework.ExpiryDate;
+                favourite.Active = framework.IsActiveFramework;
             }
             else
             {
                 var standard = await _fatApi.GetStandardAsync(favourite.ApprenticeshipId);
+                favourite.Title = standard.Title;
                 favourite.Level = standard.Level;
                 favourite.TypicalLength = standard.Duration;
                 favourite.ExpiryDate = null;
+                favourite.Active = standard.IsActiveStandard;
             }
-        }
 
+        }
 
 
         private AsyncRetryPolicy GetRetryPolicy()
