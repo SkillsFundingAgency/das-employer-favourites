@@ -38,32 +38,32 @@
 
 </head>
 <body class="govuk-template__body ">
-<!-- Google Tag Manager (noscript) -->
-<noscript>
-    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript><!-- End Google Tag Manager (noscript) -->
-<script nws-csp-add-nonce="true">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-<a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript><!-- End Google Tag Manager (noscript) -->
+    <script nws-csp-add-nonce="true">document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+    <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
-<partial name="_Header"/>
-<partial name="_Menu" model="@accountId"/>
-<div class="govuk-width-container app-account-header">
-    @RenderSection("BodyHeader", required: false)
-</div>
-
-<div class="das-section--dashboard">
-    <div class="govuk-width-container">
-        <main class="govuk-main-wrapper" id="main-content" role="main">
-            @RenderBody()
-        </main>
+    <partial name="_Header"/>
+    <partial name="_Menu" model="@accountId"/>
+    <div class="govuk-width-container app-account-header">
+        @RenderSection("BodyHeader", required: false)
     </div>
-</div>
-<partial name="_Footer"/>
-<script src="/libs/govuk-frontend/all.js"></script>
-<script src="/libs/jquery/jquery.min.js"></script>
-<script src="/js/das-all.js"></script>
-<script src="/js/app.min.js"></script>
-<script nws-csp-add-nonce="true">window.GOVUKFrontend.initAll();
-        window.DASFrontend.initAll();</script>
+
+    <div class="das-section--dashboard">
+        <div class="govuk-width-container">
+            <main class="govuk-main-wrapper" id="main-content" role="main">
+                @RenderBody()
+            </main>
+        </div>
+    </div>
+    <partial name="_Footer"/>
+    <script src="/libs/govuk-frontend/all.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script src="/js/das-all.js"></script>
+    <script src="/js/app.min.js"></script>
+    <script nws-csp-add-nonce="true">window.GOVUKFrontend.initAll();
+            window.DASFrontend.initAll();</script>
 </body>
 </html>
