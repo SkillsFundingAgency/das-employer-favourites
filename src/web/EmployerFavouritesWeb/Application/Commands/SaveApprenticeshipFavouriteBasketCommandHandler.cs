@@ -38,7 +38,7 @@ namespace DfE.EmployerFavourites.Application.Commands
             _logger.LogInformation("Handling SaveApprenticeshipFavouriteCommand for basket: {basketId}", request.BasketId);
 
             var basketContentTask = _basketStore.GetAsync(request.BasketId);
-            var employerAccountId = await GetEmployerAccountId(request.UserId);
+            var employerAccountId = request.ChosenHashedAccountId ?? await GetEmployerAccountId(request.UserId);
             var favouritesTask = _readRepository.GetApprenticeshipFavourites(employerAccountId);
 
             await Task.WhenAll(basketContentTask, favouritesTask);
