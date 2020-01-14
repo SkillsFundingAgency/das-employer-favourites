@@ -60,6 +60,7 @@ namespace DfE.EmployerFavourites.Web
                 .ScriptSources(s =>
                     {
                         s.UnsafeInlineSrc = true;
+                        s.UnsafeEvalSrc = true;
                         s.Self()
                             .CustomSources("https://az416426.vo.msecnd.net",
                                 "https://www.google-analytics.com/analytics.js",
