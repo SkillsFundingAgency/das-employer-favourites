@@ -302,3 +302,5 @@ internal-nlog.txt
 
 # Coverlet coverage
 lcov.info
+
+appsettings.Development.json
