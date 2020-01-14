@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
@@ -13,6 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SFA.DAS.EAS.Account.Api.Types;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
@@ -83,17 +85,25 @@ namespace DfE.EmployerFavourites.Web.Controllers
 
             var userId = User.GetUserId();
 
-            var accounts = await _mediator.Send(new GetUserAccountsQuery(userId));
-            if (accounts.Count > 1)
+            // MY ACCOUNT - 79RBGY
+            
+            //var accounts = await _mediator.Send(new GetUserAccountsQuery(userId));
+            var accounts = new List<AccountDetailViewModel>()
             {
+                new AccountDetailViewModel() {DasAccountName = "My Account", HashedAccountId = "79RBGY"}, 
+                new AccountDetailViewModel() {DasAccountName = "My Other Account", HashedAccountId = "79RBG1"},
+                new AccountDetailViewModel() {DasAccountName = "Yet Another Employer Account", HashedAccountId = "79RBG2"}
+            };
+            // if (accounts.Count > 1)
+            // {
                 return View("ChooseAccount", accounts);
-            }
-
-            var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteBasketCommand { UserId = userId, BasketId = basketId });
-
-            var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
-
-            return Redirect(redirectUrl);
+            // }
+            //
+            // var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteBasketCommand { UserId = userId, BasketId = basketId });
+            //
+            // var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
+            //
+            // return Redirect(redirectUrl);
         }
 
         [HttpPost("save-apprenticeship-favourites")]
@@ -102,8 +112,14 @@ namespace DfE.EmployerFavourites.Web.Controllers
             if (chosenHashedAccountId is null)
             {
                 ModelState.AddModelError("chosenHashedAccountId", "Please choose an account to continue");
-                var accounts = await _mediator.Send(new GetUserAccountsQuery(User.GetUserId()));
-                
+                //var accounts = await _mediator.Send(new GetUserAccountsQuery(User.GetUserId()));
+                //var accounts = await _mediator.Send(new GetUserAccountsQuery(userId));
+                var accounts = new List<AccountDetailViewModel>()
+                {
+                    new AccountDetailViewModel() {DasAccountName = "My Account", HashedAccountId = "79RBGY"}, 
+                    new AccountDetailViewModel() {DasAccountName = "My Other Account", HashedAccountId = "79RBG1"},
+                    new AccountDetailViewModel() {DasAccountName = "Yet Another Employer Account", HashedAccountId = "79RBG2"}
+                };
                 return View("ChooseAccount", accounts);
             }
 
