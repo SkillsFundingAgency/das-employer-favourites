@@ -53,7 +53,7 @@ namespace DfE.EmployerFavourites.Application.Commands
 
             bool changesMade = false;
 
-            foreach(var item in basketContent)
+            foreach (var item in basketContent)
             {
                 changesMade |= writeModel.Update(item.ApprenticeshipId, item.Providers);
             }
@@ -67,6 +67,9 @@ namespace DfE.EmployerFavourites.Application.Commands
             {
                 _logger.LogDebug("No changes required for basket: {basketId}", request.BasketId);
             }
+
+            _logger.LogDebug("Post save clean up. Deleting basket: {basketId}", request.BasketId);
+            await _basketStore.RemoveAsync(request.BasketId);
 
             return employerAccountId;
         }
