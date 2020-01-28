@@ -87,6 +87,8 @@ namespace DfE.EmployerFavourites.Web.Controllers
             
             var accounts = await _mediator.Send(new GetUserAccountsQuery(userId));
           
+            _logger.LogInformation($"SaveBasket - Number of accounts for userId {userId} = {accounts.Count}");
+          
             if (accounts.Count > 1)
             {
                 return View("ChooseAccount", accounts);
