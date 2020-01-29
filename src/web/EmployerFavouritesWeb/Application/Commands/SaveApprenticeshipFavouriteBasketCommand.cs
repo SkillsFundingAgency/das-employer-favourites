@@ -7,5 +7,6 @@ namespace DfE.EmployerFavourites.Application.Commands
     {
         public string UserId { get; set; }
         public Guid BasketId { get; set; }
+        public string ChosenHashedAccountId { get; set; }
     }
 }

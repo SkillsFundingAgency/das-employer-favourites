@@ -1,0 +1,46 @@
+@model ICollection<SFA.DAS.EAS.Account.Api.Types.AccountDetailViewModel>
+
+@{
+    var isValid = ViewContext.ViewData.ModelState.IsValid;
+    var modelState = ViewContext.ViewData.ModelState;
+    var errorMessage = isValid ? "" : modelState.Select(x => x.Value.Errors).Where(y => y.Count > 0).ToList()[0][0].ErrorMessage;
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <form method="post">
+            <span class="govuk-caption-l">Multiple accounts</span>
+
+            <h1 class="govuk-heading-xl">Please choose an account</h1>
+
+            <p>You have multiple accounts. To continue, please choose the account you'd like to save your favourites to.</p>
+
+            <div class="govuk-form-group @(isValid ? "" : "govuk-form-group--error")">
+                <fieldset class="govuk-fieldset" role="group">
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+                        Which account would you like to use?
+                    </legend>
+                    @if (!isValid)
+                    {
+                        <span id="passport-issued-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @errorMessage
+                        </span>
+                    }
+
+                    <div class="govuk-radios">
+                        @foreach (var account in Model)
+                        {
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" type="radio" name="chosenHashedAccountId" value="@account.HashedAccountId" id="@account.HashedAccountId">
+                                <label class="govuk-label govuk-radios__label" for="@account.HashedAccountId">
+                                    @account.DasAccountName
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+            </div>
+            <button type="submit" class="govuk-button">Save and continue</button>
+        </form>
+    </div>
+</div>
