@@ -81,6 +81,7 @@ namespace DfE.EmployerFavourites.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+                c.CustomSchemaIds(i => i.FullName);
             });
         }
 

@@ -1,4 +1,4 @@
-﻿@{
+@{
     string accountId = (string)this.ViewContext.RouteData.Values["employerAccountId"];
     ViewBag.HideHeaderBorder = true;
 }
@@ -46,6 +46,7 @@
 
     <partial name="_Header" />
     <partial name="_Menu" model="@accountId" />
+    
     <div class="govuk-width-container app-account-header">
         @RenderSection("BodyHeader", required: false)
     </div>
@@ -57,7 +58,9 @@
             </main>
         </div>
     </div>
+    
     <partial name="_Footer" />
+    
     <script src="/libs/govuk-frontend/all.js"></script>
     <script src="/libs/jquery/jquery.min.js"></script>
     <script src="/js/das-all.js"></script>

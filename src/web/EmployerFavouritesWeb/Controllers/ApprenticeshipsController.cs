@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DfE.EmployerFavourites.Application.Commands;
@@ -13,6 +14,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SFA.DAS.EAS.Account.Api.Types;
 
 namespace DfE.EmployerFavourites.Web.Controllers
 {
@@ -82,9 +84,38 @@ namespace DfE.EmployerFavourites.Web.Controllers
             }
 
             var userId = User.GetUserId();
+            
+            var accounts = await _mediator.Send(new GetUserAccountsQuery(userId));
+          
+            _logger.LogInformation($"SaveBasket - Number of accounts for userId {userId} = {accounts.Count}");
+          
+            if (accounts.Count > 1)
+            {
+                return View("ChooseAccount", accounts);
+            }
+            
             var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteBasketCommand { UserId = userId, BasketId = basketId });
-
+            
             var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
+            
+            return Redirect(redirectUrl);
+        }
+
+        [HttpPost("save-apprenticeship-favourites")]
+        public async Task<IActionResult> ChooseAccount(string chosenHashedAccountId, Guid basketId)
+        {
+            if (chosenHashedAccountId is null)
+            {
+                ModelState.AddModelError("chosenHashedAccountId", "Please choose an account to continue");
+                var accounts = await _mediator.Send(new GetUserAccountsQuery(User.GetUserId()));
+                return View("ChooseAccount", accounts);
+            }
+
+            var userId = User.GetUserId();
+            
+            await _mediator.Send(new SaveApprenticeshipFavouriteBasketCommand { UserId = userId, BasketId = basketId, ChosenHashedAccountId = chosenHashedAccountId});
+
+            var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, chosenHashedAccountId);
 
             return Redirect(redirectUrl);
         }

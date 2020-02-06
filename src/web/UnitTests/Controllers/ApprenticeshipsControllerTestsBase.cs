@@ -29,7 +29,8 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
         protected const string TEST_FAT_WEBSITE_PROVIDER_PAGE_TEMPLATE = "https://fat-website/Providers/{0}";
         protected const string TEST_CREATE_VACANCY_URL = "https://recruit.at-eas.apprenticeships.education.gov.uk/accounts/{0}/employer-create-vacancy";
         protected const string EMPLOYER_ACCOUNT_ID = "XXX123";
-        protected const string USER_ID = "User123";
+        protected const string USER_ID_WITH_SINGLE_ACCOUNT = "User123";
+        protected const string USER_ID_WITH_MULTIPLE_ACCOUNTS = "User456";
         protected const string APPRENTICESHIPID = "123";
         protected const string APPRENTICESHIPID_NO_PROVIDER_DATA = "30";
         protected const string APPRENTICESHIPID_WITH_LOCATION = "2";
@@ -52,7 +53,8 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             _mockBasketStore = new Mock<IApprenticeshipFavouritesBasketStore>();
 
             _mockAccountApiClient = new Mock<IAccountApiClient>();
-            _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID)).ReturnsAsync(GetListOfAccounts());
+            _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID_WITH_SINGLE_ACCOUNT)).ReturnsAsync(GetSingleAccount());
+            _mockAccountApiClient.Setup(x => x.GetUserAccounts(USER_ID_WITH_MULTIPLE_ACCOUNTS)).ReturnsAsync(GetListOfAccounts());
             _mockAccountApiClient.Setup(x => x.GetAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetAccount());
             _mockAccountApiClient.Setup(x => x.GetLegalEntitiesConnectedToAccount(EMPLOYER_ACCOUNT_ID)).ReturnsAsync(GetLegalEntitiesConnectedToAccount());
 
@@ -117,6 +119,14 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
                  new AccountDetailViewModel { AccountId = 4, HashedAccountId = "AAA123" }
             };
         }
+        
+        private static List<AccountDetailViewModel> GetSingleAccount()
+        {
+            return new List<AccountDetailViewModel>
+            {
+                new AccountDetailViewModel { AccountId = 1, HashedAccountId = "XXX123"}
+            };
+        }
 
 
         private AccountDetailViewModel GetAccount()
@@ -144,11 +154,11 @@ namespace DfE.EmployerFavourites.Web.UnitTests.Controllers
             };
         }
 
-        private void SetupUserInContext()
+        protected virtual void SetupUserInContext()
         {
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
                         {
-                            new Claim("http://das/employer/identity/claims/id", USER_ID)
+                            new Claim("http://das/employer/identity/claims/id", USER_ID_WITH_SINGLE_ACCOUNT)
                         }));
 
             Sut.ControllerContext = new ControllerContext
