@@ -59,12 +59,15 @@ namespace DfE.EmployerFavourites.Web
                 )
                 .ScriptSources(s =>
                     {
+                        s.UnsafeInlineSrc = true;
+                        s.UnsafeEvalSrc = true;
                         s.Self()
                             .CustomSources("https://az416426.vo.msecnd.net",
                                 "https://www.google-analytics.com/analytics.js",
                                 "https://www.googletagmanager.com/",
                                 "https://www.tagmanager.google.com/",
                                 "https://tagmanager.google.com/",
+                                "https://ajax.googleapis.com/",
                                 cdnConfig.Value.Url.AbsoluteUri);
                     }
                 )
