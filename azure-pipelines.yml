@@ -54,7 +54,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: false
-    projects: 'src\api\EmployerFavouritesApi\EmployerFavouritesApi.csproj'
+    projects: 'src/api/EmployerFavouritesApi/EmployerFavouritesApi.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
 
 - task: DotNetCoreCLI@2
