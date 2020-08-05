@@ -62,7 +62,7 @@ steps:
   inputs:
     command: publish
     publishWebProjects: false
-    projects: 'src\web\EmployerFavouritesWeb\EmployerFavouritesWeb.csproj'
+    projects: 'src/web/EmployerFavouritesWeb/EmployerFavouritesWeb.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(build.artifactstagingdirectory)/publish --no-restore'
 
 
