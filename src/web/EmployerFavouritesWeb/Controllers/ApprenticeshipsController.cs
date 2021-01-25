@@ -42,63 +42,13 @@ namespace DfE.EmployerFavourites.Web.Controllers
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships")]
         public async Task<IActionResult> Index(string employerAccountId)
         {
-            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId))
-            {
-                _logger.LogDebug($"Invalid parameter: {nameof(employerAccountId)}({employerAccountId})");
-
-                return BadRequest();
-            }
-
-            var response = await _mediator.Send(new ViewEmployerFavouritesQuery
-            {
-                EmployerAccountId = employerAccountId
-            });
-
-            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
-
-            var items = response.EmployerFavourites.Select(mapper.Map).ToList();
-
-            items.ForEach(apprenticeship =>
-            {
-                apprenticeship.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?ProgrammeId={ apprenticeship.Id }";
-            });
-
-            var model = new ApprenticeshipFavouritesViewModel
-            {
-                EmployerAccountId = employerAccountId,
-                Items = items,
-                HasLegalEntity = response.EmployerAccount.HasLegalEntities
-            };
-            
-            return View(model);
+            return RedirectPermanent(_externalLinks.AccountsHomePage);
         }
 
         [HttpGet("save-apprenticeship-favourites")]
         public async Task<IActionResult> SaveBasket(Guid basketId)
         {
-            if (!_paramValidator.IsValidBasketId(basketId))
-            {
-                _logger.LogDebug($"Invalid BasketId: {basketId}");
-
-                return BadRequest();
-            }
-
-            var userId = User.GetUserId();
-            
-            var accounts = await _mediator.Send(new GetUserAccountsQuery(userId));
-          
-            _logger.LogInformation($"SaveBasket - Number of accounts for userId {userId} = {accounts.Count}");
-          
-            if (accounts.Count > 1)
-            {
-                return View("ChooseAccount", accounts);
-            }
-            
-            var accountId = await _mediator.Send(new SaveApprenticeshipFavouriteBasketCommand { UserId = userId, BasketId = basketId });
-            
-            var redirectUrl = string.Format(_externalLinks.AccountsDashboardPage, accountId);
-            
-            return Redirect(redirectUrl);
+            return RedirectPermanent(_externalLinks.AccountsHomePage);
         }
 
         [HttpPost("save-apprenticeship-favourites")]
@@ -123,74 +73,13 @@ namespace DfE.EmployerFavourites.Web.Controllers
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/providers")]
         public async Task<IActionResult> TrainingProvider(string employerAccountId, string apprenticeshipId)
         {
-            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
-                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
-            {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
-                return BadRequest();
-            }
-
-            var response = await _mediator.Send(new ViewApprenticeshipFavouriteQuery
-            {
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId
-            });
-
-            if (response.Favourite.Providers.Count == 0)
-            {
-                _logger.LogWarning(($"No providers exist for the given apprenticeship: {apprenticeshipId}, redirecting to apprenticeship favourites"));
-
-                return RedirectToAction("Index", new{employerAccountId});
-            }
-                
-
-            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
-
-            var items = response.Favourite.Providers.Select(mapper.Map).ToList();
-
-            items.ForEach(apprenticeshipProvider => {
-                apprenticeshipProvider.CreateVacancyUrl = $"{string.Format(_externalLinks.CreateVacancyUrl, employerAccountId)}?Ukprn={ apprenticeshipProvider.Ukprn }&ProgrammeId={ apprenticeshipId }";
-            });
-            
-            var model = new TrainingProvidersViewModel
-            {
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Items = items,
-                HasLegalEntity =  response.HasLegalEntities
-            };
-
-            return await Task.FromResult(View(model));
+            return RedirectPermanent(_externalLinks.AccountsHomePage);
         }
 
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/delete")]
         public async Task<IActionResult> Delete(string employerAccountId, string apprenticeshipId)
         {
-            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
-                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId))
-            {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId})");
-                return BadRequest();
-            }
-
-            var response = await _mediator.Send(new ViewApprenticeshipFavouriteQuery
-            {
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId
-            });
-
-
-            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
-
-            var model = new TrainingProvidersViewModel
-            {
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Apprenticeship = mapper.Map(response.Favourite),
-                Items = response.Favourite.Providers.Select(mapper.Map).ToList()
-            };
-
-            return View("Delete", model);
+            return RedirectPermanent(_externalLinks.AccountsHomePage);
         }
 
         [HttpPost("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/delete")]
@@ -216,36 +105,7 @@ namespace DfE.EmployerFavourites.Web.Controllers
         [HttpGet("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/Provider/{ukprn}/delete")]
         public async Task<IActionResult> DeleteProvider(string employerAccountId, string apprenticeshipId, int ukprn)
         {
-            if (!_paramValidator.IsValidEmployerAccountId(employerAccountId) ||
-                !_paramValidator.IsValidApprenticeshipId(apprenticeshipId) || !_paramValidator.IsValidProviderUkprn(ukprn))
-            {
-                _logger.LogDebug($"Invalid parameters in the following: {nameof(employerAccountId)}({employerAccountId}), {nameof(apprenticeshipId)}({apprenticeshipId}), {nameof(ukprn)}({ukprn})");
-                return BadRequest();
-            }
-
-            var response = await _mediator.Send(new ViewTrainingProviderForApprenticeshipFavouriteQuery
-            {
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Ukprn = ukprn
-                
-            });
-
-            if (response.Provider == null)
-                throw new EntityNotFoundException($"Provider exist for the given apprenticeship: {apprenticeshipId} and ukprn: {ukprn}");
-
-            var mapper = new ApprenticeshipFavouriteMapper(_fatConfig);
-
-            var model = new DeleteTrainingProviderViewModel
-            {
-                EmployerAccountId = employerAccountId,
-                ApprenticeshipId = apprenticeshipId,
-                Provider = mapper.Map(response.Provider),
-                Ukprn = ukprn
-            };
-
-
-            return View("DeleteProvider", model);
+            return RedirectPermanent(_externalLinks.AccountsHomePage);
         }
 
         [HttpPost("accounts/{employerAccountId:minlength(6)}/apprenticeships/{apprenticeshipId}/Provider/{ukprn}/delete")]
